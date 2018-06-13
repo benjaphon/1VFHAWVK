@@ -1,0 +1,5 @@
+.form-group label.text-bold {
+	font-weight: bold;
+}
+
+.form-group label.required:after {content: " *"; color: red;}
