@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "order_status" => "R",
         "shipping_type" => trim($_POST['shipping_type']),
         "sender" => trim($_POST['sender']),
+        "sender_type" => trim($_POST['sender_type']),
         "receiver" => trim($_POST['receiver']),
         "note" => trim($_POST['note']),
         "order_datetime" => date('Y-m-d H:i:s'),
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //$_SESSION[_ss . 'order_id'] = $order_id;
         header("location:" . base_url() . "/back/order");
     }
-    mysql_close();
+    $db->close();
 }
 
 ?>

@@ -2,7 +2,7 @@
 
 $db = new database();
 $item_count = isset($_SESSION[_ss . 'cart']) ? count($_SESSION[_ss . 'cart']) : 0;
-if (isset($_SESSION[_ss . 'qty'])) {
+if ($item_count > 0 && isset($_SESSION[_ss . 'qty'])) {
     $me_qty = 0;
     foreach ($_SESSION[_ss . 'qty'] as $me_item) {
         $me_qty = $me_qty + $me_item;
@@ -69,7 +69,7 @@ echo   "<tr>
             </td>
         </tr>
         <tr>
-            <td style='text-align:right;'>หมายเหตุ</td>
+            <td style='text-align:right;'>รายละเอียดสินค้า</td>
             <td colspan='5'>
                 <input type='text' name='note[{$i}]' value='{$_SESSION[_ss . 'note'][$key]}' class='form-control input-sm'>
             </td>

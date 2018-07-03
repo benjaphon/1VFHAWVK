@@ -9,6 +9,12 @@ unset($_SESSION[_ss . 'price']);
 unset($_SESSION[_ss . 'note']);
 unset($_SESSION[_ss . 'total_price']);
 
+unset($_SESSION[_ss . 'temp_cart']);
+unset($_SESSION[_ss . 'temp_qty']);
+unset($_SESSION[_ss . 'temp_price']);
+unset($_SESSION[_ss . 'temp_note']);
+unset($_SESSION[_ss . 'temp_total_price']);
+
 $db = new database();
 
 $option_order = array(
@@ -18,10 +24,12 @@ $option_order = array(
 $query_order = $db->select($option_order);
 $rs_order = $db->get($query_order);
 
-$sql_od = "SELECT d.*,p.id,p.name,p.url_picture FROM order_details d INNER JOIN products p ";
-$sql_od .= "ON d.product_id=p.id ";
-$sql_od .="WHERE d.order_id='{$_GET['id']}' ";
-$query_od = $db->query($sql_od);
+$option_pd = array(
+    "table" => "products",
+    "condition" => "quantity > 0 AND flag_status = 1"
+);
+
+$query_pd = $db->select($option_pd);
 
 //restricted process
 if ($rs_order['order_status'] != 'R') {
@@ -88,47 +96,36 @@ MAIN CONTENT
     </div>
     <div class="row mt">
         <div class="col-lg-6">
-            <table class="table" style="font-size: 12px;">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>ชื่อสินค้า</th>
-                        <th style="text-align: right;">ราคา(บาท)</th>
-                        <th style="text-align: right;">จำนวน</th>
-                        <th style="text-align: right;">รวม</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $grand_total = 0;
-                    while ($rs_od = $db->get($query_od)) {
-                        $total_price = $rs_od['price'] * $rs_od['quantity'];
-                        $grand_total = $total_price + $grand_total;
-                        ?>
-                        <tr>
-                            <td>
-                                <img src="<?php echo base_url(); ?>/assets/upload/product/sm_<?php echo $rs_od['url_picture']; ?>">
-                            </td>
-                            <td><?php echo $rs_od['name']; ?></td>
-                            <td style="text-align: right;"><?php echo number_format($rs_od['price'], 2); ?></td>
-                            <td style="text-align: right;"><?php echo $rs_od['quantity']; ?></td>
-                            <td style="text-align: right;"><?php echo number_format($total_price, 2); ?></td>
-                        </tr>
-                        <tr>
-                            <td style='text-align:right;'>หมายเหตุ :</td>
-                            <td colspan="4"><?php echo $rs_od['note']; ?></td>
-                        </tr>
-                    <?php } ?>
-                    <tr class="info">
-                        <td colspan="5" style="text-align: right;">ค่าส่ง <strong><?php echo $rs_order['ship_price']; ?></strong> บาท</td>
-                    </tr>
-                    <tr class="info">
-                        <td colspan="5" style="text-align: right; font-size: 16px;">
-                            <strong>รวมทั้งหมด <?php echo number_format($grand_total, 2); ?> บาท</strong>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <form class="form-horizontal" id="AddOrderDetailForm">
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">สินค้า</label>
+                    <div class="col-sm-7">
+                        <select class="selectpicker form-control" data-live-search="true" name="product_id">
+                            <?php while ($row = $db->get($query_pd)){
+                                if ($row['start_ship_date']==null) {
+                                    $product = $row['name'];
+                                }else{
+                                    $product = $row['name']." (".date('d-m-Y', strtotime($row['start_ship_date'])).")";
+                                }
+
+                                echo "<option value='".$row['id'].",".$row['agent_price']."'>".$product."</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="text" class="form-control" value="1" name="qty" autocomplete="off" name="qty" placeholder="ใส่จำนวน" data-validation="number">
+                    </div>
+                    <div class="col-sm-2">
+                         <button type="button" class="btn btn-success btn-block add-cart">เพิ่ม</button>
+                    </div>
+                </div>
+                <div id="divTable">
+                    <div class='alert alert-danger' role='alert' style='margin:15px;'>
+                        ไม่มีสินค้าในตะกร้าสินค้า <b>กรุณาเพิ่มสินค้าด้านบน</b>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="col-lg-6">
             <form action="<?php echo base_url(); ?>/back/order/form_update" id="order-form" method="post">
@@ -179,7 +176,7 @@ MAIN CONTENT
                 </div>
 
                 <div class="form-group col-xs-12 clearfix">
-                        <label for="note" class="text-bold">หมายเหตุ</label>
+                        <label for="note" class="text-bold">ข้อมูลเพิ่มเติม</label>
                         <textarea class="form-control" rows="5" name="note" id="note"><?php echo $rs_order['note']; ?></textarea>
                 </div>
             </form>
@@ -199,7 +196,7 @@ MAIN CONTENT
             </div>
         </div>
     </div>
-  </section><! --/wrapper -->
+  </section><!--/wrapper -->
 </section><!-- /MAIN CONTENT -->
 <div id="wait" style="display:none;position: fixed; text-align: center; height: 100%; width: 100%; top: 0; right: 0; left: 0; z-index: 9999999; background-color: #000000; opacity: 0.7;">
             <span style="border-width: 0px; position: fixed; padding: 50px; background-color: #FFFFFF; font-size: 36px; left: 40%; top: 40%;">Loading ...</span>
@@ -232,9 +229,89 @@ $(document).ready(function(){
         $('#wait').hide();
       });
 
-    /* Save Order */
-    $('.saveform').click(function () {
-        $('#order-form').submit();
+    var url = '<?php echo $baseUrl; ?>/back/order/temp_cart';
+
+    $.post(url, { id:'<?php echo $_GET['id'] ?>' }, function(data){
+        $("#divTable").html(data);           
+    });
+
+    $("input[name=qty]").select();
+
+    /* Element Event */
+
+    $("select[name=product_id]").change(function(){
+        $("input[name=qty]").select();
+    })
+
+    $.ajaxSetup({
+        type: 'POST',
+        cache: false,
+        headers: { "cache-control": "no-cache" }
+    });
+
+    /*****************/
+
+    /* Add Product Detail */
+    $(document).on('click','.add-cart',function(){
+        event.preventDefault();
+
+        var $form = $("#AddOrderDetailForm");
+        var url = '<?php echo $baseUrl; ?>/back/order/add_cart';
+
+        $.post(url, $form.serialize(), function(data){
+            $("#divTable").html(data);           
+        });
+
+        $("input[name=qty]").select();
+    });
+    /***********************/
+
+    /* Delete Product Detail */
+    $(document).on('click','.btn_delete_cart',function(){
+        var url = $(this).attr("href");
+        var val_product_id = $(this).attr("value");
+
+        $.post(url, { product_id: val_product_id },function(data){
+            $("#divTable").html(data);         
+        });
+
+        $( ".modal-backdrop" ).remove();
+
+    });
+    /***********************/
+  
+    /* Calculate All Price */
+    $(document).on('click','.recal',function(){
+        event.preventDefault();
+
+        var $form = $("#AddOrderDetailForm");
+        var url = '<?php echo $baseUrl; ?>/back/order/update_cart';
+
+        $.post(url, $form.serialize(),function(data){
+            $("#divTable").html(data);           
+        });  
+    });
+    /***************************/
+
+   /* Save Order */
+   $('.saveform').click(function () {
+        event.preventDefault();
+
+        var $form = $("#AddOrderDetailForm");
+        var url = '<?php echo $baseUrl; ?>/back/order/update_cart';
+        //update cart
+        $.post(url, $form.serialize(),function(data){
+            $("#divTable").html(data);
+            //save order
+            $.post("<?php echo $baseUrl; ?>/back/order/check_stock", "",function(data){
+                if (data) {
+                    alert(data);
+                }else{
+                    $('#order-form').submit();
+                }     
+            });
+
+        });  
     });
     /*************/
     $('input[type=radio][name=sender_type]').change(function () {
@@ -244,7 +321,7 @@ $(document).ready(function(){
     });
     /***************************/
 
-    $( "input[type=radio][value=<?php echo $rs_order['shipping_type']; ?>" ).prop( "checked", true );
-
+    $( "input[name=shipping_type][type=radio][value=<?php echo $rs_order['shipping_type']; ?>" ).prop( "checked", true );
+    $( "input[name=sender_type][type=radio][value=<?php echo $rs_order['sender_type']; ?>" ).prop( "checked", true );
 });
 </script>

@@ -103,7 +103,7 @@ MAIN CONTENT
                             <td style="text-align: right;"><?php echo number_format($total_price, 2); ?></td>
                         </tr>
                         <tr>
-                            <td style='text-align:right;'>หมายเหตุ :</td>
+                            <td style='text-align:right;'>รายละเอียดสินค้า :</td>
                             <td colspan="4"><?php echo $rs_od['note']; ?></td>
                         </tr>
                     <?php } ?>
@@ -126,7 +126,7 @@ MAIN CONTENT
                         <li class="list-group-item"><strong>ประเภทการส่ง</strong> : <?php echo $rs_os['shipping_type'];?></li>
                         <li class="list-group-item"><strong>ที่อยู่ผู้ส่ง</strong> : <?php echo $rs_os['sender'];?></li>
                         <li class="list-group-item"><strong>ที่อยู่ผู้รับ</strong> : <?php echo $rs_os['receiver'];?></li>
-                        <li class="list-group-item"><strong>หมายเหตุ</strong> : <?php echo $rs_os['note'];?></li>
+                        <li class="list-group-item"><strong>ข้อมูลเพิ่มเติม</strong> : <?php echo $rs_os['note'];?></li>
                         <li class="list-group-item"><strong>วันที่สั่งซื้อ</strong> : <?php echo thaidate($rs_os['order_datetime']);?></li>
                         
                         <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>

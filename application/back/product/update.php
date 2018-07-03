@@ -87,7 +87,7 @@ require 'assets/template/back/header.php';
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">ค่าส่ง (ธรรมดา/ลงทะเบียน/EMS)</label>
+                        <label class="col-sm-2 control-label">ค่าส่ง (ธรรมดา/ลงทะเบียน/EMS/KERRY)</label>
                         <div class="col-sm-1">
                             <input type="text" name="parcel" class="form-control input-sm" data-validation="number" value="<?php echo $rs_pd['parcel']; ?>" data-validation-allowing="float">
                         </div>
@@ -96,6 +96,9 @@ require 'assets/template/back/header.php';
                         </div>
                         <div class="col-sm-1">
                             <input type="text" name="ems" class="form-control input-sm" data-validation="number" value="<?php echo $rs_pd['ems']; ?>" data-validation-allowing="float">
+                        </div>
+                        <div class="col-sm-1">
+                            <input type="text" name="kerry" class="form-control input-sm" data-validation="number" value="<?php echo $rs_pd['kerry']; ?>" data-validation-allowing="float">
                         </div>
                     </div>
                     <div class="form-group">

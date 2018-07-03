@@ -130,7 +130,7 @@ MAIN CONTENT
                                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                                     <td><?php echo $rs_pd['sale_price']; ?></td>
                                 <?php } ?>
-                                <td><?php echo round($rs_pd['parcel']).'/'.round($rs_pd['registered']).'/'.round($rs_pd['ems']); ?></td>
+                                <td><?php echo round($rs_pd['parcel']).'/'.round($rs_pd['registered']).'/'.round($rs_pd['ems']).'/'.round($rs_pd['kerry']);; ?></td>
                                 <td><?php echo $rs_pd['quantity']; ?></td>
                                 <td class="button-column">
                                     <!--<a class="btn btn-info btn-xs load_data" title="" href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_pd['id']; ?>" target="_blank"><i class="glyphicon glyphicon-zoom-in"></i> รายละเอียด</a>-->

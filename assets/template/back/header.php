@@ -208,7 +208,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                       </a>
                   </li>
                   <li>
-                      <span>Version 2.0</span>
+                      <span>Version 3.0</span>
                   </li>
                   <?php } ?>
               </ul>

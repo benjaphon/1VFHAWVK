@@ -14,7 +14,7 @@ $option_order = array(
 $query_order = $db->select($option_order);
 $rs_order = $db->get($query_order);
 
-$sql_od = "SELECT d.*,p.id,p.name,p.url_picture,p.parcel,p.registered,p.ems FROM order_details d INNER JOIN products p ";
+$sql_od = "SELECT d.*,p.id,p.name,p.url_picture,p.parcel,p.registered,p.ems,p.kerry FROM order_details d INNER JOIN products p ";
 $sql_od .= "ON d.product_id=p.id ";
 $sql_od .="WHERE d.order_id='{$_GET['id']}' ";
 $query_od = $db->query($sql_od);
@@ -93,6 +93,10 @@ MAIN CONTENT
                             <td style="text-align: right;"><?php echo $rs_od['quantity']; ?></td>
                             <td style="text-align: right;"><?php echo number_format($total_price, 2); ?></td>
                         </tr>
+                        <tr>
+                            <td style='text-align:right;'>รายละเอียดสินค้า :</td>
+                            <td colspan="4"><?php echo $rs_od['note']; ?></td>
+                        </tr>
                     <?php } ?>
                     <tr class="info">
                         <td colspan="3"></td>
@@ -122,6 +126,10 @@ MAIN CONTENT
                                                 case 'EMS':
                                                     $grand_total_with_ship = $grand_total + $rs_od['ems'];
                                                     echo "value='".$rs_od['ems']."'";
+                                                    break;
+                                                case 'KERRY':
+                                                    $grand_total_with_ship = $grand_total + $rs_od['kerry'];
+                                                    echo "value='".$rs_od['kerry']."'";
                                                     break;
                                             }
                                             

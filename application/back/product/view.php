@@ -85,7 +85,7 @@ require 'assets/template/back/header.php';
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label text-bold">ค่าส่ง (ธรรมดา/ลงทะเบียน/EMS)</label>
+                    <label class="col-sm-2 control-label text-bold">ค่าส่ง (ธรรมดา/ลงทะเบียน/EMS/KERRY)</label>
                     <div class="col-sm-1">
                         <label name="parcel" class="control-label"><?php echo $rs_product['parcel']; ?></label>
                     </div>
@@ -94,6 +94,9 @@ require 'assets/template/back/header.php';
                     </div>
                     <div class="col-sm-1">
                         <label name="ems" class="control-label"><?php echo $rs_product['ems']; ?></label>
+                    </div>
+                    <div class="col-sm-1">
+                        <label name="kerry" class="control-label"><?php echo $rs_product['kerry']; ?></label>
                     </div>
                 </div>
                 <div class="form-group">

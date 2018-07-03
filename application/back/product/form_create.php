@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "parcel" => trim($_POST['parcel']),
         "registered" => trim($_POST['registered']),
         "ems" => trim($_POST['ems']),
+        "kerry" => trim($_POST['kerry']),
         "start_ship_date" => date("Y-m-d", strtotime($_POST['start_ship_date'])),
         "description" => trim($_POST['description']),
         "quantity" => trim($_POST['quantity']),

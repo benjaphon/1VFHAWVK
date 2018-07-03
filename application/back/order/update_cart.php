@@ -20,10 +20,15 @@ if (isset($_POST['qtyupdate'])) {
         $query_pd = $db->select($option_pd);
         $rs_pd = $db->get($query_pd);
 
-        //Calculate and keep price&quality session
-        if ($rs_pd['quantity'] >= $qty) {
-        
         $key = $_POST['arr_key_' . $i];
+
+        if (!isset($_SESSION[_ss . 'temp_qty'][$key]))
+            $temp_qty = $qty;
+        else
+            $temp_qty = $qty-$_SESSION[_ss . 'temp_qty'][$key];
+
+        if ($rs_pd['quantity'] >= $temp_qty) {
+        
         $_SESSION[_ss . 'total_price'] -= $_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key];
         $_SESSION[_ss . 'total_price'] += $_SESSION[_ss . 'price'][$key] * $qty;
         $_SESSION[_ss . 'qty'][$key] = $qty;

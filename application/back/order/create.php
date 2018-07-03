@@ -9,6 +9,12 @@ unset($_SESSION[_ss . 'price']);
 unset($_SESSION[_ss . 'note']);
 unset($_SESSION[_ss . 'total_price']);
 
+unset($_SESSION[_ss . 'temp_cart']);
+unset($_SESSION[_ss . 'temp_qty']);
+unset($_SESSION[_ss . 'temp_price']);
+unset($_SESSION[_ss . 'temp_note']);
+unset($_SESSION[_ss . 'temp_total_price']);
+
 $db = new database();
 $option_pd = array(
     "table" => "products",
@@ -159,7 +165,7 @@ MAIN CONTENT
                 </div>
 
                 <div class="form-group col-xs-12 clearfix">
-                        <label for="note" class="text-bold">หมายเหตุ</label>
+                        <label for="note" class="text-bold">ข้อมูลเพิ่มเติม</label>
                         <textarea class="form-control" rows="5" name="note" id="note"></textarea>
                 </div>
             </form>

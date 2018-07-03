@@ -29,6 +29,6 @@ if($query == TRUE){
 }else{
     echo "Error!";
 }
-mysql_close();
+$db->close();
 
 ?>

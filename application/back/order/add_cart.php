@@ -18,25 +18,34 @@ $option_pd = array(
 $query_pd = $db->select($option_pd);
 $rs_pd = $db->get($query_pd);
 
-    if (!isset($_SESSION[_ss . 'cart'])) {
-        $_SESSION[_ss . 'cart'] = array();
-        $_SESSION[_ss . 'qty'][] = array();
-        $_SESSION[_ss . 'price'][] = array();
-        $_SESSION[_ss . 'note'][] = array();
-        $_SESSION[_ss . 'total_price'] = 0;
-    }
+if (!isset($_SESSION[_ss . 'cart'])) {
+    $_SESSION[_ss . 'cart'] = array();
+    $_SESSION[_ss . 'qty'][] = array();
+    $_SESSION[_ss . 'price'][] = array();
+    $_SESSION[_ss . 'note'][] = array();
+    $_SESSION[_ss . 'total_price'] = 0;
+}
 
-    if (in_array($product_id, $_SESSION[_ss . 'cart'])) {
-        $key = array_search($product_id, $_SESSION[_ss . 'cart']);
-    } else {
-        array_push($_SESSION[_ss . 'cart'], $product_id);
-        $key = array_search($product_id, $_SESSION[_ss . 'cart']);
-        $_SESSION[_ss . 'qty'][$key] = 0;
-        $_SESSION[_ss . 'price'][$key] = 0;
-        $_SESSION[_ss . 'note'][$key] = '';
-    }
+if (in_array($product_id, $_SESSION[_ss . 'cart'])) {
+    $key = array_search($product_id, $_SESSION[_ss . 'cart']);
+} else {
+    array_push($_SESSION[_ss . 'cart'], $product_id);
+    $key = array_search($product_id, $_SESSION[_ss . 'cart']);
+    $_SESSION[_ss . 'qty'][$key] = 0;
+    $_SESSION[_ss . 'price'][$key] = 0;
+    $_SESSION[_ss . 'note'][$key] = '';
 
-if ($rs_pd['quantity'] >= ($_SESSION[_ss . 'qty'][$key]+$qty)) {
+    $_SESSION[_ss . 'temp_qty'][$key] = 0;
+    $_SESSION[_ss . 'temp_price'][$key] = 0;
+    $_SESSION[_ss . 'temp_note'][$key] = '';
+}
+
+if (!isset($_SESSION[_ss . 'temp_qty'][$key]))
+    $temp_qty = $_SESSION[_ss . 'qty'][$key];
+else
+    $temp_qty = $_SESSION[_ss . 'qty'][$key]-$_SESSION[_ss . 'temp_qty'][$key];
+
+if ($rs_pd['quantity'] >= ($temp_qty+$qty)) {
     $_SESSION[_ss . 'qty'][$key] += $qty;
     $_SESSION[_ss . 'price'][$key] = $price;
     $_SESSION[_ss . 'total_price'] += $price * $qty;
