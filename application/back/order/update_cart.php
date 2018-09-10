@@ -30,7 +30,18 @@ if (isset($_POST['qtyupdate'])) {
         if ($rs_pd['quantity'] >= $temp_qty) {
         
         $_SESSION[_ss . 'total_price'] -= $_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key];
+
+        //Whole Sale Price Calculation
+        if($qty > 10)
+        $_SESSION[_ss . 'price'][$key] = $_SESSION[_ss . 'wholesale_price'][$key];
+        else
+        $_SESSION[_ss . 'price'][$key] = $_SESSION[_ss . 'agent_price'][$key];
+
         $_SESSION[_ss . 'total_price'] += $_SESSION[_ss . 'price'][$key] * $qty;
+
+        $_SESSION[_ss . 'total_weight'] -= $_SESSION[_ss . 'weight'][$key] * $_SESSION[_ss . 'qty'][$key];
+        $_SESSION[_ss . 'total_weight'] += $_SESSION[_ss . 'weight'][$key] * $qty;
+        
         $_SESSION[_ss . 'qty'][$key] = $qty;
 
         }

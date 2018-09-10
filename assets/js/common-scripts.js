@@ -71,9 +71,8 @@ var Script = function () {
     });
 
 // custom scrollbar
-    $("#sidebar").niceScroll({styler:"fb",cursorcolor:"#ec1044", cursorwidth: '3', cursorborderradius: '10px', background: '#283b58', spacebarenabled:false, cursorborder: ''});
-
-    $("html").niceScroll({styler:"fb",cursorcolor:"#ec1044", cursorwidth: '6', cursorborderradius: '10px', background: '#283b58', spacebarenabled:false,  cursorborder: '', zindex: '1000'});
+//    $("#sidebar").niceScroll({styler:"fb",cursorcolor:"#ec1044", cursorwidth: '3', cursorborderradius: '10px', background: '#283b58', spacebarenabled:false, cursorborder: ''});
+//  $("html").niceScroll({styler:"fb",cursorcolor:"#ec1044", cursorwidth: '6', cursorborderradius: '10px', background: '#283b58', spacebarenabled:false,  cursorborder: '', zindex: '1000'});
 
 // widget tools
 
@@ -115,5 +114,17 @@ var Script = function () {
         })
     }
 
-
 }();
+
+function addCommas(nStr)
+{
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+}

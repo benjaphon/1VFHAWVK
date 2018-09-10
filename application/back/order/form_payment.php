@@ -5,19 +5,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     date_default_timezone_set('Asia/Bangkok');
     $db = new database();
-    
-    if (checkimg() == TRUE) {
-        $filename = date('YmdHis') . rand(0, 9);
-        $type = end(explode(".", $_FILES["image"]["name"]));
-        $image = $filename . "." . $type;
 
-        $path = base_path() . "/assets/upload/payment/";
-        uploadimg($filename, 600, 600, $path);
-        uploadimg("thumb_" . $filename, 400, 400, $path);
-        uploadimg("md_" . $filename, 150, 150, $path);
-        uploadimg("sm_" . $filename, 70, 70, $path);
-    } else {
-        $image = "ecimage.jpg";
+    $full_filename = '';
+
+    if (file_exists($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
+        $ext = explode('.', basename($_FILES['image']['name'][0]));
+        $file_extension = end($ext); 
+        $filename = date('YmdHis') . md5(uniqid());
+        $full_filename = $filename . "." . end($ext); 
+
+        $validextensions = array("jpeg", "jpg", "png");
+        if (($_FILES["image"]["size"][0] < 1000000) && in_array($file_extension, $validextensions)) {
+            $path = base_path() . "/assets/upload/payment/";
+            uploadimg($filename, 600, 600, $path, 0);
+            uploadimg("thumb_" . $filename, 400, 400, $path, 0);
+            uploadimg("md_" . $filename, 150, 150, $path, 0);
+            uploadimg("sm_" . $filename, 70, 70, $path, 0);
+
+        }
+    }else{
+        $full_filename = 'ecimage.jpg';
     }
     
     if ($_POST['pay_type']=="other") {
@@ -29,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "detail" => trim($_POST['detail']),
         "order_id" => $_POST['order_id'],
         "pay_type" => trim($_POST['pay_type']),
-        "url_picture" => $image,
+        "url_picture" => $full_filename,
         "created_at" => date('Y-m-d H:i:s')
     );
     $query_pm = $db->insert("payments", $value_pm);
@@ -38,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $db->update("orders", array("order_status"=>"P","ship_price"=>$_POST['ship_price'] ,"total"=>$_POST['grand_total']+$_POST['ship_price']),"id='{$_POST['order_id']}'");
         header("location:" . $baseUrl . "/back/order");
     }
-    mysql_close();
+    $db->close();
 }
 
 ?>

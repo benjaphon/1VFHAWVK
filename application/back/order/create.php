@@ -6,14 +6,12 @@
 unset($_SESSION[_ss . 'cart']);
 unset($_SESSION[_ss . 'qty']);
 unset($_SESSION[_ss . 'price']);
+unset($_SESSION[_ss . 'wholesale_price']);
+unset($_SESSION[_ss . 'weight']);
 unset($_SESSION[_ss . 'note']);
 unset($_SESSION[_ss . 'total_price']);
-
-unset($_SESSION[_ss . 'temp_cart']);
+unset($_SESSION[_ss . 'total_weight']);
 unset($_SESSION[_ss . 'temp_qty']);
-unset($_SESSION[_ss . 'temp_price']);
-unset($_SESSION[_ss . 'temp_note']);
-unset($_SESSION[_ss . 'temp_total_price']);
 
 $db = new database();
 $option_pd = array(
@@ -94,7 +92,7 @@ MAIN CONTENT
                                     $product = $row['name']." (".date('d-m-Y', strtotime($row['start_ship_date'])).")";
                                 }
 
-                                echo "<option value='".$row['id'].",".$row['agent_price']."'>".$product."</option>";
+                                echo "<option value='".$row['id'].",".$row['agent_price'].",".$row['weight'].",".$row['wholesale_price']."'>".$product."</option>";
                             }
                             ?>
                         </select>
@@ -120,10 +118,10 @@ MAIN CONTENT
                     <label for="shipping_type" class="text-bold required col-xs-12">ประเภทการส่ง</label>
                     <div class="col-xs-6">
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="พัสดุธรรมดา" checked>พัสดุธรรมดา</label>
+                          <label><input type="radio" id="rdo_parcel" name="shipping_type" value="พัสดุธรรมดา" checked>พัสดุธรรมดา</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="ลงทะเบียน">ลงทะเบียน</label>
+                          <label><input type="radio" id="rdo_register" name="shipping_type" value="ลงทะเบียน">ลงทะเบียน</label>
                         </div>
                         <div class="radio">
                           <label><input type="radio" name="shipping_type" value="EMS">EMS</label>
@@ -185,7 +183,7 @@ MAIN CONTENT
             </div>
         </div>
     </div>
-  </section><! --/wrapper -->
+  </section><!--/wrapper -->
 </section><!-- /MAIN CONTENT -->
 <div id="wait" style="display:none;position: fixed; text-align: center; height: 100%; width: 100%; top: 0; right: 0; left: 0; z-index: 9999999; background-color: #000000; opacity: 0.7;">
             <span style="border-width: 0px; position: fixed; padding: 50px; background-color: #FFFFFF; font-size: 36px; left: 40%; top: 40%;">Loading ...</span>
@@ -241,7 +239,7 @@ $(document).ready(function(){
         var url = '<?php echo $baseUrl; ?>/back/order/add_cart';
 
         $.post(url, $form.serialize(), function(data){
-            $("#divTable").html(data);           
+            $("#divTable").html(data);
         });
 
         $("input[name=qty]").select();
@@ -254,7 +252,7 @@ $(document).ready(function(){
         var val_product_id = $(this).attr("value");
 
         $.post(url, { product_id: val_product_id },function(data){
-            $("#divTable").html(data);         
+            $("#divTable").html(data);
         });
 
         $( ".modal-backdrop" ).remove();

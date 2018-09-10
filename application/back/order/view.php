@@ -80,12 +80,14 @@ MAIN CONTENT
                         <th style="text-align: right;">ราคา(บาท)</th>
                         <th style="text-align: right;">จำนวน</th>
                         <th style="text-align: right;">รวม</th>
+                        <th style='text-align: right;'>น้ำหนักรวม (กรัม)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     while ($rs_od = $db->get($query_od)) {
                         $total_price = $rs_od['price'] * $rs_od['quantity'];
+                        $total_weight = $rs_od['weight'] * $rs_od['quantity'];
                         ?>
                         <tr>
                             <td>
@@ -101,17 +103,31 @@ MAIN CONTENT
                             <td style="text-align: right;"><?php echo number_format($rs_od['price'], 2); ?></td>
                             <td style="text-align: right;"><?php echo $rs_od['quantity']; ?></td>
                             <td style="text-align: right;"><?php echo number_format($total_price, 2); ?></td>
+                            <td style="text-align: right;"><?php echo number_format($total_weight); ?></td>
                         </tr>
                         <tr>
                             <td style='text-align:right;'>รายละเอียดสินค้า :</td>
-                            <td colspan="4"><?php echo $rs_od['note']; ?></td>
+                            <td colspan="5"><?php echo $rs_od['note']; ?></td>
                         </tr>
                     <?php } ?>
                     <tr class="info">
-                        <td colspan="5" style="text-align: right;">ค่าส่ง <strong><?php echo $rs_os['ship_price']; ?></strong> บาท</td>
+                        <td colspan="6" style="text-align: right;">
+                            <p><a href='<?php echo $baseUrl; ?>/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a></p>
+                            <?php if (isset($rs_os['ship_price'])){ ?>
+                                <h4>ค่าส่ง <?php echo number_format($rs_os['ship_price']); ?> บาท</h4>
+                            <?php } else { ?>
+                                <h4>ยังไม่ได้ระบุค่าส่ง</h4>
+                            <?php } ?>
+                            
+                        </td>
                     </tr>
                     <tr class="info">
-                        <td colspan="5" style="text-align: right; font-size: 16px;"><strong>รวมทั้งหมด <?php echo $rs_os['total']; ?> บาท</strong></td>
+                        <td colspan="6" style="text-align: right;">
+                            <h4>น้ำหนักรวม <?php echo number_format($rs_os['total_weight']); ?> กรัม</h4>
+                        </td>
+                    </tr>
+                    <tr class="info">
+                        <td colspan="6" style="text-align: right;"><h4><strong>รวมทั้งหมด <?php echo number_format($rs_os['total']); ?> บาท</strong></h4></td>
                     </tr>
                 </tbody>
             </table>

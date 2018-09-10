@@ -6,14 +6,12 @@
 unset($_SESSION[_ss . 'cart']);
 unset($_SESSION[_ss . 'qty']);
 unset($_SESSION[_ss . 'price']);
+unset($_SESSION[_ss . 'wholesale_price']);
+unset($_SESSION[_ss . 'weight']);
 unset($_SESSION[_ss . 'note']);
 unset($_SESSION[_ss . 'total_price']);
-
-unset($_SESSION[_ss . 'temp_cart']);
+unset($_SESSION[_ss . 'total_weight']);
 unset($_SESSION[_ss . 'temp_qty']);
-unset($_SESSION[_ss . 'temp_price']);
-unset($_SESSION[_ss . 'temp_note']);
-unset($_SESSION[_ss . 'temp_total_price']);
 
 $db = new database();
 
@@ -108,7 +106,7 @@ MAIN CONTENT
                                     $product = $row['name']." (".date('d-m-Y', strtotime($row['start_ship_date'])).")";
                                 }
 
-                                echo "<option value='".$row['id'].",".$row['agent_price']."'>".$product."</option>";
+                                echo "<option value='".$row['id'].",".$row['agent_price'].",".$row['weight'].",".$row['wholesale_price']."'>".$product."</option>";
                             }
                             ?>
                         </select>
@@ -134,10 +132,10 @@ MAIN CONTENT
                     <label for="shipping_type" class="text-bold required col-xs-12">ประเภทการส่ง</label>
                     <div class="col-xs-6">
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="พัสดุธรรมดา">พัสดุธรรมดา</label>
+                          <label><input type="radio" id="rdo_parcel" name="shipping_type" value="พัสดุธรรมดา">พัสดุธรรมดา</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="ลงทะเบียน">ลงทะเบียน</label>
+                          <label><input type="radio" id="rdo_register" name="shipping_type" value="ลงทะเบียน">ลงทะเบียน</label>
                         </div>
                         <div class="radio">
                           <label><input type="radio" name="shipping_type" value="EMS">EMS</label>

@@ -1,6 +1,7 @@
 <?php
 
 $db = new database();
+$total_weight = 0;
 $item_count = isset($_SESSION[_ss . 'cart']) ? count($_SESSION[_ss . 'cart']) : 0;
 if ($item_count > 0 && isset($_SESSION[_ss . 'qty'])) {
     $me_qty = 0;
@@ -35,7 +36,8 @@ echo   "<table class='table table-bordered table-striped'>
 	                <th>สินค้า</th>
 	                <th style='text-align:center;'>ราคา/หน่วย</th>
 	                <th style='width: 100px;text-align: center;''>จำนวน</th>
-	                <th style='text-align:center;'>จำนวนเงินรวม</th>
+                    <th style='text-align:center;'>จำนวนเงินรวม</th>
+                    <th style='text-align:center;'>น้ำหนักรวม (กรัม)</th>
 	                <th>&nbsp;</th>
 	            </tr>
 	        </thead>
@@ -45,7 +47,9 @@ $i = 0;
 $total_price = 0;
 while ($rs_ct = $db->get($query_ct)) {
 $key = array_search($rs_ct['id'], $_SESSION[_ss . 'cart']);
-$total_price = $total_price + ($_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key]);
+
+/*$total_price += ($_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key]);
+$total_weight += ($_SESSION[_ss . 'weight'][$key] * $_SESSION[_ss . 'qty'][$key]);*/
 
 echo   "<tr>
             <td>
@@ -61,6 +65,7 @@ echo   "<tr>
                 <input type='hidden' name='product_id_{$i}' value='{$rs_ct['id']}'>
             </td>
             <td style='text-align:right;'>".number_format($_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key], 2)."</td>
+            <td style='text-align:right;'>".number_format($_SESSION[_ss . 'weight'][$key] * $_SESSION[_ss . 'qty'][$key])."</td>
             <td style='text-align:center;'>
                 <button type='button' data-toggle='modal' data-target='#deleteModal{$rs_ct['id']}' class='btn btn-danger'>
                     <span class='glyphicon glyphicon-trash'></span>
@@ -70,7 +75,7 @@ echo   "<tr>
         </tr>
         <tr>
             <td style='text-align:right;'>รายละเอียดสินค้า</td>
-            <td colspan='5'>
+            <td colspan='6'>
                 <input type='text' name='note[{$i}]' value='{$_SESSION[_ss . 'note'][$key]}' class='form-control input-sm'>
             </td>
         </tr>
@@ -94,13 +99,33 @@ echo   "<tr>
         </div>";
 $i++; }
 
-echo    "<tr>
-            <td colspan='6' style='text-align: right;'>
-                <h4>จำนวนเงินรวมทั้งหมด ".number_format($total_price)." บาท</h4>
+echo    "
+        <tr>
+            <td colspan='7' style='text-align: right;'>
+                <h4>รวมเงิน(ยังไม่รวมค่าส่ง) ".number_format($_SESSION[_ss . 'total_price'])." บาท</h4>
             </td>
         </tr>
         <tr>
-            <td colspan='6' style='text-align: right;'>
+            <td colspan='7' style='text-align: right;'>
+                <h4>น้ำหนักรวม ".number_format($_SESSION[_ss . 'total_weight'])." กรัม</h4>
+            </td>
+        <tr>
+        <tr>
+            <td colspan='7' style='text-align: right;'>
+                <h4>
+                    <span id='wrap_shipping_text'>คำนวณค่าส่ง ประเภท <span id='sp_shipping_type'/> <span id='sp_shipping_rate'/> บาท</span>
+                    <span id='wrap_shipping_warning'>น้ำหนักเกิน 10 กิโลกรัม โปรดรอสอบถามแอดมิน!</span>
+                </h4>
+                <a href='{$baseUrl}/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan='7' style='text-align: right;'>
+                <h4>รวมเงินทั้งหมด(รวมค่าส่ง) <span id='sp_total_price'/> บาท</h4>
+            </td>
+        </tr>
+        <tr>
+            <td colspan='7' style='text-align: right;'>
                 <button type='button' class='btn btn-primary recal'>
                     <span class='glyphicon glyphicon-refresh'></span>
                     คำนวณสินค้าใหม่
@@ -109,6 +134,66 @@ echo    "<tr>
         </tr>
         </tbody>
     </table>";
+
+//Calculation Shipping Rate Show
+$option_shipping = array(
+    "table" => "shipping_rate",
+    "condition" => "'{$_SESSION[_ss . 'total_weight']}' >= min_wg AND '{$_SESSION[_ss . 'total_weight']}' <= max_wgparcel "
+);
+$query_shipping = $db->select($option_shipping);
+$rs_shipping = $db->get($query_shipping);
+
+echo    "<script>
+            if (".$_SESSION[_ss . 'total_weight']." > 2000) {
+                $('#rdo_register').attr('disabled', true);
+
+                if($('#rdo_register').prop('checked'))
+                    $('#rdo_parcel').prop('checked', true);
+            }else{
+                $('#rdo_register').attr('disabled', false);
+            }
+
+            $('input[name=shipping_type]').change(function() {
+
+                var shipping_rate = 0; 
+
+                if (".$db->rows($query_shipping)." == 0){
+                    $('#wrap_shipping_text').hide();
+                    $('#wrap_shipping_warning').show();
+                } else {
+                    $('#wrap_shipping_text').show();
+                    $('#wrap_shipping_warning').hide();
+
+                    var shipping_type = $('input[name=shipping_type]:checked').val();
+                    $('#sp_shipping_type').text(shipping_type);
+
+                    switch(shipping_type) {
+                        case 'พัสดุธรรมดา':
+                            shipping_rate = ".$rs_shipping['parcel']."
+                            $('#sp_shipping_rate').text(shipping_rate);
+                            break;
+                        case 'ลงทะเบียน':
+                            shipping_rate = ".$rs_shipping['register']."
+                            $('#sp_shipping_rate').text(shipping_rate);
+                            break;
+                        case 'EMS':
+                            shipping_rate = ".$rs_shipping['EMS']."
+                            $('#sp_shipping_rate').text(shipping_rate);
+                            break;
+                        default:
+                            $('#sp_shipping_rate').text('0');
+                            break;
+                    }
+                }
+
+                $('#sp_total_price').text(addCommas(".$_SESSION[_ss . 'total_price']."+shipping_rate));
+
+            });
+
+            $('input[name=shipping_type]').change();
+
+        </script>";
+
 } else {
 echo   "<div class='alert alert-danger' role='alert' style='margin:15px;'>
 	        ไม่มีสินค้าในตะกร้าสินค้า <b>กรุณาเพิ่มสินค้าด้านบน</b>

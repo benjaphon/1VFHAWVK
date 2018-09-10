@@ -108,17 +108,32 @@ MAIN CONTENT
                         $i = 0;
                         while ($rs_pd = $db->get($query_pd)) {
                             $tr = ($i % 2 == 0) ? "odd" : "even";
+
+                            $option_img = array(
+                                "table" => "images",
+                                "condition" => "ref_id='{$rs_pd['id']}' AND filetype='product'",
+                                "order" => "id",
+                                "limit" => "1"
+                            );
+                            $query_img = $db->select($option_img);
+                            
+                            if($db->rows($query_img) > 0){
+                                $rs_img = $db->get($query_img);
+                                $filename_img = $rs_img['filename'];
+                            }
+                            else {
+                                $filename_img = 'ecimage.jpg';
+                            }
+
                             ?>
                             <tr class="<?php echo $tr; ?>">
                                 <td>         
-                                    <a href="<?php echo base_url(); ?>/assets/upload/product/<?php echo !empty($rs_pd['url_picture'])?$rs_pd['url_picture']:'ecimage.jpg'; ?>" data-imagelightbox="a">
-                                        <img src="<?php echo base_url(); ?>/assets/upload/product/sm_<?php echo !empty($rs_pd['url_picture'])?$rs_pd['url_picture']:'ecimage.jpg'; ?>" class="img-responsive" alt="Responsive image">
+                                    <a href="<?php echo base_url(); ?>/assets/upload/product/<?php echo $filename_img; ?>" data-imagelightbox="a">
+                                        <img src="<?php echo base_url(); ?>/assets/upload/product/sm_<?php echo $filename_img; ?>" class="img-responsive" alt="Responsive image">
                                     </a>
                                 </td>
                                 <td>
-                                    <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                                     <a class="load_data" href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_pd['id']; ?>"><?php echo $rs_pd['name']; ?></a>
-                                    <?php } else echo $rs_pd['name']; ?>
                                 </td>
                                 <td>
                                     <?php echo ($rs_pd['start_ship_date']!=null)? date('d-m-Y', strtotime($rs_pd['start_ship_date'])) : ''; ?>

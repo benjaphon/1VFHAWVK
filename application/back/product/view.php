@@ -14,6 +14,12 @@ $option_product = array(
 $query_product = $db->select($option_product);
 $rs_product = $db->get($query_product);
 
+$option_img = array(
+    "table" => "images",
+    "condition" => "ref_id='{$_GET['id']}' AND filetype = 'product' "
+);
+$query_img = $db->select($option_img);
+
 
 $title = 'รายละเอียดสินค้า : ' . $rs_product['name'];
 /*
@@ -32,6 +38,14 @@ require 'assets/template/back/header.php';
   MAIN CONTENT
   *********************************************************************************************************************************************************** -->
 <!--main content start-->
+<style>
+@import "http://fonts.googleapis.com/css?family=Droid+Sans";
+.abcd img{
+width:200px;
+padding:5px;
+border:1px solid #e8debd
+}
+</style>
 <section id="main-content">
   <section class="wrapper">
     <div class="row mt">
@@ -55,9 +69,24 @@ require 'assets/template/back/header.php';
                 <div class="form-group">
                     <label for="product_image" class="col-sm-2 control-label text-bold">รูปภาพประจำสินค้า</label>
                     <div class="col-sm-4">
-                        <img src="<?php echo $baseUrl ?>/assets/upload/product/md_<?php echo $rs_product['url_picture'];?>">
+                        <?php while ($rs_img = $db->get($query_img)) { ?>
+                            <div id="div-image-<?php echo $rs_img['id']; ?>" class="abcd">
+                                <a title="" download="<?php echo $rs_img['filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/product/<?php echo $rs_img['filename']; ?>"><img src="<?php echo $baseUrl ?>/assets/upload/product/<?php echo $rs_img['filename'];?>"></a>
+                            </div>
+                        <?php } ?>         
                     </div>
                 </div>
+                <?php  if (!empty($rs_product['video_filename'])) { ?>
+                <div class="form-group">
+                    <label for="video" class="col-sm-2 control-label">วิดีโอ</label>
+                    <div class="col-sm-4">
+                            <video width="400" controls>
+                                <source src="<?php echo $baseUrl ?>/assets/upload/product/<?php echo $rs_product['video_filename']; ?>" id="video_here">
+                                    Your browser does not support HTML5 video.
+                            </video>
+                    </div>
+                </div>
+                <?php } ?>
                 <div class="form-group">
                     <label for="name" class="col-sm-2 control-label text-bold">ชื่อสินค้า</label>
                     <div class="col-sm-4">

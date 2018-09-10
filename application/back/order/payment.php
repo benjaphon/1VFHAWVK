@@ -75,14 +75,20 @@ MAIN CONTENT
                         <th style="text-align: right;">ราคา(บาท)</th>
                         <th style="text-align: right;">จำนวน</th>
                         <th style="text-align: right;">รวม</th>
+                        <th style='text-align: right;'>น้ำหนักรวม (กรัม)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $grand_total = 0;
+                    $grand_total_weight = 0;
                     while ($rs_od = $db->get($query_od)) {
+
                         $total_price = $rs_od['price'] * $rs_od['quantity'];
-                        $grand_total = $total_price + $grand_total;
+                        $grand_total += $total_price;
+
+                        $total_weight = $rs_od['weight'] * $rs_od['quantity'];
+                        $grand_total_weight += $total_weight;
                         ?>
                         <tr>
                             <td>
@@ -92,69 +98,82 @@ MAIN CONTENT
                             <td style="text-align: right;"><?php echo number_format($rs_od['price'], 2); ?></td>
                             <td style="text-align: right;"><?php echo $rs_od['quantity']; ?></td>
                             <td style="text-align: right;"><?php echo number_format($total_price, 2); ?></td>
+                            <td style="text-align: right;"><?php echo number_format($total_weight); ?></td>
                         </tr>
                         <tr>
                             <td style='text-align:right;'>รายละเอียดสินค้า :</td>
-                            <td colspan="4"><?php echo $rs_od['note']; ?></td>
+                            <td colspan="5"><?php echo $rs_od['note']; ?></td>
                         </tr>
                     <?php } ?>
                     <tr class="info">
                         <td colspan="3"></td>
-                        <td colspan="2" style="text-align: right;">
+                        <td colspan="3" style="text-align: right;">
                             
                             <input type="hidden" name="grand_total" value="<?php echo $grand_total; ?>">
-                            <label for="pay_money" class="text-bold control-label required">ค่าส่ง (ตามเงื่อนไข)</label>
+                            <label for="pay_money" class="text-bold control-label required">ค่าส่ง (<a href='<?php echo $baseUrl; ?>/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a>)</label>
                             <input type="text" style="text-align: right;" id="ship_price" name="ship_price" class="form-control input-sm" width="20px" data-validation="number" data-validation-error-msg="โปรดระบุค่าส่ง" data-validation-allowing="float"
                             <?php 
 
+                                $option_shipping = array(
+                                    "table" => "shipping_rate",
+                                    "condition" => "'{$grand_total_weight}' >= min_wg AND '{$grand_total_weight}' <= max_wgparcel "
+                                );
+                                $query_shipping = $db->select($option_shipping);
+                                $rs_shipping = $db->get($query_shipping);
+
+                                $shipping_fees = 0;
                                 $grand_total_with_ship = 0;
 
                                 if ($rs_order['ship_price']==null) {
-                                    if($db->rows($query_od)==1){
-                                        $query_od = $db->query($sql_od);
-                                        $rs_od = $db->get($query_od);
-                                        if($rs_od['quantity']==1){
-                                            switch ($rs_order['shipping_type']) {
-                                                case 'พัสดุธรรมดา':
-                                                    $grand_total_with_ship = $grand_total + $rs_od['parcel'];
-                                                    echo "value='".$rs_od['parcel']."'";
-                                                    break;
-                                                case 'ลงทะเบียน':
-                                                    $grand_total_with_ship = $grand_total + $rs_od['registered'];
-                                                    echo "value='".$rs_od['registered']."'";
-                                                    break;
-                                                case 'EMS':
-                                                    $grand_total_with_ship = $grand_total + $rs_od['ems'];
-                                                    echo "value='".$rs_od['ems']."'";
-                                                    break;
-                                                case 'KERRY':
-                                                    $grand_total_with_ship = $grand_total + $rs_od['kerry'];
-                                                    echo "value='".$rs_od['kerry']."'";
-                                                    break;
-                                            }
-                                            
-                                        }
+                                    switch ($rs_order['shipping_type']) {
+                                        case 'พัสดุธรรมดา':
+                                            $shipping_fees = $rs_shipping['parcel'];
+                                            break;
+                                        case 'ลงทะเบียน':
+                                            $shipping_fees = $rs_shipping['register'];
+                                            break;
+                                        case 'EMS':
+                                            $shipping_fees = $rs_shipping['EMS'];
+                                            break;
+                                        /*case 'KERRY':
+                                            $grand_total_with_ship = $grand_total + $rs_shipping['kerry'];
+                                            echo "value='".$rs_shipping['kerry']."'";
+                                            break;*/
                                     }
+
+                                    $grand_total_with_ship = $grand_total + $shipping_fees;
+                                    if ($shipping_fees > 0)
+                                    echo "value='".$shipping_fees."'";
                                 }else{
                                     $grand_total_with_ship = $grand_total + $rs_order['ship_price'];
                                     echo "value='".$rs_order['ship_price']."'";
                                 }
-
-                            ?>>* สอบถามแอดมิน
-
-                        </td>   
+                            ?>>
+                        </td>
                     </tr>
                     <tr class="info">
-                        <td colspan="5" style="text-align: right; font-size: 16px;"><strong>รวมทั้งหมด <span id="grand_total"><?php echo number_format($grand_total_with_ship, 2); ?></span> บาท</strong></td>
+                        <td colspan="6" style="text-align: right;">
+                            <h4>
+                                <?php if ($db->rows($query_shipping) > 0){ ?>
+                                    <p>น้ำหนักรวม <?php echo number_format($grand_total_weight); ?> กรัม</p>
+                                <?php } else { ?>
+                                    <p>น้ำหนักเกิน 10 กิโลกรัม โปรดรอสอบถามแอดมิน!</p>
+                                <?php } ?>
+                            </h4>
+                            
+                        </td>
                     </tr>
                     <tr class="info">
-                        <td colspan="5">ที่อยู่ผู้ส่ง :<br><?php echo $rs_order['sender']; ?></td>
+                        <td colspan="6" style="text-align: right;"><h4><strong>รวมทั้งหมด <span id="grand_total"><?php echo number_format($grand_total_with_ship); ?></span> บาท</strong></h4></td>
                     </tr>
                     <tr class="info">
-                        <td colspan="5">ที่อยู่ผู้รับ :<br><?php echo $rs_order['receiver']; ?></td>
+                        <td colspan="6">ที่อยู่ผู้ส่ง :<br><?php echo $rs_order['sender']; ?></td>
                     </tr>
                     <tr class="info">
-                        <td colspan="5">ประเภทการส่ง :<br><?php echo $rs_order['shipping_type']; ?></td>
+                        <td colspan="6">ที่อยู่ผู้รับ :<br><?php echo $rs_order['receiver']; ?></td>
+                    </tr>
+                    <tr class="info">
+                        <td colspan="6">ประเภทการส่ง :<br><?php echo $rs_order['shipping_type']; ?></td>
                     </tr>
                 </tbody>
             </table>
@@ -200,10 +219,10 @@ MAIN CONTENT
                     <div class="form-group clearfix">
                         <div class="col-xs-6">
                             <label for="url_picture" class="control-label">รูปภาพ</label>
-                            <input type="file" name="image" id="image">
+                            <input type="file" name="image[]" id="image" accept="image/*">
                         </div>
                     </div>
-                    <div class="form-group clearfix"">
+                    <div class="form-group clearfix">
                         <div class="col-sm-6">
                             <label for="detail" class="text-bold">เพิ่มเติม</label>
                             <input type="text" id="detail" name="detail" class="form-control" autocomplete="off">
@@ -234,8 +253,8 @@ MAIN CONTENT
             </div>
         </div>
     </div>
-  </section><! --/wrapper -->
-</section><!-- /MAIN CONTENT -->
+  </section><!--/wrapper -->
+</section><!--/MAIN CONTENT -->
 
 <?php
 /*
@@ -255,15 +274,56 @@ require 'assets/template/back/footer.php';
 <script>
     $(document).ready(function () {
         $(".saveform").click(function () {
+            if ($("input[name='image[]']")[0].files && $("input[name='image[]']")[0].files[0]) {
+                var filename = $("input[name='image[]']")[0].files[0].name;
+                var extension = filename.replace(/^.*\./, '').toLowerCase();
+                switch (extension) {
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'png':
+                        break;
+                    default:
+                        alert("นามสกุลไฟล์ไม่ถูกต้องค่ะ");
+                        return false;
+                }
+
+                if($("input[name='image[]']")[0].files[0].size > 1000000){
+                    alert("ขนาดไฟล์ห้ามใหญ่เกิน 1MB ค่ะ");
+                    return false;
+                }
+            }
+
             $("#payment_form").submit();
-            return false;
         });
 
         $("#ship_price").blur(function(){
             var ship_price = ($(this).val()) ? parseFloat($(this).val()) : 0;
             
-            $("#grand_total").text(ship_price+<?php echo $grand_total; ?>);
+            $("#grand_total").text(addCommas(ship_price+<?php echo $grand_total; ?>));
+        });
+
+        $('body').on('change', '#image', function() {
+            if (this.files && this.files[0]) {
+
+                var extension = this.files[0].name.replace(/^.*\./, '').toLowerCase();
+                switch (extension) {
+                    case 'jpg':
+                    case 'jpeg':
+                    case 'png':
+                        break;
+                    default:
+                        alert("นามสกุลไฟล์ไม่ถูกต้องค่ะ");
+                        return false;
+                }
+
+                if(this.files[0].size > 1000000){
+                    alert("ขนาดไฟล์ห้ามใหญ่เกิน 1MB ค่ะ");
+                    return false;
+                }
+            }
         });
     });
     $.validate();
 </script>
+
+

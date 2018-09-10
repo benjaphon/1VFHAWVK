@@ -3,24 +3,12 @@
  * php code///////////**********************************************************
  */
 $title = 'ระบบจัดการร้านค้า : รายการสั่งซื้อสินค้า';
-
-$perpage = 25;
-if (isset($_GET['page'])) {
-    $page = $_GET['page'];
-} else {
-    $page = 1;
-}
-
-$start = ($page - 1) * $perpage;
-
 $db = new database();
 
 if($_SESSION[_ss . 'levelaccess'] == 'admin') {
     $option_or = array(
         "table" => "orders",
-        "order" => "id DESC",
-        "limit" => "{$start},{$perpage}",
-        "condition" => "1=1"
+        "order" => "id DESC"
     );
 }
 else
@@ -32,40 +20,7 @@ else
     );
 }
 
-$search = (isset($_GET['search']))?$_GET['search']:'';
-$status = (isset($_GET['status']))?$_GET['status']:'';
-
-if(isset($search) && !empty($search)){
-    $option_or["condition"] .= " AND (";
-    $option_or["condition"] .= " id LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " order_datetime LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " receiver LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " receiver LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " tracking_no LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " ship_date LIKE'%{$search}%')";
-}
-
-if(isset($status) && !empty($status)){
-    $option_or["condition"] .= " AND (order_status='{$status}')";
-}
-
 $query_or = $db->select($option_or);
-
-unset($option_or["limit"]);
-$option_or["fields"] = "COUNT(*) as num_row";
-$query_pg = $db->select($option_or);
-$rs_pg = $db->get($query_pg);
-$total_record = $rs_pg["num_row"];
-$total_page = ceil($total_record / $perpage);
-
-$page_number = 10;
-$page_start = $page - ceil($page_number/2);
-$page_end = $page + ceil($page_number/2);
-
-$page_start = ($page_start > 1) ? $page_start : 1;
-$page_end = ($page_end < $total_page) ? $page_end : $total_page;
-
-
 
 //$uri = $_SERVER['REQUEST_URI']; // url
 
@@ -85,12 +40,6 @@ require 'assets/template/back/header.php';
     #tbl_Order ul{
         padding: 0;
     }
-
-    @media (min-width: 1200px) {
-        .pull-lg-right {
-            float: right;
-        }
-    }
 </style>
 
 <!-- **********************************************************************************************************************************************************
@@ -105,8 +54,8 @@ MAIN CONTENT
         </div>
     </div>
     <div class="row mt">
-        <div class="col-lg-6">
-            <div class="form-group">
+        <div class="col-lg-12">
+            <div class="subhead">
                 <a role="button" class="btn btn-success new-data"
                    href="<?php echo $baseUrl; ?>/back/order/create">
                     <i class="fa fa-plus"></i>
@@ -119,32 +68,10 @@ MAIN CONTENT
                 </a>
             </div>
         </div>
-        <div class="col-lg-6">
-            <form class="form-inline pull-lg-right" method="get">
-                <div class="form-group">
-                    <input id="search" name="search" type="text" class="form-control form-control-lg" placeholder="Search Here">
-                </div>
-                <div class="form-group">
-                    <!--R จองสินค้า
-                        P ชำระเงินแล้ว
-                        F รับออเดอร์
-                        S ส่งแล้ว-->
-                    <select id="select_status" name="status" class="form-control">
-                        <option value="">สถานะ</option>
-                        <option value="R">จองสินค้า</option>
-                        <option value="P">ชำระเงินแล้ว</option>
-                        <option value="F">รับออเดอร์</option>
-                        <option value="S">ส่งแล้ว</option>
-                    </select>
-                </div>
-                <button id="btn_search" type="submit" class="btn btn-primary">ค้นหา</button>
-                <button type="reset" class="btn btn-primary">เคลียร์</button>
-            </form>
-        </div>
     </div>
     <div class="row mt">
         <div class="col-lg-12">
-            <div id="user-grid" class="grid-view table-responsive">
+            <div id="user-grid" class="grid-view">
                 <table class="table table-striped table-custom" id="tbl_Order">
                     <thead>
                         <tr>
@@ -163,6 +90,7 @@ MAIN CONTENT
                             <th id="user-grid_c0">
                                 <a class="sort-link">สถานะ</a>
                             </th>
+                            <th class="button-column" id="user-grid_c6">&nbsp;</th>
                             <th id="user-grid_c1">
                                 <a class="sort-link">เลขที่พัสดุ</a>
                             </th>
@@ -175,10 +103,11 @@ MAIN CONTENT
                         <?php
                         $i = 0;
                         while ($rs_or = $db->get($query_or)) {
+                            $tr = ($i % 2 == 0) ? "odd" : "even";
                             //สถานะ
                             /*
                             R จองสินค้า
-                            P ชำระเงินแล้ว
+                            P ชำรเงินแล้ว
                             F รับออเดอร์
                             S ส่งแล้ว
                             */
@@ -222,20 +151,18 @@ MAIN CONTENT
                             }
 
                             ?>
-                            <tr>
+                            <tr class="<?php echo $tr; ?>">
                                 <td>
                                     <a href="<?php echo $baseUrl; ?>/back/order/view/<?php echo $rs_or['id']; ?>"><?php echo $rs_or['id']; ?></a>
                                 </td>
                                 <td><?php echo thaidate($rs_or['order_datetime']); ?></td>
                                 <td width="200px">
-                                    <p data-toggle="tooltip" title="<?php echo $rs_or['receiver']; ?>">
                                     <?php if (strlen($rs_or['receiver']) <= 100) {
                                                 echo $rs_or['receiver'];
                                             } else {
                                                 echo substr($rs_or['receiver'], 0, 100).'...';
                                             }    
                                     ?>
-                                    </p>
                                 </td>
                                 <td>
                                     <ul>
@@ -262,30 +189,27 @@ MAIN CONTENT
                                 </td>
 
                                 <td><?php echo $order_status; ?></td>
-                                <td><a href="http://emsbot.com/#/?s=<?php echo $rs_or['tracking_no'];?>" target="_blank"><?php echo $rs_or['tracking_no'];?></a></td>
-                                <td><?php if(!empty($rs_or['ship_date'])) echo thaidate($rs_or['ship_date']); ?></td>
-                            </tr>
-                            <tr>
-                                <td colspan="7" style="border-top: 0px;">
+                                <td class="button-column">
+
                                     <?php if($_SESSION[_ss . 'levelaccess'] == 'admin' && $rs_or['order_status']=='P'){ ?>
-                                        <a class="btn btn-success btn-sm" title="ยืนยันการชำระเงิน" href="<?php echo $baseUrl; ?>/back/order/view/<?php echo $rs_or['id']; ?>"><i class="  glyphicon glyphicon-ok"></i> ยืนยันการชำระเงิน</a>
+                                        <a class="btn btn-success btn-xs" title="ยืนยันการชำระเงิน" href="<?php echo $baseUrl; ?>/back/order/view/<?php echo $rs_or['id']; ?>"><i class="  glyphicon glyphicon-ok"></i> ยืนยันการชำระเงิน</a>
                                     <?php } ?>
 
                                     <?php if($rs_or['order_status']=='F' || $rs_or['order_status']=='S'){ ?>
                                         <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
-                                            <a class="btn btn-success btn-sm" title="ส่งสินค้า" href="<?php echo $baseUrl; ?>/back/order/view/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-send"></i> ส่งสินค้า</a>
+                                            <a class="btn btn-success btn-xs" title="ส่งสินค้า" href="<?php echo $baseUrl; ?>/back/order/view/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-send"></i> ส่งสินค้า</a>
                                         <?php } ?>
                                     <?php } else { ?>
-                                        <a class="btn btn-warning btn-sm mr-1 <?php echo $btnstat;?>" title="<?php echo $btnorder;?>" href="<?php echo $baseUrl; ?>/back/order/payment/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-usd"></i> <?php echo $btnorder;?></a>
+                                        <a class="btn btn-warning btn-xs <?php echo $btnstat;?>" title="<?php echo $btnorder;?>" href="<?php echo $baseUrl; ?>/back/order/payment/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-usd"></i> <?php echo $btnorder;?></a>
                                     <?php } ?>
 
-                                    <a class="btn btn-info btn-sm" title="รายละเอียด" href="<?php echo $baseUrl; ?>/back/order/view/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-zoom-in"></i> รายละเอียด</a>
-                                    <a class="btn btn-warning btn-sm <?php echo $btnstat;?>" title="แก้ไข" href="<?php echo $baseUrl; ?>/back/order/update/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-edit"></i> แก้ไข</a>
+                                    <a class="btn btn-info btn-xs" title="รายละเอียด" href="<?php echo $baseUrl; ?>/back/order/view/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-zoom-in"></i> รายละเอียด</a>
+                                    <a class="btn btn-warning btn-xs <?php echo $btnstat;?>" title="แก้ไข" href="<?php echo $baseUrl; ?>/back/order/update/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-edit"></i> แก้ไข</a>
                                     <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
-                                        <a class="btn btn-success btn-sm" title="พิมพ์" href="<?php echo $baseUrl; ?>/back/order/print/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-print"></i> พิมพ์</a>
+                                        <a class="btn btn-success btn-xs" title="พิมพ์" href="<?php echo $baseUrl; ?>/back/order/print/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-print"></i> พิมพ์</a>
                                     <?php } ?>
-                                    <a class="btn btn-danger btn-sm <?php echo $btnstat_del;?> confirm" title="ลบ" href="#" data-toggle="modal" data-target="#deleteModal<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-remove"></i> ลบ</a>
-                                    <a class="btn btn-warning btn-sm" title="แจ้งปัญหา" href="<?php echo $baseUrl; ?>/back/report/view/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-bullhorn"></i> แจ้งปัญหา</a>
+                                    <a class="btn btn-danger btn-xs <?php echo $btnstat_del;?> confirm" title="ลบ" href="#" data-toggle="modal" data-target="#deleteModal<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-remove"></i> ลบ</a>
+                                    <a class="btn btn-warning btn-xs" title="แจ้งปัญหา" href="<?php echo $baseUrl; ?>/back/report/view/<?php echo $rs_or['id']; ?>"><i class="glyphicon glyphicon-bullhorn"></i> แจ้งปัญหา</a>
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="deleteModal<?php echo $rs_or['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -306,31 +230,16 @@ MAIN CONTENT
                                         </div>
                                     </div>
                                 </td>
+                                <td><a href="http://emsbot.com/#/?s=<?php echo $rs_or['tracking_no'];?>" target="_blank"><?php echo $rs_or['tracking_no'];?></a></td>
+                                <td><?php if(!empty($rs_or['ship_date'])) echo thaidate($rs_or['ship_date']); ?></td>
                             </tr>
                         <?php } ?>
                     </tbody>
                 </table>
-                <nav>
-                    <ul class="pagination pull-lg-right">
-                        <li>
-                            <a href="?page=1&search=<?php echo $search ?>&status=<?php echo $status ?>" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                            <?php for($i=$page_start; ($i<$page_start+$page_number) && ($i<=$total_page); $i++){ ?>
-                                <li><a href="?page=<?php echo $i; ?>&search=<?php echo $search ?>&status=<?php echo $status ?>"><?php echo $i; ?></a></li>
-                            <?php } ?>
-                        <li>
-                            <a href="?page=<?php echo $total_page;?>&search=<?php echo $search ?>&status=<?php echo $status ?>" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
         </div>
     </div>
-  </section><!--/wrapper -->
+  </section><! --/wrapper -->
 </section><!-- /MAIN CONTENT -->
 
 <?php
@@ -345,19 +254,12 @@ require 'assets/template/back/footer.php';
 
     <script type="text/javascript">
         $(document).ready(function () {
-            /*$("#tbl_Order").DataTable({
+            $("#tbl_Order").DataTable({
                 aaSorting: [],
                 responsive: true,
                 "language": {
                     "url": "<?php echo $baseUrl; ?>/assets/DataTables/lang/Thai.json"
                 }
-            });*/
-
-            $("#select_status").val("<?php echo $status; ?>");
-            $("#search").val("<?php echo $search; ?>");
-            $("button[type=reset]").click(function(){
-                $(this).parent("form")[0].reset();
-                $("#btn_search").click();
             });
         });
     </script>

@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "note" => trim($_POST['note']),
         "order_datetime" => date('Y-m-d H:i:s'),
         "total" => $_SESSION[_ss . 'total_price'],
+        "total_weight" => $_SESSION[_ss . 'total_weight'],
         "user_id" => $_SESSION[_ss . 'id'],
         "created_at" => date('Y-m-d H:i:s'),
         "modified_at" => date('Y-m-d H:i:s')
@@ -27,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 "product_id" => $value,
                 "quantity" => $_SESSION[_ss . 'qty'][$key],
                 "price" => $_SESSION[_ss . 'price'][$key],
+                "weight" => $_SESSION[_ss . 'weight'][$key],
                 "note" => $_SESSION[_ss . 'note'][$key]
             );
             $db->insert("order_details", $value_od);
@@ -39,8 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         unset($_SESSION[_ss . 'cart']);
         unset($_SESSION[_ss . 'qty']);
         unset($_SESSION[_ss . 'price']);
+        unset($_SESSION[_ss . 'wholesale_price']);
+        unset($_SESSION[_ss . 'weight']);
         unset($_SESSION[_ss . 'note']);
         unset($_SESSION[_ss . 'total_price']);
+        unset($_SESSION[_ss . 'temp_qty']);
+        
 
         //$_SESSION[_ss . 'mform'] = "borbaimai";
         //$_SESSION[_ss . 'order_id'] = $order_id;

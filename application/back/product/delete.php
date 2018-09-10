@@ -5,23 +5,24 @@
  */
 $db = new database();
 
-$option_im = array(
-    "table" => "products",
-    "fields" => "url_picture",
-    "condition" => "id='{$_GET['id']}'"
+$option_img = array(
+    "table" => "images",
+    "fields" => "filename",
+    "condition" => "ref_id='{$_GET['id']}' AND filetype='product'"
 );
-$query_im = $db->select($option_im);
-$rs_im = $db->get($query_im);
+$query_img = $db->select($option_img);
 
 $query = $db->delete("products", "id='{$_GET['id']}'");
 if ($query == TRUE) {
-    if ($rs_im['url_picture'] != "ecimage.jpg") {
+    while($rs_im = $db->get($query_img)){
         $path = base_path() . "/assets/upload/product/";
-        @unlink($path . $rs_im['url_picture']);
-        @unlink($path . "thumb_" . $rs_im['url_picture']);
-        @unlink($path . "md_" . $rs_im['url_picture']);
-        @unlink($path . "sm_" . $rs_im['url_picture']);
+        @unlink($path . $rs_im['filename']);
+        @unlink($path . "thumb_" . $rs_im['filename']);
+        @unlink($path . "md_" . $rs_im['filename']);
+        @unlink($path . "sm_" . $rs_im['filename']);
     }
+
+    $query = $db->delete("images", "ref_id='{$_GET['id']}'");
 } else {
     //error can't delete foreign key just update status
     $value_pd = array(

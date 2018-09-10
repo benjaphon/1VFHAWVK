@@ -59,7 +59,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
     <link href="<?php echo $baseUrl; ?>/assets/css/style-custom.css" rel="stylesheet">
     <link href="<?php echo $baseUrl; ?>/assets/css/style-responsive.css" rel="stylesheet">
 
-    <script src="<?php echo $baseUrl; ?>/assets/js/chart-master/Chart.js"></script>
+    <!--<script src="<?php echo $baseUrl; ?>/assets/js/chart-master/Chart.js"></script>-->
     <!-- DATA TABLES -->
     <link href="<?php echo $baseUrl; ?>/assets/DataTables/datatables.min.css" rel="stylesheet" type="text/css" />
     <!-- selectbox -->
@@ -102,15 +102,17 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                             </li>
                             <?php while ($rs_head_pd = $db_head->get($query_head_pd)) { ?>
                             <li>
-                                <a href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_head_pd['id']; ?>">
-                                    <span class="photo"><img alt="avatar" src="<?php echo $baseUrl; ?>/assets/upload/product/thumb_<?php echo $rs_head_pd['url_picture']; ?>"></span>
-                                    <span class="subject">
-                                      <span><?php echo $rs_head_pd['name']; ?></span>
-                                    </span>
-                                    <span class="message">
-                                        คงเหลือ <?php echo $rs_head_pd['quantity']; ?> ชิ้น
-                                    </span>
-                                </a>
+                                <div>
+                                    <a href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_head_pd['id']; ?>">
+                                        <span class="photo"><img alt="avatar" src="<?php echo $baseUrl; ?>/assets/upload/product/thumb_<?php echo $rs_head_pd['url_picture']; ?>"></span>
+                                        <span class="subject">
+                                        <span><?php echo $rs_head_pd['name']; ?></span>
+                                        </span>
+                                        <span class="message">
+                                            คงเหลือ <?php echo $rs_head_pd['quantity']; ?> ชิ้น
+                                        </span>
+                                    </a>
+                                </div>
                             </li>
                             <?php } ?>
                         </ul>
@@ -127,12 +129,14 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                             </li>
                             <?php while ($rs_head_pd_2 = $db_head->get($query_head_pd_2)) { ?>
                             <li>
-                                <a href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_head_pd_2['id']; ?>">
-                                    <span class="photo"><img alt="avatar" src="<?php echo $baseUrl; ?>/assets/upload/product/thumb_<?php echo $rs_head_pd_2['url_picture']; ?>"></span>
-                                    <span class="subject">
-                                      <span><?php echo $rs_head_pd_2['name']; ?></span>
-                                    </span>
-                                </a>
+                                <div>
+                                    <a href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_head_pd_2['id']; ?>">
+                                        <span class="photo"><img alt="avatar" src="<?php echo $baseUrl; ?>/assets/upload/product/thumb_<?php echo $rs_head_pd_2['url_picture']; ?>"></span>
+                                        <span class="subject">
+                                        <span><?php echo $rs_head_pd_2['name']; ?></span>
+                                        </span>
+                                    </a>
+                                </div>
                             </li>
                             <?php } ?>
                         </ul>
@@ -208,7 +212,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                       </a>
                   </li>
                   <li>
-                      <span>Version 3.0</span>
+                      <span>Version 4.0</span>
                   </li>
                   <?php } ?>
               </ul>

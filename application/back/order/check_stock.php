@@ -5,7 +5,6 @@ if (isset($_SESSION[_ss . 'cart']) && COUNT($_SESSION[_ss . 'cart']) > 0) {
     //Check Stock
     foreach ($_SESSION[_ss . 'cart'] as $key => $value) {
         $product_id = $value;
-        $qty = $_SESSION[_ss . 'qty'][$key];
 
         $option_pd = array(
             "table" => "products",
@@ -15,7 +14,12 @@ if (isset($_SESSION[_ss . 'cart']) && COUNT($_SESSION[_ss . 'cart']) > 0) {
         $query_pd = $db->select($option_pd);
         $rs_pd = $db->get($query_pd);
 
-        if ($rs_pd['quantity'] < $qty) {
+        if (!isset($_SESSION[_ss . 'temp_qty'][$key]))
+            $temp_qty = $_SESSION[_ss . 'qty'][$key];
+        else
+            $temp_qty = $_SESSION[_ss . 'qty'][$key]-$_SESSION[_ss . 'temp_qty'][$key];
+
+        if ($rs_pd['quantity'] < $temp_qty) {
             echo "สินค้า {$rs_pd['name']} คงเหลือไม่เพียงพอ";
             break;
         }
