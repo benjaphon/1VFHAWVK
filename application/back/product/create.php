@@ -108,6 +108,12 @@ border:1px solid #e8debd
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="wholesale_price" class="col-sm-2 control-label required">ราคาขายส่ง</label>
+                        <div class="col-sm-4">
+                            <input type="text" id="wholesale_price" name="wholesale_price" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="agent_price" class="col-sm-2 control-label required">ราคา ตท.</label>
                         <div class="col-sm-4">
                             <input type="text" id="agent_price" name="agent_price" class="form-control input-sm" data-validation="number" data-validation-allowing="float">

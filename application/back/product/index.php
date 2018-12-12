@@ -87,6 +87,9 @@ MAIN CONTENT
                                 </th>
                             <?php } ?>
                             <th id="user-grid_c1">
+                                <a class="sort-link">ราคาขายส่ง</a>
+                            </th>
+                            <th id="user-grid_c1">
                                 <a class="sort-link">ราคา ตท.</a>
                             </th>
                             <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
@@ -141,6 +144,7 @@ MAIN CONTENT
                                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                                     <td><?php echo $rs_pd['price']; ?></td>
                                 <?php } ?>
+                                <td><?php echo $rs_pd['wholesale_price']; ?></td>
                                 <td><?php echo $rs_pd['agent_price']; ?></td>
                                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                                     <td><?php echo $rs_pd['sale_price']; ?></td>

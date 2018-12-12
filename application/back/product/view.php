@@ -102,6 +102,12 @@ border:1px solid #e8debd
                 </div>
                 <?php } ?>
                 <div class="form-group">
+                    <label for="wholesale_price" class="col-sm-2 control-label text-bold">ราคาขายส่ง</label>
+                    <div class="col-sm-4">
+                        <label name="wholesale_price" class="control-label"><?php echo $rs_product['wholesale_price']; ?></label>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="agent_price" class="col-sm-2 control-label text-bold">ราคา ตท.</label>
                     <div class="col-sm-4">
                         <label name="agent_price" class="control-label"><?php echo $rs_product['agent_price']; ?></label>

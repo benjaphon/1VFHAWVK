@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $value_pd = array(
         "name" => trim($_POST['name']),
         "price" => trim($_POST['price']),
+        "wholesale_price" => trim($_POST['wholesale_price']),
         "agent_price" => trim($_POST['agent_price']),
         "sale_price" => trim($_POST['sale_price']),
         "parcel" => trim($_POST['parcel']),
