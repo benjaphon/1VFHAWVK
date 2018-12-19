@@ -110,7 +110,7 @@ MAIN CONTENT
                         <td colspan="3" style="text-align: right;">
                             
                             <input type="hidden" name="grand_total" value="<?php echo $grand_total; ?>">
-                            <label for="pay_money" class="text-bold control-label required">ค่าส่ง (<a href='<?php echo $baseUrl; ?>/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a>)</label>
+                            <label for="pay_money" class="text-bold control-label required">ค่าส่ง (ตามเงื่อนไข)<!--(<a href='<?php echo $baseUrl; ?>/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a>)--></label>
                             <input type="text" style="text-align: right;" id="ship_price" name="ship_price" class="form-control input-sm" width="20px" data-validation="number" data-validation-error-msg="โปรดระบุค่าส่ง" data-validation-allowing="float"
                             <?php 
 

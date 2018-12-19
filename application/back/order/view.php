@@ -112,7 +112,7 @@ MAIN CONTENT
                     <?php } ?>
                     <tr class="info">
                         <td colspan="6" style="text-align: right;">
-                            <p><a href='<?php echo $baseUrl; ?>/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a></p>
+                            <!--<p><a href='<?php echo $baseUrl; ?>/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a></p>-->
                             <?php if (isset($rs_os['ship_price'])){ ?>
                                 <h4>ค่าส่ง <?php echo number_format($rs_os['ship_price']); ?> บาท</h4>
                             <?php } else { ?>

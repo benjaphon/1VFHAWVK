@@ -116,7 +116,7 @@ echo    "
                     <span id='wrap_shipping_text'>คำนวณค่าส่ง ประเภท <span id='sp_shipping_type'/> <span id='sp_shipping_rate'/> บาท</span>
                     <span id='wrap_shipping_warning'>น้ำหนักเกิน 10 กิโลกรัม โปรดรอสอบถามแอดมิน!</span>
                 </h4>
-                <a href='{$baseUrl}/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a>
+                <!--<a href='{$baseUrl}/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a>-->
             </td>
         </tr>
         <tr>
