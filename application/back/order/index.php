@@ -40,7 +40,6 @@ if(isset($search) && !empty($search)){
     $option_or["condition"] .= " id LIKE'%{$search}%' OR";
     $option_or["condition"] .= " order_datetime LIKE'%{$search}%' OR";
     $option_or["condition"] .= " receiver LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " receiver LIKE'%{$search}%' OR";
     $option_or["condition"] .= " tracking_no LIKE'%{$search}%' OR";
     $option_or["condition"] .= " ship_date LIKE'%{$search}%')";
 }
