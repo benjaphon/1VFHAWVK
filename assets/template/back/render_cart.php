@@ -37,7 +37,7 @@ echo   "<table class='table table-bordered table-striped'>
 	                <th style='text-align:center;'>ราคา/หน่วย</th>
 	                <th style='width: 100px;text-align: center;''>จำนวน</th>
                     <th style='text-align:center;'>จำนวนเงินรวม</th>
-                    <th style='text-align:center;'>น้ำหนักรวม (กรัม)</th>
+                    <!--<th style='text-align:center;'>น้ำหนักรวม (กรัม)</th>-->
 	                <th>&nbsp;</th>
 	            </tr>
 	        </thead>
@@ -65,7 +65,7 @@ echo   "<tr>
                 <input type='hidden' name='product_id_{$i}' value='{$rs_ct['id']}'>
             </td>
             <td style='text-align:right;'>".number_format($_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key], 2)."</td>
-            <td style='text-align:right;'>".number_format($_SESSION[_ss . 'weight'][$key] * $_SESSION[_ss . 'qty'][$key])."</td>
+            <!--<td style='text-align:right;'>".number_format($_SESSION[_ss . 'weight'][$key] * $_SESSION[_ss . 'qty'][$key])."</td>-->
             <td style='text-align:center;'>
                 <button type='button' data-toggle='modal' data-target='#deleteModal{$rs_ct['id']}' class='btn btn-danger'>
                     <span class='glyphicon glyphicon-trash'></span>
@@ -75,7 +75,7 @@ echo   "<tr>
         </tr>
         <tr>
             <td style='text-align:right;'>รายละเอียดสินค้า</td>
-            <td colspan='6'>
+            <td colspan='5'>
                 <input type='text' name='note[{$i}]' value='{$_SESSION[_ss . 'note'][$key]}' class='form-control input-sm'>
             </td>
         </tr>
@@ -101,17 +101,17 @@ $i++; }
 
 echo    "
         <tr>
-            <td colspan='7' style='text-align: right;'>
+            <td colspan='6' style='text-align: right;'>
                 <h4>รวมเงิน(ยังไม่รวมค่าส่ง) ".number_format($_SESSION[_ss . 'total_price'])." บาท</h4>
             </td>
         </tr>
         <tr>
-            <td colspan='7' style='text-align: right;'>
+            <td colspan='6' style='text-align: right;'>
                 <h4>น้ำหนักรวม ".number_format($_SESSION[_ss . 'total_weight'])." กรัม</h4>
             </td>
         <tr>
         <tr>
-            <td colspan='7' style='text-align: right;'>
+            <td colspan='6' style='text-align: right;'>
                 <h4>
                     <span id='wrap_shipping_text'>คำนวณค่าส่ง ประเภท <span id='sp_shipping_type'/> <span id='sp_shipping_rate'/> บาท</span>
                     <span id='wrap_shipping_warning'>น้ำหนักเกิน 10 กิโลกรัม โปรดรอสอบถามแอดมิน!</span>
@@ -120,12 +120,12 @@ echo    "
             </td>
         </tr>
         <tr>
-            <td colspan='7' style='text-align: right;'>
+            <td colspan='6' style='text-align: right;'>
                 <h4>รวมเงินทั้งหมด(รวมค่าส่ง) <span id='sp_total_price'/> บาท</h4>
             </td>
         </tr>
         <tr>
-            <td colspan='7' style='text-align: right;'>
+            <td colspan='6' style='text-align: right;'>
                 <button type='button' class='btn btn-primary recal'>
                     <span class='glyphicon glyphicon-refresh'></span>
                     คำนวณสินค้าใหม่

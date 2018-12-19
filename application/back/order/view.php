@@ -80,7 +80,7 @@ MAIN CONTENT
                         <th style="text-align: right;">ราคา(บาท)</th>
                         <th style="text-align: right;">จำนวน</th>
                         <th style="text-align: right;">รวม</th>
-                        <th style='text-align: right;'>น้ำหนักรวม (กรัม)</th>
+                        <!--<th style='text-align: right;'>น้ำหนักรวม (กรัม)</th>-->
                     </tr>
                 </thead>
                 <tbody>
@@ -103,7 +103,7 @@ MAIN CONTENT
                             <td style="text-align: right;"><?php echo number_format($rs_od['price'], 2); ?></td>
                             <td style="text-align: right;"><?php echo $rs_od['quantity']; ?></td>
                             <td style="text-align: right;"><?php echo number_format($total_price, 2); ?></td>
-                            <td style="text-align: right;"><?php echo number_format($total_weight); ?></td>
+                            <!--<td style="text-align: right;"><?php echo number_format($total_weight); ?></td>-->
                         </tr>
                         <tr>
                             <td style='text-align:right;'>รายละเอียดสินค้า :</td>
@@ -111,7 +111,7 @@ MAIN CONTENT
                         </tr>
                     <?php } ?>
                     <tr class="info">
-                        <td colspan="6" style="text-align: right;">
+                        <td colspan="5" style="text-align: right;">
                             <!--<p><a href='<?php echo $baseUrl; ?>/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a></p>-->
                             <?php if (isset($rs_os['ship_price'])){ ?>
                                 <h4>ค่าส่ง <?php echo number_format($rs_os['ship_price']); ?> บาท</h4>
@@ -122,12 +122,12 @@ MAIN CONTENT
                         </td>
                     </tr>
                     <tr class="info">
-                        <td colspan="6" style="text-align: right;">
+                        <td colspan="5" style="text-align: right;">
                             <h4>น้ำหนักรวม <?php echo number_format($rs_os['total_weight']); ?> กรัม</h4>
                         </td>
                     </tr>
                     <tr class="info">
-                        <td colspan="6" style="text-align: right;"><h4><strong>รวมทั้งหมด <?php echo number_format($rs_os['total']); ?> บาท</strong></h4></td>
+                        <td colspan="5" style="text-align: right;"><h4><strong>รวมทั้งหมด <?php echo number_format($rs_os['total']); ?> บาท</strong></h4></td>
                     </tr>
                 </tbody>
             </table>

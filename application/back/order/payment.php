@@ -75,7 +75,7 @@ MAIN CONTENT
                         <th style="text-align: right;">ราคา(บาท)</th>
                         <th style="text-align: right;">จำนวน</th>
                         <th style="text-align: right;">รวม</th>
-                        <th style='text-align: right;'>น้ำหนักรวม (กรัม)</th>
+                        <!--<th style='text-align: right;'>น้ำหนักรวม (กรัม)</th>-->
                     </tr>
                 </thead>
                 <tbody>
@@ -98,7 +98,7 @@ MAIN CONTENT
                             <td style="text-align: right;"><?php echo number_format($rs_od['price'], 2); ?></td>
                             <td style="text-align: right;"><?php echo $rs_od['quantity']; ?></td>
                             <td style="text-align: right;"><?php echo number_format($total_price, 2); ?></td>
-                            <td style="text-align: right;"><?php echo number_format($total_weight); ?></td>
+                            <!--<td style="text-align: right;"><?php echo number_format($total_weight); ?></td>-->
                         </tr>
                         <tr>
                             <td style='text-align:right;'>รายละเอียดสินค้า :</td>
@@ -107,7 +107,7 @@ MAIN CONTENT
                     <?php } ?>
                     <tr class="info">
                         <td colspan="3"></td>
-                        <td colspan="3" style="text-align: right;">
+                        <td colspan="2" style="text-align: right;">
                             
                             <input type="hidden" name="grand_total" value="<?php echo $grand_total; ?>">
                             <label for="pay_money" class="text-bold control-label required">ค่าส่ง (ตามเงื่อนไข)<!--(<a href='<?php echo $baseUrl; ?>/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a>)--></label>
@@ -152,7 +152,7 @@ MAIN CONTENT
                         </td>
                     </tr>
                     <tr class="info">
-                        <td colspan="6" style="text-align: right;">
+                        <td colspan="5" style="text-align: right;">
                             <h4>
                                 <?php if ($db->rows($query_shipping) > 0){ ?>
                                     <p>น้ำหนักรวม <?php echo number_format($grand_total_weight); ?> กรัม</p>
@@ -164,16 +164,16 @@ MAIN CONTENT
                         </td>
                     </tr>
                     <tr class="info">
-                        <td colspan="6" style="text-align: right;"><h4><strong>รวมทั้งหมด <span id="grand_total"><?php echo number_format($grand_total_with_ship); ?></span> บาท</strong></h4></td>
+                        <td colspan="5" style="text-align: right;"><h4><strong>รวมทั้งหมด <span id="grand_total"><?php echo number_format($grand_total_with_ship); ?></span> บาท</strong></h4></td>
                     </tr>
                     <tr class="info">
-                        <td colspan="6">ที่อยู่ผู้ส่ง :<br><?php echo $rs_order['sender']; ?></td>
+                        <td colspan="5">ที่อยู่ผู้ส่ง :<br><?php echo $rs_order['sender']; ?></td>
                     </tr>
                     <tr class="info">
-                        <td colspan="6">ที่อยู่ผู้รับ :<br><?php echo $rs_order['receiver']; ?></td>
+                        <td colspan="5">ที่อยู่ผู้รับ :<br><?php echo $rs_order['receiver']; ?></td>
                     </tr>
                     <tr class="info">
-                        <td colspan="6">ประเภทการส่ง :<br><?php echo $rs_order['shipping_type']; ?></td>
+                        <td colspan="5">ประเภทการส่ง :<br><?php echo $rs_order['shipping_type']; ?></td>
                     </tr>
                 </tbody>
             </table>
