@@ -194,7 +194,7 @@ MAIN CONTENT
                                     <a class="load_data" href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_pd['id']; ?>"><?php echo $rs_pd['name']; ?></a>
                                 </td>
                                 <td>
-                                    <?php echo ($rs_pd['start_ship_date']!=null)? date('d-m-Y', strtotime($rs_pd['start_ship_date'])) : ''; ?>
+                                    <?php echo ($rs_pd['start_ship_date']!=null)? date('d/m/Y', strtotime($rs_pd['start_ship_date'])) : ''; ?>
                                 </td>
                                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                                     <td><?php echo $rs_pd['price']; ?></td>

@@ -88,9 +88,9 @@ border:1px solid #e8debd
                     <input type="hidden" name="id" value="<?php echo $rs_pd['id'];?>">
                     <div class="form-group">
                         <label for="product_image" class="col-sm-2 control-label required">รูปภาพประจำสินค้า</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-10">
                             <?php while ($rs_img = $db->get($query_img)) { ?>
-                                <div id="div-image-<?php echo $rs_img['id']; ?>" class="abcd">
+                                <div id="div-image-<?php echo $rs_img['id']; ?>" class="abcd col-sm-3">
                                     <a title="" download="<?php echo $rs_img['filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/product/<?php echo $rs_img['filename']; ?>"><img src="<?php echo $baseUrl ?>/assets/upload/product/<?php echo $rs_img['filename'];?>"></a>
                                     <a title="" href="#" data-toggle="modal" data-target="#deleteModal<?php echo $rs_img['id'];?>"><img id="x-img" src="<?php echo $baseUrl; ?>/assets/img/x.png" alt="delete"></a>
                                     <!-- Modal -->
