@@ -88,10 +88,29 @@ MAIN CONTENT
                     while ($rs_od = $db->get($query_od)) {
                         $total_price = $rs_od['price'] * $rs_od['quantity'];
                         $total_weight = $rs_od['weight'] * $rs_od['quantity'];
+
+                        //Select Product Picture
+                        $option_img = array(
+                            "table" => "images",
+                            "condition" => "ref_id='{$rs_od['id']}' AND filetype='product'",
+                            "order" => "id",
+                            "limit" => "1"
+                        );
+                        $query_img = $db->select($option_img);
+
+                        if($db->rows($query_img) > 0){
+                            $rs_img = $db->get($query_img);
+                            $filename_img = $rs_img['filename'];
+                        }
+                        else {
+                            $filename_img = 'ecimage.jpg';
+                        }
                         ?>
                         <tr>
                             <td>
-                                <img src="<?php echo base_url(); ?>/assets/upload/product/sm_<?php echo $rs_od['url_picture']; ?>">
+                                <a href='<?php echo base_url(); ?>/assets/upload/product/<?php echo $filename_img; ?>' data-imagelightbox='a'>
+                                    <img src="<?php echo base_url(); ?>/assets/upload/product/sm_<?php echo $filename_img; ?>">
+                                </a>
                             </td>
                             <td><?php 
                                 if ($rs_od['start_ship_date']==null) {

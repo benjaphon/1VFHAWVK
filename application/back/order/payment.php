@@ -32,6 +32,16 @@ require 'assets/template/back/header.php';
  * header***********************************************************************
  */
 ?>
+<style>
+    #imagelightbox
+    {
+        position: fixed;
+        z-index: 9999;
+
+        -ms-touch-action: none;
+        touch-action: none;
+    }
+</style>
 
 <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/ckeditor/ckeditor.js"></script>
 
@@ -89,10 +99,29 @@ MAIN CONTENT
 
                         $total_weight = $rs_od['weight'] * $rs_od['quantity'];
                         $grand_total_weight += $total_weight;
+
+                        //Select Product Picture
+                        $option_img = array(
+                            "table" => "images",
+                            "condition" => "ref_id='{$rs_od['id']}' AND filetype='product'",
+                            "order" => "id",
+                            "limit" => "1"
+                        );
+                        $query_img = $db->select($option_img);
+
+                        if($db->rows($query_img) > 0){
+                            $rs_img = $db->get($query_img);
+                            $filename_img = $rs_img['filename'];
+                        }
+                        else {
+                            $filename_img = 'ecimage.jpg';
+                        }
                         ?>
                         <tr>
                             <td>
-                                <img src="<?php echo base_url(); ?>/assets/upload/product/sm_<?php echo $rs_od['url_picture']; ?>">
+                                <a href='<?php echo base_url(); ?>/assets/upload/product/<?php echo $filename_img; ?>' data-imagelightbox='a'>
+                                    <img src="<?php echo base_url(); ?>/assets/upload/product/sm_<?php echo $filename_img; ?>">
+                                </a>
                             </td>
                             <td><?php echo $rs_od['name']; ?></td>
                             <td style="text-align: right;"><?php echo number_format($rs_od['price'], 2); ?></td>
@@ -268,11 +297,13 @@ require 'assets/template/back/footer.php';
 
 <link rel="stylesheet" href="<?php echo $baseUrl; ?>/assets/css/jquery.datetimepicker.css" type="text/css" />
 
+<script type="text/javascript" src="<?php echo base_url(); ?>/assets/js/imagelightbox.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/jquery.form-validator.min.js"></script>
 <script type='text/javascript' src="<?php echo $baseUrl; ?>/assets/js/jquery.datetimepicker.js"></script>
 
 <script>
     $(document).ready(function () {
+        $('a').imageLightbox();
         $(".saveform").click(function () {
             if ($("input[name='image[]']")[0].files && $("input[name='image[]']")[0].files[0]) {
                 var filename = $("input[name='image[]']")[0].files[0].name;

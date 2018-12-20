@@ -51,10 +51,27 @@ $key = array_search($rs_ct['id'], $_SESSION[_ss . 'cart']);
 /*$total_price += ($_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key]);
 $total_weight += ($_SESSION[_ss . 'weight'][$key] * $_SESSION[_ss . 'qty'][$key]);*/
 
+//Select Product Picture
+$option_img = array(
+    "table" => "images",
+    "condition" => "ref_id='{$rs_ct['id']}' AND filetype='product'",
+    "order" => "id",
+    "limit" => "1"
+);
+$query_img = $db->select($option_img);
+
+if($db->rows($query_img) > 0){
+    $rs_img = $db->get($query_img);
+    $filename_img = $rs_img['filename'];
+}
+else {
+    $filename_img = 'ecimage.jpg';
+}
+
 echo   "<tr>
             <td>
-                <a href='{$baseUrl}/assets/upload/product/{$rs_ct['url_picture']}' data-imagelightbox='a'>
-                    <img src='{$baseUrl}/assets/upload/product/sm_{$rs_ct['url_picture']}' class='img-responsive' alt='Responsive image'>
+                <a href='{$baseUrl}/assets/upload/product/{$filename_img}' data-imagelightbox='a'>
+                    <img src='{$baseUrl}/assets/upload/product/sm_{$filename_img}' class='img-responsive' alt='Responsive image'>
                 </a>
             </td>
             <td>{$rs_ct['name']}</td>

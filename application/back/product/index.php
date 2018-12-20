@@ -155,7 +155,7 @@ MAIN CONTENT
                                 </th>
                             <?php } ?>
                             <th id="user-grid_c1">
-                                <a class="sort-link">ค่าส่ง</a>
+                                <a class="sort-link">ค่าส่ง (Kerry)</a>
                             </th>
                             <th id="user-grid_c3">
                                 <a class="sort-link">คงเหลือ</a>
@@ -204,7 +204,7 @@ MAIN CONTENT
                                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                                     <td><?php echo $rs_pd['sale_price']; ?></td>
                                 <?php } ?>
-                                <td><?php echo round($rs_pd['parcel']).'/'.round($rs_pd['registered']).'/'.round($rs_pd['ems']).'/'.round($rs_pd['kerry']);; ?></td>
+                                <td><?php echo round($rs_pd['kerry']); ?></td>
                                 <td><?php echo $rs_pd['quantity']; ?></td>
                             </tr>
                             <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>

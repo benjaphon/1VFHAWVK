@@ -112,7 +112,7 @@ border:1px solid #e8debd
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p><span style="padding-right: 10px;">ค่าส่ง</span><?php echo $rs_product['parcel']; ?>/<?php echo $rs_product['registered']; ?>/<?php echo $rs_product['ems']; ?>/<?php echo $rs_product['kerry']; ?></p>
+                        <p><span style="padding-right: 10px;">ค่าส่ง (Kerry)</span><?php echo $rs_product['kerry']; ?></p>
                     </div>
                 </div>
                 
