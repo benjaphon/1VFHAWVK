@@ -154,19 +154,19 @@ MAIN CONTENT
                                 <a class="sort-link">วันที่สั่งซื้อ</a>
                             </th>
                             <th id="user-grid_c4">
-                                <a class="sort-link">ที่อยู่ผู้รับ</a>
-                            </th>
-                            <th id="user-grid_c4">
                                 <a class="sort-link">รายการสินค้า</a>
                             </th>
-                            <th id="user-grid_c0">
-                                <a class="sort-link">สถานะ</a>
+                            <th id="user-grid_c4">
+                                <a class="sort-link">ที่อยู่ผู้รับ</a>
                             </th>
                             <th id="user-grid_c1">
                                 <a class="sort-link">เลขที่พัสดุ</a>
                             </th>
                             <th id="user-grid_c1">
                                 <a class="sort-link">วันที่จัดส่ง</a>
+                            </th>
+                            <th id="user-grid_c0">
+                                <a class="sort-link">สถานะ</a>
                             </th>
                         </tr>
                     </thead>
@@ -226,16 +226,6 @@ MAIN CONTENT
                                     <a href="<?php echo $baseUrl; ?>/back/order/view/<?php echo $rs_or['id']; ?>"><?php echo $rs_or['id']; ?></a>
                                 </td>
                                 <td><?php echo thaidate($rs_or['order_datetime']); ?></td>
-                                <td width="200px">
-                                    <p data-toggle="tooltip" title="<?php echo $rs_or['receiver']; ?>">
-                                    <?php if (strlen($rs_or['receiver']) <= 100) {
-                                                echo $rs_or['receiver'];
-                                            } else {
-                                                echo substr($rs_or['receiver'], 0, 100).'...';
-                                            }    
-                                    ?>
-                                    </p>
-                                </td>
                                 <td>
                                     <ul>
                                     <?php
@@ -259,10 +249,19 @@ MAIN CONTENT
                                     <?php } ?>
                                     </ul>
                                 </td>
-
-                                <td><?php echo $order_status; ?></td>
+                                <td width="200px">
+                                    <p data-toggle="tooltip" title="<?php echo $rs_or['receiver']; ?>">
+                                    <?php if (strlen($rs_or['receiver']) <= 100) {
+                                                echo $rs_or['receiver'];
+                                            } else {
+                                                echo substr($rs_or['receiver'], 0, 100).'...';
+                                            }    
+                                    ?>
+                                    </p>
+                                </td>
                                 <td><a href="http://emsbot.com/#/?s=<?php echo $rs_or['tracking_no'];?>" target="_blank"><?php echo $rs_or['tracking_no'];?></a></td>
                                 <td><?php if(!empty($rs_or['ship_date'])) echo thaidate($rs_or['ship_date']); ?></td>
+                                <td><?php echo $order_status; ?></td>
                             </tr>
                             <tr>
                                 <td colspan="7" style="border-top: 0px;">
