@@ -16,10 +16,11 @@ $start = ($page - 1) * $perpage;
 $db = new database();
 
 $option_product = array(
-    "table" => "products",
-    "order" => "id DESC",
+    "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
+    "table" => "products AS p LEFT JOIN shipping_rate AS s ON p.weight >= s.min_wg AND p.weight <= s.max_wg",
+    "order" => "p.id DESC",
     "limit" => "{$start},{$perpage}",
-    "condition" => "flag_status = 1"
+    "condition" => "p.flag_status = 1"
 );
 
 
@@ -155,7 +156,7 @@ MAIN CONTENT
                                 </th>
                             <?php } ?>
                             <th id="user-grid_c1">
-                                <a class="sort-link">ค่าส่ง (Kerry)</a>
+                                <a class="sort-link">ค่าส่ง</a>
                             </th>
                             <th id="user-grid_c3">
                                 <a class="sort-link">คงเหลือ</a>
@@ -204,7 +205,7 @@ MAIN CONTENT
                                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                                     <td><?php echo $rs_pd['sale_price']; ?></td>
                                 <?php } ?>
-                                <td><?php echo round($rs_pd['kerry']); ?></td>
+                                <td><?php echo round($rs_pd['cal_parcel']); ?>/<?php echo round($rs_pd['cal_register']); ?>/<?php echo round($rs_pd['cal_EMS']); ?>/<?php echo round($rs_pd['kerry']); ?></td>
                                 <td><?php echo $rs_pd['quantity']; ?></td>
                             </tr>
                             <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>

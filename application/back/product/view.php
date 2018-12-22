@@ -8,8 +8,9 @@ if (!isset($_GET['id'])) {
 
 $db = new database();
 $option_product = array(
-    "table" => "products",
-    "condition" => "id='{$_GET['id']}'"
+    "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
+    "table" => "products AS p LEFT JOIN shipping_rate AS s ON p.weight >= s.min_wg AND p.weight <= s.max_wg",
+    "condition" => "p.id='{$_GET['id']}'"
 );
 $query_product = $db->select($option_product);
 $rs_product = $db->get($query_product);
@@ -87,41 +88,46 @@ border:1px solid #e8debd
                 <?php } ?>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p><span style="padding-right: 10px;">วันที่ส่งได้</span><?php echo date('d/m/Y', strtotime($rs_product['start_ship_date'])); ?></p>
+                        <p id="p_start_ship_date">วันที่ส่งได้ <?php echo date('d/m/Y', strtotime($rs_product['start_ship_date'])); ?></p>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <h4><b><?php echo $rs_product['name']; ?></b></h4>
+                        <h4 id="h_product_name"><b><?php echo $rs_product['name']; ?></b></h4>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p><?php echo $rs_product['description']; ?></p>
+                        <div id="div_desc"><?php echo $rs_product['description']; ?></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p><span style="padding-right: 10px;">ราคาขายส่ง</span><?php echo $rs_product['wholesale_price']; ?></p>
+                        <p id="p_price">ราคา <?php echo $rs_product['agent_price']; ?></p>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p><span style="padding-right: 10px;">ราคา ตท</span><?php echo $rs_product['agent_price']; ?></p>
+                        <p id="p_shipping">ค่าส่ง <?php echo round($rs_product['cal_parcel']); ?>/<?php echo round($rs_product['cal_register']); ?>/<?php echo round($rs_product['cal_EMS']); ?>/<?php echo round($rs_product['kerry']); ?></p>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p><span style="padding-right: 10px;">ค่าส่ง (Kerry)</span><?php echo $rs_product['kerry']; ?></p>
+                        <button onclick="copyToClipboard()">คัดลอกข้อความ</button>
                     </div>
                 </div>
-                
                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                 <h3>ส่วนแสดงผลเฉพาะแอดมิน</h3>
                 <div class="form-group">
                     <label for="price" class="col-sm-2 control-label text-bold">ราคาต้นทุน</label>
                     <div class="col-sm-4">
                         <label name="price" class="control-label"><?php echo $rs_product['price']; ?></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="price" class="col-sm-2 control-label text-bold">ราคาขายส่ง</label>
+                    <div class="col-sm-4">
+                        <label name="price" class="control-label"><?php echo $rs_product['wholesale_price']; ?></label>
                     </div>
                 </div>
                 <div class="form-group">
@@ -164,7 +170,22 @@ require 'assets/template/back/footer.php';
 
 <script type="text/javascript">
     $(document).ready(function() {
-        CKEDITOR.replace('editor');
-        CKEDITOR.config.readOnly = true;
+        /*CKEDITOR.replace('editor');
+        CKEDITOR.config.readOnly = true;*/
+
     });
+
+    function copyToClipboard() {
+        var $temp = $("<textarea cols='40' rows='5'>");
+        $("body").append($temp);
+        start_ship_date = $('#p_start_ship_date').text();
+        product_name = $('#h_product_name').text();
+        desc = $('#div_desc').text();
+        price = $('#p_price').text();
+        shipping = $('#p_shipping').text();
+        $temp.val(start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\n'+price+'\n\n'+shipping).select();
+        document.execCommand("copy");
+        $temp.remove();
+        alert("Copied!");
+    }
 </script>

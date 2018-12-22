@@ -44,9 +44,14 @@ echo   "<table class='table table-bordered table-striped'>
         <tbody>";
 
 $i = 0;
+$product_qty = 0;
+$kerry_shipping = 0;
 $total_price = 0;
 while ($rs_ct = $db->get($query_ct)) {
 $key = array_search($rs_ct['id'], $_SESSION[_ss . 'cart']);
+//For Culculate kerry shipping
+$product_qty = $_SESSION[_ss . 'qty'][$key];
+$kerry_shipping = (!isset($rs_ct['kerry']) || trim($rs_ct['kerry']) === '')?0:$rs_ct['kerry'];
 
 /*$total_price += ($_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key]);
 $total_weight += ($_SESSION[_ss . 'weight'][$key] * $_SESSION[_ss . 'qty'][$key]);*/
@@ -155,20 +160,12 @@ echo    "
 //Calculation Shipping Rate Show
 $option_shipping = array(
     "table" => "shipping_rate",
-    "condition" => "'{$_SESSION[_ss . 'total_weight']}' >= min_wg AND '{$_SESSION[_ss . 'total_weight']}' <= max_wgparcel "
+    "condition" => "'{$_SESSION[_ss . 'total_weight']}' >= min_wg AND '{$_SESSION[_ss . 'total_weight']}' <= max_wg "
 );
 $query_shipping = $db->select($option_shipping);
 $rs_shipping = $db->get($query_shipping);
 
 echo    "<script>
-            if (".$_SESSION[_ss . 'total_weight']." > 2000) {
-                $('#rdo_register').attr('disabled', true);
-
-                if($('#rdo_register').prop('checked'))
-                    $('#rdo_parcel').prop('checked', true);
-            }else{
-                $('#rdo_register').attr('disabled', false);
-            }
 
             $('input[name=shipping_type]').change(function() {
 
@@ -186,16 +183,26 @@ echo    "<script>
 
                     switch(shipping_type) {
                         case 'พัสดุธรรมดา':
-                            shipping_rate = ".$rs_shipping['parcel']."
+                            shipping_rate = ".$rs_shipping['parcel'].";
                             $('#sp_shipping_rate').text(shipping_rate);
                             break;
                         case 'ลงทะเบียน':
-                            shipping_rate = ".$rs_shipping['register']."
+                            shipping_rate = ".$rs_shipping['register'].";
                             $('#sp_shipping_rate').text(shipping_rate);
                             break;
                         case 'EMS':
-                            shipping_rate = ".$rs_shipping['EMS']."
+                            shipping_rate = ".$rs_shipping['EMS'].";
                             $('#sp_shipping_rate').text(shipping_rate);
+                            break;
+                        case 'KERRY':
+                            if (".$me_count." == 1 && ".$product_qty." == 1){
+                                shipping_rate = ".$kerry_shipping.";
+                                $('#sp_shipping_rate').text(shipping_rate);
+                            } else {
+                                $('#wrap_shipping_text').hide();
+                                $('#wrap_shipping_warning').show();
+                                $('#wrap_shipping_warning').text('โปรดสอบถามค่าส่งจากแอดมิน!');
+                            }
                             break;
                         default:
                             $('#sp_shipping_rate').text('0');

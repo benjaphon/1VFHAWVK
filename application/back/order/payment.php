@@ -14,10 +14,11 @@ $option_order = array(
 $query_order = $db->select($option_order);
 $rs_order = $db->get($query_order);
 
-$sql_od = "SELECT d.*,p.id,p.name,p.url_picture,p.parcel,p.registered,p.ems,p.kerry FROM order_details d INNER JOIN products p ";
+$sql_od = "SELECT d.*,p.id,p.name,p.kerry FROM order_details d INNER JOIN products p ";
 $sql_od .= "ON d.product_id=p.id ";
 $sql_od .="WHERE d.order_id='{$_GET['id']}' ";
 $query_od = $db->query($sql_od);
+$rows_count = $db->rows($query_od);
 
 $title = 'รายละเอียดการชำระเงิน';
 /*
@@ -90,9 +91,13 @@ MAIN CONTENT
                 </thead>
                 <tbody>
                     <?php
+                    $product_qty = 0;
+                    $kerry_shipping = 0;
                     $grand_total = 0;
                     $grand_total_weight = 0;
                     while ($rs_od = $db->get($query_od)) {
+                        $product_qty = $rs_od['quantity'];
+                        $kerry_shipping = $rs_od['kerry'];
 
                         $total_price = $rs_od['price'] * $rs_od['quantity'];
                         $grand_total += $total_price;
@@ -145,7 +150,7 @@ MAIN CONTENT
 
                                 $option_shipping = array(
                                     "table" => "shipping_rate",
-                                    "condition" => "'{$grand_total_weight}' >= min_wg AND '{$grand_total_weight}' <= max_wgparcel "
+                                    "condition" => "'{$grand_total_weight}' >= min_wg AND '{$grand_total_weight}' <= max_wg "
                                 );
                                 $query_shipping = $db->select($option_shipping);
                                 $rs_shipping = $db->get($query_shipping);
@@ -164,10 +169,11 @@ MAIN CONTENT
                                         case 'EMS':
                                             $shipping_fees = $rs_shipping['EMS'];
                                             break;
-                                        /*case 'KERRY':
-                                            $grand_total_with_ship = $grand_total + $rs_shipping['kerry'];
-                                            echo "value='".$rs_shipping['kerry']."'";
-                                            break;*/
+                                        case 'KERRY':
+                                            if ($rows_count == 1 && $product_qty == 1){
+                                                $shipping_fees = $kerry_shipping;
+                                            }
+                                            break;
                                     }
 
                                     $grand_total_with_ship = $grand_total + $shipping_fees;
