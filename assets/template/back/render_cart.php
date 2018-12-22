@@ -12,6 +12,7 @@ if ($item_count > 0 && isset($_SESSION[_ss . 'qty'])) {
     $me_qty = 0;
 }
 
+$me_count = 0;
 if (isset($_SESSION[_ss . 'cart']) and $item_count > 0) {
     $items_id = "";
     foreach ($_SESSION[_ss . 'cart'] as $item_id) {
@@ -24,8 +25,6 @@ if (isset($_SESSION[_ss . 'cart']) and $item_count > 0) {
     );
     $query_ct = $db->select($option_ct);
     $me_count = $db->rows($query_ct);
-} else {
-    $me_count = 0;
 }
 
 if ($me_count > 0) { 
@@ -51,7 +50,7 @@ while ($rs_ct = $db->get($query_ct)) {
 $key = array_search($rs_ct['id'], $_SESSION[_ss . 'cart']);
 //For Culculate kerry shipping
 $product_qty = $_SESSION[_ss . 'qty'][$key];
-$kerry_shipping = (!isset($rs_ct['kerry']) || trim($rs_ct['kerry']) === '')?0:$rs_ct['kerry'];
+$kerry_shipping = (isset($rs_ct['kerry']) && trim($rs_ct['kerry']) <> '')?$rs_ct['kerry']:0;
 
 /*$total_price += ($_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key]);
 $total_weight += ($_SESSION[_ss . 'weight'][$key] * $_SESSION[_ss . 'qty'][$key]);*/
@@ -164,14 +163,32 @@ $option_shipping = array(
 );
 $query_shipping = $db->select($option_shipping);
 $rs_shipping = $db->get($query_shipping);
+$rows_shipping = $db->rows($query_shipping);
+
+$parcel_shipping = 0;
+$register_shipping = 0;
+$EMS_shipping = 0;
+
+if($rows_shipping > 0){
+    $parcel_shipping = $rs_shipping['parcel'];
+    $register_shipping = $rs_shipping['register'];
+    $EMS_shipping = $rs_shipping['EMS'];
+}
 
 echo    "<script>
+            if (".$_SESSION[_ss . 'total_weight']." > 10000) {
+                $('#rdo_register').attr('disabled', true);
+                if($('#rdo_register').prop('checked'))
+                    $('#rdo_parcel').prop('checked', true);
+            }else{
+                $('#rdo_register').attr('disabled', false);
+            }
 
             $('input[name=shipping_type]').change(function() {
 
                 var shipping_rate = 0; 
 
-                if (".$db->rows($query_shipping)." == 0){
+                if (".$rows_shipping." == 0){
                     $('#wrap_shipping_text').hide();
                     $('#wrap_shipping_warning').show();
                 } else {
@@ -183,15 +200,15 @@ echo    "<script>
 
                     switch(shipping_type) {
                         case 'พัสดุธรรมดา':
-                            shipping_rate = ".$rs_shipping['parcel'].";
+                            shipping_rate = ".$parcel_shipping.";
                             $('#sp_shipping_rate').text(shipping_rate);
                             break;
                         case 'ลงทะเบียน':
-                            shipping_rate = ".$rs_shipping['register'].";
+                            shipping_rate = ".$register_shipping.";
                             $('#sp_shipping_rate').text(shipping_rate);
                             break;
                         case 'EMS':
-                            shipping_rate = ".$rs_shipping['EMS'].";
+                            shipping_rate = ".$EMS_shipping.";
                             $('#sp_shipping_rate').text(shipping_rate);
                             break;
                         case 'KERRY':

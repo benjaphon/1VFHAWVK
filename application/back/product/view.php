@@ -186,6 +186,6 @@ require 'assets/template/back/footer.php';
         $temp.val(start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\n'+price+'\n\n'+shipping).select();
         document.execCommand("copy");
         $temp.remove();
-        alert("Copied!");
+        alert("คัดลอกข้อความแล้ว");
     }
 </script>

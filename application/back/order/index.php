@@ -143,7 +143,7 @@ MAIN CONTENT
     </div>
     <div class="row mt">
         <div class="col-lg-12">
-            <div id="user-grid" class="grid-view table-responsive">
+            <div id="user-grid" class="grid-view">
                 <table class="table table-striped table-custom" id="tbl_Order">
                     <thead>
                         <tr>

@@ -28,14 +28,14 @@ $search = (isset($_GET['search']))?$_GET['search']:'';
 
 if(isset($search) && !empty($search)){
     $option_product["condition"] .= " AND (";
-    $option_product["condition"] .= " id LIKE'%{$search}%' OR";
-    $option_product["condition"] .= " name LIKE'%{$search}%' OR";
-    $option_product["condition"] .= " price LIKE'%{$search}%' OR";
-    $option_product["condition"] .= " agent_price LIKE'%{$search}%' OR";
-    $option_product["condition"] .= " wholesale_price LIKE'%{$search}%' OR";
-    $option_product["condition"] .= " sale_price LIKE'%{$search}%' OR";
-    $option_product["condition"] .= " start_ship_date LIKE'%{$search}%' OR";
-    $option_product["condition"] .= " quantity LIKE'%{$search}%')";
+    $option_product["condition"] .= " p.id LIKE'%{$search}%' OR";
+    $option_product["condition"] .= " p.name LIKE'%{$search}%' OR";
+    $option_product["condition"] .= " p.price LIKE'%{$search}%' OR";
+    $option_product["condition"] .= " p.agent_price LIKE'%{$search}%' OR";
+    $option_product["condition"] .= " p.wholesale_price LIKE'%{$search}%' OR";
+    $option_product["condition"] .= " p.sale_price LIKE'%{$search}%' OR";
+    $option_product["condition"] .= " p.start_ship_date LIKE'%{$search}%' OR";
+    $option_product["condition"] .= " p.quantity LIKE'%{$search}%')";
 }
 
 $query_product = $db->select($option_product);
