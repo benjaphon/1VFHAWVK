@@ -29,7 +29,7 @@ if(isset($search) && !empty($search)){
     $option_user["condition"] .= " AND (";
     $option_user["condition"] .= " id LIKE'%{$search}%' OR";
     $option_user["condition"] .= " username LIKE'%{$search}%' OR";
-    $option_user["condition"] .= " created_at LIKE'%{$search}%')";
+    $option_user["condition"] .= " DATE_FORMAT(created_at, '%d/%m/%Y') LIKE'%{$search}%')";
 }
 
 if(isset($role) && !empty($role)){

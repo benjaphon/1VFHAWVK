@@ -229,8 +229,8 @@ require 'assets/template/back/footer.php';
                 return false;
             }*/
 
-            if($("input[name='file_video']")[0].files[0] && $("input[name='file_video']")[0].files[0].size > 10000000){
-                alert("ขนาดไฟล์วิดีโอห้ามใหญ่เกิน 10MB ค่ะ");
+            if($("input[name='file_video']")[0].files[0] && $("input[name='file_video']")[0].files[0].size > 100000000){
+                alert("ขนาดไฟล์วิดีโอห้ามใหญ่เกิน 100MB ค่ะ");
                 return false;
             }
         
@@ -333,8 +333,8 @@ require 'assets/template/back/footer.php';
         $(document).on("change", "#file_video", function() {
             if (this.files && this.files[0]) {
 
-                if(this.files[0].size > 10000000){
-                    alert("ขนาดไฟล์ห้ามใหญ่เกิน 10MB ค่ะ");
+                if(this.files[0].size > 100000000){
+                    alert("ขนาดไฟล์ห้ามใหญ่เกิน 100MB ค่ะ");
                     return false;
                 }
                 

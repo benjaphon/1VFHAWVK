@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vdo_filename = '';
 
     if (file_exists($_FILES['file_video']['tmp_name']) && is_uploaded_file($_FILES['file_video']['tmp_name'])) {
-        if ($_FILES["file_video"]["size"] < 10000000) {
+        if ($_FILES["file_video"]["size"] < 100000000) {
             $ext_vdo = explode('.', basename($_FILES['file_video']['name'])); 
             $vdo_filename = date('YmdHis') . md5(uniqid()). "." . end($ext_vdo);
             $path = base_path() . "/assets/upload/product/";

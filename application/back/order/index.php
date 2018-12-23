@@ -15,21 +15,19 @@ $start = ($page - 1) * $perpage;
 
 $db = new database();
 
+$option_or = array(
+    "fields" => "o.id, o.order_datetime, o.receiver, o.tracking_no, o.ship_date, o.order_status",
+    "table" => "orders AS o LEFT JOIN order_details AS d ON o.id = d.order_id INNER JOIN products AS p ON d.product_id = p.id",
+    "order" => "o.id DESC",
+    "limit" => "{$start},{$perpage}"
+);
+
 if($_SESSION[_ss . 'levelaccess'] == 'admin') {
-    $option_or = array(
-        "table" => "orders",
-        "order" => "id DESC",
-        "limit" => "{$start},{$perpage}",
-        "condition" => "1=1"
-    );
+    $option_or["condition"] = "1=1";
 }
 else
 {
-    $option_or = array(
-        "table" => "orders",
-        "order" => "id DESC",
-        "condition" => "user_id={$_SESSION[_ss . 'id']}"
-    );
+    $option_or["condition"] = "user_id={$_SESSION[_ss . 'id']}";
 }
 
 $search = (isset($_GET['search']))?$_GET['search']:'';
@@ -37,24 +35,25 @@ $status = (isset($_GET['status']))?$_GET['status']:'';
 
 if(isset($search) && !empty($search)){
     $option_or["condition"] .= " AND (";
-    $option_or["condition"] .= " id LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " order_datetime LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " receiver LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " tracking_no LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " ship_date LIKE'%{$search}%')";
+    $option_or["condition"] .= " o.id LIKE'%{$search}%' OR";
+    $option_or["condition"] .= " DATE_FORMAT(o.order_datetime, '%d/%m/%Y') LIKE'%{$search}%' OR";
+    $option_or["condition"] .= " o.receiver LIKE'%{$search}%' OR";
+    $option_or["condition"] .= " o.tracking_no LIKE'%{$search}%' OR";
+    $option_or["condition"] .= " DATE_FORMAT(o.ship_date, '%d/%m/%Y') LIKE'%{$search}%' OR";
+    $option_or["condition"] .= " p.name LIKE'%{$search}%')";
 }
 
 if(isset($status) && !empty($status)){
-    $option_or["condition"] .= " AND (order_status='{$status}')";
+    $option_or["condition"] .= " AND (o.order_status='{$status}')";
 }
+
+$option_or["condition"] .= " GROUP BY o.id, o.order_datetime, o.receiver, o.tracking_no, o.ship_date, o.order_status";
 
 $query_or = $db->select($option_or);
 
 unset($option_or["limit"]);
-$option_or["fields"] = "COUNT(*) as num_row";
-$query_pg = $db->select($option_or);
-$rs_pg = $db->get($query_pg);
-$total_record = $rs_pg["num_row"];
+$query_rows = $db->select($option_or);
+$total_record = $db->rows($query_rows);
 $total_page = ceil($total_record / $perpage);
 
 $page_number = 10;

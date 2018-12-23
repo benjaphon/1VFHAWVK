@@ -34,7 +34,7 @@ if(isset($search) && !empty($search)){
     $option_product["condition"] .= " p.agent_price LIKE'%{$search}%' OR";
     $option_product["condition"] .= " p.wholesale_price LIKE'%{$search}%' OR";
     $option_product["condition"] .= " p.sale_price LIKE'%{$search}%' OR";
-    $option_product["condition"] .= " p.start_ship_date LIKE'%{$search}%' OR";
+    $option_product["condition"] .= " DATE_FORMAT(p.start_ship_date, '%d/%m/%Y') LIKE'%{$search}%' OR";
     $option_product["condition"] .= " p.quantity LIKE'%{$search}%')";
 }
 

@@ -26,7 +26,7 @@ class database {
             'fields' => '*',
             'condition' => '1=1',
             'order' => '1',
-            'limit' => 2500
+            'limit' => 10000
         );
         $options = array_merge($default, $options);
         $sql = "SELECT {$options['fields']} FROM {$options['table']} WHERE {$options['condition']} ORDER BY {$options['order']} LIMIT {$options['limit']}";
