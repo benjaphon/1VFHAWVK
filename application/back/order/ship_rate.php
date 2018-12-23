@@ -47,7 +47,7 @@ require 'assets/template/back/header.php';
                     <?php while ($rs_ship = $db->get($query_ship)) { ?>
                     <tr>
                         <td style="text-align: right;"><?php echo $rs_ship['min_wg']; ?></td>
-                        <td style="text-align: right;"><?php echo $rs_ship['max_wgparcel']; ?></td>
+                        <td style="text-align: right;"><?php echo $rs_ship['max_wg']; ?></td>
                         <td style="text-align: right;"><?php echo $rs_ship['parcel']; ?></td>
                         <td style="text-align: right;"><?php echo $rs_ship['register']; ?></td>
                         <td style="text-align: right;"><?php echo $rs_ship['EMS']; ?></td>

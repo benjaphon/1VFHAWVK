@@ -52,6 +52,9 @@ width:200px;
 padding:5px;
 border:1px solid #e8debd
 }
+.ck-editor__editable {
+    min-height: 200px;
+}
 </style>
 
 <section id="main-content">
@@ -176,7 +179,11 @@ require 'assets/template/back/footer.php';
 <script type="text/javascript">
     var abc = 0;      // Declaring and defining global increment variable.
     $(document).ready(function () {
-        CKEDITOR.replace('editor');
+        ClassicEditor
+            .create( document.querySelector( '#editor' ) )
+            .catch( error => {
+                console.error( error );
+            } );
         $( "#start_ship_date" ).datepicker({ dateFormat: 'dd-mm-yy' });
         $("#save").click(function (e) {
 

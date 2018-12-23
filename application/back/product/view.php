@@ -103,7 +103,7 @@ border:1px solid #e8debd
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p id="p_price">ราคา <?php echo $rs_product['agent_price']; ?></p>
+                        <p id="p_price">ราคา <?php echo $rs_product['agent_price']; ?> บาท</p>
                     </div>
                 </div>
                 <div class="form-group">
@@ -169,11 +169,6 @@ require 'assets/template/back/footer.php';
  ?>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        /*CKEDITOR.replace('editor');
-        CKEDITOR.config.readOnly = true;*/
-
-    });
 
     function copyToClipboard() {
         var $temp = $("<textarea cols='40' rows='5'>");

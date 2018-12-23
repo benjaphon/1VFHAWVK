@@ -18,7 +18,7 @@
     <script src="<?php echo $baseUrl; ?>/assets/js/jquery.nicescroll.js" type="text/javascript"></script>
     <script src="<?php echo $baseUrl; ?>/assets/js/jquery.sparkline.js"></script>-->
     <!--common script for all pages-->
-    <script src="<?php echo $baseUrl; ?>/assets/js/common-scripts.js"></script>
+    <script src="<?php echo $baseUrl; ?>/assets/js/common-scripts-001.js"></script>
 
     <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/gritter/js/jquery.gritter.js"></script>
     <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/gritter-conf.js"></script>
@@ -28,7 +28,7 @@
     <!-- DATA TABES SCRIPT -->
     <script src="<?php echo $baseUrl; ?>/assets/DataTables/datatables.min.js" type="text/javascript"></script>
     <!-- Editor -->
-    <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/ckeditor5/ckeditor.js"></script>
 	<script type="text/javascript">
         /*$(document).ready(function () {
 
