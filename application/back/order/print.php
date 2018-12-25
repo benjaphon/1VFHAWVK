@@ -5,23 +5,22 @@ if (!isset($_GET['id'])) {
 }
 
 $db = new database();
-$sql_od = "SELECT d.*,p.id,p.name,p.url_picture FROM order_details d INNER JOIN products p ";
-$sql_od .= "ON d.product_id=p.id ";
-$sql_od .="WHERE d.order_id='{$_GET['id']}' ";
-$query_od = $db->query($sql_od);
 
-$sql_os = "SELECT os.*, pm.pay_type, pm.pay_money, pm.url_picture, pm.detail, u.username FROM orders os ";
-$sql_os .= "LEFT JOIN payments pm ON pm.order_id = os.id ";
-$sql_os .= "LEFT JOIN users u ON u.id = os.user_id ";
+$sql_os = "SELECT os.* FROM orders os ";
 $sql_os .= "WHERE os.id='{$_GET['id']}'";
 
 $query_os = $db->query($sql_os);
 $rows_os = $db->rows($query_os);
-if($rows_os != 1){
+if($rows_os == 0){
     header("location:" . $baseUrl . "/back/order");
 }else{
     $rs_os = $db->get($query_os);
 }
+
+$sql_od = "SELECT d.*,p.name FROM order_details d INNER JOIN products p ";
+$sql_od .= "ON d.product_id=p.id ";
+$sql_od .="WHERE d.order_id='{$_GET['id']}' ";
+$query_od = $db->query($sql_od);
 
 ?>
 <!DOCTYPE html>
