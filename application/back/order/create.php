@@ -7,6 +7,8 @@ unset($_SESSION[_ss . 'cart']);
 unset($_SESSION[_ss . 'qty']);
 unset($_SESSION[_ss . 'price']);
 unset($_SESSION[_ss . 'wholesale_price']);
+unset($_SESSION[_ss . 'agent_price']);
+unset($_SESSION[_ss . 'sale_price']);
 unset($_SESSION[_ss . 'weight']);
 unset($_SESSION[_ss . 'note']);
 unset($_SESSION[_ss . 'total_price']);
@@ -41,14 +43,6 @@ require 'assets/template/back/header.php';
     text-align: right;
 }
 
-#imagelightbox
-{
-    position: fixed;
-    z-index: 9999;
-
-    -ms-touch-action: none;
-    touch-action: none;
-}
 </style>
 
 
@@ -92,7 +86,7 @@ MAIN CONTENT
                                     $product = $row['name']." (".date('d-m-Y', strtotime($row['start_ship_date'])).")";
                                 }
 
-                                echo "<option value='".$row['id'].",".$row['agent_price'].",".$row['weight'].",".$row['wholesale_price']."'>".$product."</option>";
+                                echo "<option value='".$row['id'].",".$row['agent_price'].",".$row['weight'].",".$row['wholesale_price'].",".$row['sale_price']."'>".$product."</option>";
                             }
                             ?>
                         </select>
@@ -151,7 +145,7 @@ MAIN CONTENT
                           <label><input type="radio" name="sender_type" value="address_admin">ที่อยู่ littlenow</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="sender_type" value="address_other">ที่อยู่อื่นๆ (ระบุ)</label>
+                          <label><input type="radio" name="sender_type" value="address_other" data-validation="required">ที่อยู่อื่นๆ (ระบุ)</label>
                         </div>
                         <textarea class="form-control" rows="5" name="sender" id="sender" data-validation="required"></textarea>
                 </div>
@@ -197,7 +191,6 @@ require 'assets/template/back/footer.php';
  * footer***********************************************************************
  */
 ?>
-<script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/imagelightbox.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/jquery.form-validator.min.js"></script>
 <!-- selectbox -->
 <script src="<?php echo $baseUrl; ?>/assets/js/bootstrap-select.js" type="text/javascript"></script>
@@ -206,7 +199,7 @@ require 'assets/template/back/footer.php';
 $(document).ready(function(){
 
     /* Initial */
-    $('a').imageLightbox();
+    $('a.fancybox').fancybox();
     $.validate();
     $(document)
       .ajaxStart(function () {

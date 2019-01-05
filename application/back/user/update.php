@@ -81,15 +81,20 @@ require 'assets/template/back/header.php';
                             <textarea class="form-control input-sm" maxlength="200" rows="3" name="address" id="address" type="text"><?php echo $rs_user['address'];?></textarea>
                         </div>
                     </div>
+                    <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="role">ประเภทสมาชิก</label>
                         <div class="col-sm-4">
                             <select class="form-control input-sm" name="role" id="role">
                                 <option value="user">ผู้ใช้ทั่วไป</option>
+                                <option value="agent_vip">ตัวแทน vip</option>
                                 <option value="admin">ผู้ดูแลระบบ</option>
                             </select>
                         </div>
                     </div>
+                    <?php } else { ?>
+                        <input type="hidden" name="role" value="<?php echo $rs_user['role']; ?>">
+                    <?php } ?>
                 </form>
             </div>
         </div>

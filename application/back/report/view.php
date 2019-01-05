@@ -8,13 +8,19 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $db = new database();
 $option_rq = array(
-    "table" => "request",
+    "table" => "request rq LEFT JOIN problem_type pm_type ON rq.problem_type = pm_type.id",
     "condition" => "order_id = {$_GET['id']}"
 );
 
 $query_rq = $db->select($option_rq);
 $rows_rq = $db->rows($query_rq);
 $rs_rq = $db->get($query_rq);
+
+$option_pm_type = array(
+    "table" => "problem_type"
+);
+
+$query_pm_type = $db->select($option_pm_type);
 
 $title = 'แจ้งปัญหา';
 /*
@@ -62,6 +68,16 @@ MAIN CONTENT
             <form action="<?php echo base_url(); ?>/back/report/create" id="report-create-form" method="post">
                 <input type="hidden" name="order_id" value="<?php echo $_GET['id']; ?>">
                 <div class="form-group col-xs-12 clearfix">
+                    <label for="problem" class="text-bold required">ประเภทปัญหา</label>
+                    <select id="problem_type" name="problem_type" class="form-control" data-validation="required">
+                        <option value="">เลือกประเภท</option>
+                        <?php while ($row = $db->get($query_pm_type)){
+                            echo "<option value='".$row['id']."'>".$row['problem_name']."</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="form-group col-xs-12 clearfix">
                     <label for="problem" class="text-bold required">ปัญหาที่พบ</label>
                     <textarea class="form-control" rows="5" name="problem" id="problem" data-validation="required"></textarea>
                 </div>
@@ -96,7 +112,10 @@ MAIN CONTENT
                                 <label for="status_name" class="text-bold">สถานะ</label>
                                 <label name="status_name" class="control-label"><?php echo $status_name; ?></label>
                             </div>
-
+                            <div class="form-group col-xs-12 clearfix">
+                                <label for="problem_name" class="text-bold">ประเภทปัญหา</label><br>
+                                <label name="problem_name" class="control-label"><?php echo $rs_rq['problem_name']; ?></label>
+                            </div>
                             <div class="form-group col-xs-12 clearfix">
                                 <label for="problem" class="text-bold">ปัญหาที่พบ</label><br>
                                 <label name="problem" class="control-label"><?php echo $rs_rq['problem']; ?></label>
@@ -137,6 +156,11 @@ MAIN CONTENT
                             </div>
 
                             <div class="form-group col-xs-12 clearfix">
+                                <label for="problem_name" class="text-bold">ประเภทปัญหา</label><br>
+                                <label name="problem_name" class="control-label"><?php echo $rs_rq['problem_name']; ?></label>
+                            </div>
+
+                            <div class="form-group col-xs-12 clearfix">
                                 <label for="problem" class="text-bold">ปัญหาที่พบ</label><br>
                                 <label name="problem" class="control-label"><?php echo $rs_rq['problem']; ?></label>
                             </div>
@@ -144,6 +168,7 @@ MAIN CONTENT
                             <div class="form-group col-xs-12 clearfix">
                                 <label for="result" class="text-bold">การแก้ไข</label><br>
                                 <label name="result" class="control-label"><?php echo $rs_rq['result']; ?></label>
+                                <input type="hidden" name="result" value="<?php echo $rs_rq['result']; ?>">
                             </div>
 
                             <div class="form-group col-xs-12 clearfix">
@@ -166,6 +191,11 @@ MAIN CONTENT
                             </div>
 
                             <div class="form-group col-xs-12 clearfix">
+                                <label for="problem_name" class="text-bold">ประเภทปัญหา</label><br>
+                                <label name="problem_name" class="control-label"><?php echo $rs_rq['problem_name']; ?></label>
+                            </div>
+
+                            <div class="form-group col-xs-12 clearfix">
                                 <label for="problem" class="text-bold">ปัญหาที่พบ</label><br>
                                 <label name="problem" class="control-label"><?php echo $rs_rq['problem']; ?></label>
                             </div>
@@ -173,6 +203,7 @@ MAIN CONTENT
                             <div class="form-group col-xs-12 clearfix">
                                 <label for="result" class="text-bold">การแก้ไข</label><br>
                                 <label name="result" class="control-label"><?php echo $rs_rq['result']; ?></label>
+                                <input type="hidden" name="result" value="<?php echo $rs_rq['result']; ?>">
                             </div>
 
                             <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
@@ -193,6 +224,11 @@ MAIN CONTENT
                             <div class="form-group col-xs-12 clearfix">
                                 <label for="status_name" class="text-bold">สถานะ</label>
                                 <label name="status_name" class="control-label"><?php echo $status_name; ?></label>
+                            </div>
+
+                            <div class="form-group col-xs-12 clearfix">
+                                <label for="problem_name" class="text-bold">ประเภทปัญหา</label><br>
+                                <label name="problem_name" class="control-label"><?php echo $rs_rq['problem_name']; ?></label>
                             </div>
 
                             <div class="form-group col-xs-12 clearfix">
@@ -249,7 +285,6 @@ require 'assets/template/back/footer.php';
  * footer***********************************************************************
  */
 ?>
-<script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/imagelightbox.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/jquery.form-validator.min.js"></script>
 <!-- selectbox -->
 <script src="<?php echo $baseUrl; ?>/assets/js/bootstrap-select.js" type="text/javascript"></script>
@@ -258,7 +293,7 @@ require 'assets/template/back/footer.php';
 $(document).ready(function(){
 
     /* Initial */
-    $('a').imageLightbox();
+    $('a.fancybox').fancybox();
     $.validate();
     $(document)
       .ajaxStart(function () {

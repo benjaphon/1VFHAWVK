@@ -4,12 +4,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $db = new database();
     $password = salt_pass($_POST['new_password']);
-    $value = array(
+    $values = array(
         "username" => trim($_POST['username']),
         "password" => $password,
-        "user_type" => trim($_POST['user_type'])
+        "address" => trim($_POST['address']),
+        "role" => trim($_POST['role'])
     );
-    $query = $db->update("subject", $values, "id={$_POST['id']}");
+    $query = $db->update("users", $values, "id={$_GET['id']}");
 
     if ($query) {
         header("location:" . $baseUrl . "/back/user");

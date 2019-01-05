@@ -47,12 +47,13 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
     <title><?php echo $title; ?></title>
 
     <!-- Bootstrap core CSS -->
-    <link href="<?php echo $baseUrl; ?>/assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>/assets/css/bootstrap.min.css">
     <!--external css-->
-    <link href="<?php echo $baseUrl; ?>/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>/assets/font-awesome/css/font-awesome.css"  />
     <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>/assets/css/zabuto_calendar.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>/assets/js/gritter/css/jquery.gritter.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>/assets/lineicons/style.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>/assets/css/jquery.fancybox.min.css" />
 
     <!-- Custom styles for this template -->
     <link href="<?php echo $baseUrl; ?>/assets/css/style.css" rel="stylesheet">
@@ -100,11 +101,29 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                             <li>
                                 <p class="green">สินค้าใกล้หมด <?php echo $rows_head; ?> รายการ</p>
                             </li>
-                            <?php while ($rs_head_pd = $db_head->get($query_head_pd)) { ?>
+                            <?php while ($rs_head_pd = $db_head->get($query_head_pd)) {
+                            
+                            $option_head_img = array(
+                                "table" => "images",
+                                "condition" => "ref_id='{$rs_head_pd['id']}' AND filetype='product'",
+                                "order" => "id",
+                                "limit" => "1"
+                            );
+                            $query_head_img = $db_head->select($option_head_img);
+                            
+                            if($db_head->rows($query_head_img) > 0){
+                                $rs_head_img = $db_head->get($query_head_img);
+                                $filename_head_img = $rs_head_img['filename'];
+                            }
+                            else {
+                                $filename_head_img = 'ecimage.jpg';
+                            }
+                                
+                            ?>
                             <li>
                                 <div>
                                     <a href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_head_pd['id']; ?>">
-                                        <span class="photo"><img alt="avatar" src="<?php echo $baseUrl; ?>/assets/upload/product/thumb_<?php echo $rs_head_pd['url_picture']; ?>"></span>
+                                        <span class="photo"><img alt="avatar" src="<?php echo $baseUrl; ?>/assets/upload/product/thumb_<?php echo $filename_head_img; ?>"></span>
                                         <span class="subject">
                                         <span><?php echo $rs_head_pd['name']; ?></span>
                                         </span>
@@ -127,11 +146,29 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                             <li>
                                 <p class="green">สินค้ามาใหม่ <?php echo $rows_head_2; ?> รายการ</p>
                             </li>
-                            <?php while ($rs_head_pd_2 = $db_head->get($query_head_pd_2)) { ?>
+                            <?php while ($rs_head_pd_2 = $db_head->get($query_head_pd_2)) { 
+                                
+                            $option_head_img = array(
+                                "table" => "images",
+                                "condition" => "ref_id='{$rs_head_pd_2['id']}' AND filetype='product'",
+                                "order" => "id",
+                                "limit" => "1"
+                            );
+                            $query_head_img = $db_head->select($option_head_img);
+                            
+                            if($db_head->rows($query_head_img) > 0){
+                                $rs_head_img = $db_head->get($query_head_img);
+                                $filename_head_img = $rs_head_img['filename'];
+                            }
+                            else {
+                                $filename_head_img = 'ecimage.jpg';
+                            }
+
+                            ?>
                             <li>
                                 <div>
                                     <a href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_head_pd_2['id']; ?>">
-                                        <span class="photo"><img alt="avatar" src="<?php echo $baseUrl; ?>/assets/upload/product/thumb_<?php echo $rs_head_pd_2['url_picture']; ?>"></span>
+                                        <span class="photo"><img alt="avatar" src="<?php echo $baseUrl; ?>/assets/upload/product/thumb_<?php echo $filename_head_img; ?>"></span>
                                         <span class="subject">
                                         <span><?php echo $rs_head_pd_2['name']; ?></span>
                                         </span>
@@ -162,7 +199,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
 
-              	  <p class="centered"><a href="<?php echo $baseUrl; ?>/back/user/update/1"><img src="<?php echo $baseUrl; ?>/assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p>
+              	  <p class="centered"><a href="<?php echo $baseUrl; ?>/back/user/update/<?php echo $_SESSION[_ss . 'id'] ?>"><img src="<?php echo $baseUrl; ?>/assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p>
               	  <h5 class="centered"><?php echo $_SESSION[_ss . 'username'] ?></h5>
 
                   <!--<li class="mt">
@@ -212,7 +249,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                       </a>
                   </li>
                   <li>
-                      <span>Version 4.0</span>
+                      <span>Version 4.5</span>
                   </li>
                   <?php } ?>
               </ul>

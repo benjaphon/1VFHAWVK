@@ -64,7 +64,7 @@ require 'assets/template/back/header.php';
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="address">ที่อยู่</label>
                         <div class="col-sm-4">
-                            <textarea class="form-control input-sm" maxlength="200" rows="3" name="address" id="address" type="text" value="<?php echo $rs_user['address'];?>"></textarea>
+                            <textarea class="form-control input-sm" maxlength="200" rows="3" name="address" id="address" type="text" ></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -72,6 +72,7 @@ require 'assets/template/back/header.php';
                         <div class="col-sm-4">
                             <select class="form-control input-sm" name="role" id="role">
                                 <option value="user">ผู้ใช้ทั่วไป</option>
+                                <option value="agent_vip">ตัวแทน vip</option>
                                 <option value="admin">ผู้ดูแลระบบ</option>
                             </select>
                         </div>

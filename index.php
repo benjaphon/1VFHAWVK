@@ -33,7 +33,11 @@ if ($onpage == "back" AND $a != "login") {
     	//product edit
     	if ($url == 'product' && $a == 'update') {
     		 header("location:" . base_url() . "/back/product");
-    	}
+        }
+        
+        if ($url == 'user' && $a == 'index') {
+            header("location:" . base_url() . "/back/order");
+        }
     }
 }
 

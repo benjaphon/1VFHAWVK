@@ -74,7 +74,7 @@ else {
 
 echo   "<tr>
             <td>
-                <a href='{$baseUrl}/assets/upload/product/{$filename_img}' data-imagelightbox='a'>
+                <a href='{$baseUrl}/assets/upload/product/{$filename_img}' class='fancybox'>
                     <img src='{$baseUrl}/assets/upload/product/sm_{$filename_img}' class='img-responsive' alt='Responsive image'>
                 </a>
             </td>
@@ -232,6 +232,8 @@ echo    "<script>
             });
 
             $('input[name=shipping_type]').change();
+
+            $('a.fancybox').fancybox();
 
         </script>";
 
