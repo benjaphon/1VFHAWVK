@@ -32,10 +32,18 @@ if (isset($_POST['qtyupdate'])) {
         $_SESSION[_ss . 'total_price'] -= $_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key];
 
         //Whole Sale Price Calculation
-        if($qty > 10)
-        $_SESSION[_ss . 'price'][$key] = $_SESSION[_ss . 'wholesale_price'][$key];
-        else
-        $_SESSION[_ss . 'price'][$key] = $_SESSION[_ss . 'agent_price'][$key];
+        if(($_SESSION[_ss . 'levelaccess'] == 'agent_vip')){
+
+            $_SESSION[_ss . 'price'][$key] = $_SESSION[_ss . 'sale_price'][$key];
+            
+        }else{
+
+            if($qty > 10)
+                $_SESSION[_ss . 'price'][$key] = $_SESSION[_ss . 'wholesale_price'][$key];
+            else
+                $_SESSION[_ss . 'price'][$key] = $_SESSION[_ss . 'agent_price'][$key];
+
+        }
 
         $_SESSION[_ss . 'total_price'] += $_SESSION[_ss . 'price'][$key] * $qty;
 

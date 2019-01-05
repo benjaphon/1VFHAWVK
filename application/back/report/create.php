@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $value_rq = array(
         "status" => "A",
         "problem" => trim($_POST['problem']),
+        "problem_type" => trim($_POST['problem_type']),
         "order_id" => trim($_POST['order_id']),
         "user_id" => $_SESSION[_ss . 'id'],
         "created_at" => date('Y-m-d H:i:s')

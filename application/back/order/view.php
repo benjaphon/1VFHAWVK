@@ -7,7 +7,7 @@ if (!isset($_GET['id'])) {
 }
 $db = new database();
 
-$sql_os = "SELECT os.*, pm.pay_type, pm.pay_money, pm.url_picture, pm.detail, u.username FROM orders os ";
+$sql_os = "SELECT os.*, pm.pay_type, pm.pay_money, pm.url_picture, pm.detail, pm.created_at as pay_created_at, u.username FROM orders os ";
 $sql_os .= "LEFT JOIN payments pm ON pm.order_id = os.id ";
 $sql_os .= "LEFT JOIN users u ON u.id = os.user_id ";
 $sql_os .= "WHERE os.id='{$_GET['id']}' ORDER BY pm.created_at DESC LIMIT 1";
@@ -39,14 +39,7 @@ require 'assets/template/back/header.php';
  */
 ?>
 <style>
-    #imagelightbox
-    {
-        position: fixed;
-        z-index: 9999;
 
-        -ms-touch-action: none;
-        touch-action: none;
-    }
 </style>
 
 <!-- **********************************************************************************************************************************************************
@@ -108,7 +101,7 @@ MAIN CONTENT
                         ?>
                         <tr>
                             <td>
-                                <a href='<?php echo base_url(); ?>/assets/upload/product/<?php echo $filename_img; ?>' data-imagelightbox='a'>
+                                <a href='<?php echo base_url(); ?>/assets/upload/product/<?php echo $filename_img; ?>' class='fancybox'>
                                     <img src="<?php echo base_url(); ?>/assets/upload/product/sm_<?php echo $filename_img; ?>">
                                 </a>
                             </td>
@@ -193,10 +186,11 @@ MAIN CONTENT
                         <li class="list-group-item"><strong>จำนวน</strong> : <?php echo number_format($rs_os['pay_money'],2); ?></li>
                         <li class="list-group-item"><strong>เพิ่มเติม</strong> : <?php echo $rs_os['detail']; ?></li>
                         <li class="list-group-item"><strong>หลักฐานการโอน</strong> : 
-                            <a href="<?php echo base_url(); ?>/assets/upload/payment/<?php echo !empty($rs_os['url_picture'])?$rs_os['url_picture']:'ecimage.jpg'; ?>" data-imagelightbox="a">
+                            <a href="<?php echo base_url(); ?>/assets/upload/payment/<?php echo !empty($rs_os['url_picture'])?$rs_os['url_picture']:'ecimage.jpg'; ?>" class="fancybox">
                                 <img src="<?php echo base_url(); ?>/assets/upload/payment/md_<?php echo !empty($rs_os['url_picture'])?$rs_os['url_picture']:'ecimage.jpg'; ?>" class="img-responsive" alt="Responsive image">
                             </a>
                         </li>
+                        <li class="list-group-item"><strong>วันที่ชำระเงิน</strong> : <?php echo thaidate($rs_os['pay_created_at'], true); ?></li>
                         <?php if($_SESSION[_ss . 'levelaccess'] == 'admin' && $rs_os['order_status']=='P') { ?>
                         <form action="<?php echo $baseUrl; ?>/back/order/form_confirm_payment" method="post">
                             <input type="hidden" name="order_id" value="<?php echo $_GET['id']; ?>">
@@ -232,12 +226,11 @@ require 'assets/template/back/footer.php';
  * footer***********************************************************************
  */
 ?>
-<script type="text/javascript" src="<?php echo base_url(); ?>/assets/js/imagelightbox.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/jquery.form-validator.min.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('a').imageLightbox();
+        $('a.fancybox').fancybox();
     });
     $.validate();
 </script>

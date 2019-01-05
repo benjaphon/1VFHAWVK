@@ -11,7 +11,7 @@
   </section>
 
     <!-- js placed at the end of the document so the pages load faster -->
-    <script src="<?php echo $baseUrl; ?>/assets/js/jquery-1.8.3.min.js"></script>
+    <script src="<?php echo $baseUrl; ?>/assets/js/jquery-3.3.1.min.js"></script>
     <script src="<?php echo $baseUrl; ?>/assets/js/bootstrap.min.js"></script>
     <script class="include" type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/jquery.dcjqaccordion.2.7.js"></script>
     <!--<script src="<?php echo $baseUrl; ?>/assets/js/jquery.scrollTo.min.js"></script>
@@ -23,6 +23,7 @@
     <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/gritter/js/jquery.gritter.js"></script>
     <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/gritter-conf.js"></script>
     <!--script for this page-->
+    <script src="<?php echo $baseUrl; ?>/assets/js/jquery.fancybox.min.js"></script>
     <!--<script src="<?php echo $baseUrl; ?>/assets/js/sparkline-chart.js"></script>-->
 	<script src="<?php echo $baseUrl; ?>/assets/js/zabuto_calendar.js"></script>
     <!-- DATA TABES SCRIPT -->

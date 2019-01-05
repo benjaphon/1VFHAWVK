@@ -14,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "order_datetime" => date('Y-m-d H:i:s'),
         "total" => $_SESSION[_ss . 'total_price'],
         "total_weight" => $_SESSION[_ss . 'total_weight'],
-        "user_id" => $_SESSION[_ss . 'id'],
         "modified_at" => date('Y-m-d H:i:s')
     );
     $query_or = $db->update("orders", $value_or, "id='{$_POST['id']}'");
