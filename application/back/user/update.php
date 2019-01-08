@@ -53,9 +53,16 @@ require 'assets/template/back/header.php';
                 <form id="user-form" action="<?php echo $baseUrl; ?>/back/user/form_update/<?php echo $rs_user['id']; ?>" method="post">
                     <div class="form-group">
                         <label class="col-sm-2 control-label required" for="username">Username</label>
+                        
                         <div class="col-sm-4">
-                            <input class="form-control input-sm" maxlength="50" name="username" id="username" type="text" value="<?php echo $rs_user['username'];?>" data-validation="required" autocomplete="off" />
+                            <?php if($_SESSION[_ss . 'levelaccess'] == 'admin') { ?>
+                                <input class="form-control input-sm" maxlength="50" name="username" id="username" type="text" value="<?php echo $rs_user['username'];?>" data-validation="required" autocomplete="off" />
+                            <?php } else { ?>
+                                <label><?php echo $rs_user['username'];?></label>
+                                <input type="hidden" name="username" value="<?php echo $rs_user['username'];?>">
+                            <?php } ?>
                         </div>
+                    
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label required" for="old_password">Old Password</label>
@@ -113,7 +120,7 @@ require 'assets/template/back/footer.php';
  */
 ?>
 
-<script type="text/javascript" src="<?php echo $baseUrl; ?>/js/jquery.form-validator.min.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/jquery.form-validator.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
         $("#save").click(function() {
