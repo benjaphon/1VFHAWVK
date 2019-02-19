@@ -249,7 +249,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                       </a>
                   </li>
                   <li>
-                      <span>Version 4.5</span>
+                      <span>Version 5</span>
                   </li>
                   <?php } ?>
               </ul>
