@@ -21,8 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 break;
             case 'F':
                 $value_rq = array(
-                    "status" => trim($_POST['status']),
-                    "result" => trim($_POST['result'])
+                    "status" => trim($_POST['status'])
                 );
                 break;
             case 'C':

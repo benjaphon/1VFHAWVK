@@ -70,6 +70,14 @@ require 'assets/template/back/header.php';
 ?>
 
 <style>
+    #imagelightbox
+    {
+        position: fixed;
+        z-index: 9999;
+
+        -ms-touch-action: none;
+        touch-action: none;
+    }
 
     @media (min-width: 1200px) {
         .pull-lg-right {
@@ -179,7 +187,7 @@ MAIN CONTENT
                             ?>
                             <tr>
                                 <td>         
-                                    <a href="<?php echo base_url(); ?>/assets/upload/product/<?php echo $filename_img; ?>" class="fancybox">
+                                    <a href="<?php echo base_url(); ?>/assets/upload/product/<?php echo $filename_img; ?>" data-imagelightbox="a">
                                         <img src="<?php echo base_url(); ?>/assets/upload/product/sm_<?php echo $filename_img; ?>" class="img-responsive" alt="Responsive image">
                                     </a>
                                 </td>
@@ -206,29 +214,9 @@ MAIN CONTENT
                                     
                                     <a class="btn btn-info btn-sm" title="" href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_pd['id']; ?>"><i class="glyphicon glyphicon-zoom-in"></i> รายละเอียด</a>
                                     <a class="btn btn-warning btn-sm" title="" href="<?php echo $baseUrl; ?>/back/product/update/<?php echo $rs_pd['id']; ?>"><i class="glyphicon glyphicon-edit"></i> แก้ไข</a>
-                                    <a class="btn btn-primary btn-sm" title="" href="#" data-toggle="modal" data-target="#duplicateModal<?php echo $rs_pd['id'];?>"><i class="glyphicon glyphicon-duplicate"></i> สำเนา</a>
                                     <a class="btn btn-danger btn-sm confirm" title="" href="#" data-toggle="modal" data-target="#deleteModal<?php echo $rs_pd['id'];?>"><i class="glyphicon glyphicon-remove"></i> ลบ</a>
                                     
-                                    <!-- Modal Duplicate -->
-                                    <div class="modal fade" id="duplicateModal<?php echo $rs_pd['id'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header" style="background:#337ab7;">
-                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                    <h4 class="modal-title" id="myModalLabel">แจ้งเตือนการทำสำเนาข้อมูล</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    คุณยืนยันต้องการจะทำสำเนาสินค้านี้ ใช่หรือไม่?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">ไม่ใช่</button>
-                                                    <a role="button" class="btn btn-primary" href="<?php echo $baseUrl; ?>/back/product/form_duplicate/<?php echo $rs_pd['id']; ?>">ใช่ ยืนยันการทำสำเนา</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Modal Delete -->
+                                    <!-- Modal -->
                                     <div class="modal fade" id="deleteModal<?php echo $rs_pd['id'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -284,6 +272,8 @@ require 'assets/template/back/footer.php';
  * footer***********************************************************************
  */
 ?>
+<script type="text/javascript" src="<?php echo base_url(); ?>/assets/js/imagelightbox.min.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
         /*$("#tbl_Product").DataTable({
@@ -293,7 +283,7 @@ require 'assets/template/back/footer.php';
                 "url": "<?php echo $baseUrl; ?>/assets/DataTables/lang/Thai.json"
             }
         });*/
-        $('a.fancybox').fancybox();
+        $('a').imageLightbox();
 
         $("#search").val("<?php echo $search; ?>");
         $("button[type=reset]").click(function(){

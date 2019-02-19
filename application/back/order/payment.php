@@ -33,6 +33,16 @@ require 'assets/template/back/header.php';
  * header***********************************************************************
  */
 ?>
+<style>
+    #imagelightbox
+    {
+        position: fixed;
+        z-index: 9999;
+
+        -ms-touch-action: none;
+        touch-action: none;
+    }
+</style>
 
 <!-- **********************************************************************************************************************************************************
 MAIN CONTENT
@@ -112,7 +122,7 @@ MAIN CONTENT
                         ?>
                         <tr>
                             <td>
-                                <a href='<?php echo base_url(); ?>/assets/upload/product/<?php echo $filename_img; ?>' class="fancybox">
+                                <a href='<?php echo base_url(); ?>/assets/upload/product/<?php echo $filename_img; ?>' data-imagelightbox='a'>
                                     <img src="<?php echo base_url(); ?>/assets/upload/product/sm_<?php echo $filename_img; ?>">
                                 </a>
                             </td>
@@ -291,12 +301,13 @@ require 'assets/template/back/footer.php';
 
 <link rel="stylesheet" href="<?php echo $baseUrl; ?>/assets/css/jquery.datetimepicker.css" type="text/css" />
 
+<script type="text/javascript" src="<?php echo base_url(); ?>/assets/js/imagelightbox.min.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/jquery.form-validator.min.js"></script>
 <script type='text/javascript' src="<?php echo $baseUrl; ?>/assets/js/jquery.datetimepicker.js"></script>
 
 <script>
     $(document).ready(function () {
-        $('a.fancybox').fancybox();
+        $('a').imageLightbox();
         $(".saveform").click(function () {
             if ($("input[name='image[]']")[0].files && $("input[name='image[]']")[0].files[0]) {
                 var filename = $("input[name='image[]']")[0].files[0].name;
