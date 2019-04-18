@@ -22,7 +22,7 @@ function uploadimg($filename, $width, $get_height, $path, $order) {
             ImageJPEG($images_fin, $path . $images);
             ImageDestroy($images_orig);
             ImageDestroy($images_fin);
-            return $filename . ".jpg";
+            return $images;
         } elseif ($_FILES['image']['type'][$order] == 'image/x-png' OR $_FILES['image']['type'][$order] == 'image/png') {
             $images = $filename . ".png";
             $size = getimagesize($tmp_images);
@@ -40,7 +40,7 @@ function uploadimg($filename, $width, $get_height, $path, $order) {
             Imagepng($images_fin, $path . $images);
             ImageDestroy($images_orig);
             ImageDestroy($images_fin);
-            return $filename . ".png";
+            return $images;
         } elseif ($_FILES['image']['type'][$order] == 'image/gif') {
             $images = $filename . ".gif";
             $size = getimagesize($tmp_images);
@@ -58,7 +58,7 @@ function uploadimg($filename, $width, $get_height, $path, $order) {
             Imagegif($images_fin, $path . $images);
             ImageDestroy($images_orig);
             ImageDestroy($images_fin);
-            return $filename . ".gif";
+            return $images;
         } else {
             return FALSE;
         }

@@ -12,12 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $ext = explode('.', basename($_FILES['image']['name'][0]));
         $file_extension = end($ext); 
         $filename = date('YmdHis') . md5(uniqid());
-        $full_filename = $filename . "." . end($ext); 
 
         $validextensions = array("jpeg", "jpg", "png");
         if (($_FILES["image"]["size"][0] < 1000000) && in_array($file_extension, $validextensions)) {
             $path = base_path() . "/assets/upload/payment/";
-            uploadimg($filename, 600, 600, $path, 0);
+            $full_filename = uploadimg($filename, 600, 600, $path, 0);
             uploadimg("thumb_" . $filename, 400, 400, $path, 0);
             uploadimg("md_" . $filename, 150, 150, $path, 0);
             uploadimg("sm_" . $filename, 70, 70, $path, 0);

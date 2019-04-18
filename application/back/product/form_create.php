@@ -43,9 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $ext = explode('.', basename($_FILES['image']['name'][$i]));   // Explode file name from dot(.)
                 $file_extension = end($ext); // Store extensions in the variable.
                 $filename = date('YmdHis') . md5(uniqid());     // Set the target path with a new name of image.
-                $full_filename = $filename . "." . $ext[count($ext) - 1]; 
+                
                 if (($_FILES["image"]["size"][$i] < 1000000) && in_array($file_extension, $validextensions)) { // 1000 B = 1 KB = 1000 KB = 1 MB 
-                    uploadimg($filename, 600, 600, $path, $i);
+                    $full_filename = uploadimg($filename, 600, 600, $path, $i);
                     uploadimg("thumb_" . $filename, 400, 400, $path, $i);
                     uploadimg("md_" . $filename, 150, 150, $path, $i);
                     uploadimg("sm_" . $filename, 70, 70, $path, $i);
