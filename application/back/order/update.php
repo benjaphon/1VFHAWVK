@@ -140,10 +140,10 @@ MAIN CONTENT
                           <label><input type="radio" name="shipping_type" value="KERRY">KERRY</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="NIM EXPRESS">NIM EXPRESS</label>
+                          <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">เอกชน (สำหรับสินค้าจำนวนมาก แบบสต็อค)</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="นัดรับ">นัดรับ</label>
+                          <label><input type="radio" name="shipping_type" value="อื่นๆ">อื่นๆ</label>
                         </div>
                     </div>
                 </div>

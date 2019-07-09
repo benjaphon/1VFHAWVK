@@ -157,6 +157,9 @@ MAIN CONTENT
                                         case 'EMS':
                                             $shipping_fees = $rs_shipping['EMS'];
                                             break;
+										case 'FLASH EXPRESS':
+                                            $shipping_fees = $rs_shipping['Flash'];
+                                            break;
                                         case 'KERRY':
                                             if ($rows_count == 1 && $product_qty == 1){
                                                 $shipping_fees = $kerry_shipping;

@@ -135,7 +135,7 @@ echo    "
             <td colspan='6' style='text-align: right;'>
                 <h4>
                     <span id='wrap_shipping_text'>คำนวณค่าส่ง ประเภท <span id='sp_shipping_type'/> <span id='sp_shipping_rate'/> บาท</span>
-                    <span id='wrap_shipping_warning'>น้ำหนักเกิน 10 กิโลกรัม โปรดรอสอบถามแอดมิน!</span>
+                    <span id='wrap_shipping_warning'>น้ำหนักเกิน 30 กิโลกรัม โปรดรอสอบถามแอดมิน!</span>
                 </h4>
                 <!--<a href='{$baseUrl}/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a>-->
             </td>
@@ -168,15 +168,17 @@ $rows_shipping = $db->rows($query_shipping);
 $parcel_shipping = 0;
 $register_shipping = 0;
 $EMS_shipping = 0;
+$Flash_shipping = 0;
 
 if($rows_shipping > 0){
     $parcel_shipping = $rs_shipping['parcel'];
     $register_shipping = $rs_shipping['register'];
     $EMS_shipping = $rs_shipping['EMS'];
+	$Flash_shipping = $rs_shipping['Flash'];
 }
 
 echo    "<script>
-            if (".$_SESSION[_ss . 'total_weight']." > 10000) {
+            if (".$_SESSION[_ss . 'total_weight']." > 30000) {
                 $('#rdo_register').attr('disabled', true);
                 if($('#rdo_register').prop('checked'))
                     $('#rdo_parcel').prop('checked', true);
@@ -209,6 +211,10 @@ echo    "<script>
                             break;
                         case 'EMS':
                             shipping_rate = ".$EMS_shipping.";
+                            $('#sp_shipping_rate').text(shipping_rate);
+                            break;
+						case 'FLASH EXPRESS':
+                            shipping_rate = ".$Flash_shipping.";
                             $('#sp_shipping_rate').text(shipping_rate);
                             break;
                         case 'KERRY':
