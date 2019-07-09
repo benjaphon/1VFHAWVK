@@ -41,6 +41,7 @@ require 'assets/template/back/header.php';
                         <th style="text-align: center;">พัสดุธรรมดา (บาท)</th>
                         <th style='text-align: center;'>ลงทะเบียน (บาท)</th>
                         <th style='text-align: center;'>EMS (บาท)</th>
+						 <th style='text-align: center;'>Flash Express (บาท)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,6 +52,7 @@ require 'assets/template/back/header.php';
                         <td style="text-align: right;"><?php echo $rs_ship['parcel']; ?></td>
                         <td style="text-align: right;"><?php echo $rs_ship['register']; ?></td>
                         <td style="text-align: right;"><?php echo $rs_ship['EMS']; ?></td>
+						<td style="text-align: right;"><?php echo $rs_ship['Flash']; ?></td>
                     </tr>
                     <?php } ?>
                 </tbody>

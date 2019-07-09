@@ -179,6 +179,7 @@ MAIN CONTENT
                             P ชำระเงินแล้ว
                             F รับออเดอร์
                             S ส่งแล้ว
+							D โอนเงินคืน
                             */
                             switch ($rs_or['order_status']) {
                                 case 'R':
@@ -209,7 +210,13 @@ MAIN CONTENT
                                     $order_status = 'เกินกว่ากำหนด';
                                     $btnorder = 'เกินกว่ากำหนด';
                                     $btnstat = 'disabled hidden';
-                                    $btnstat_del = '';
+                                    $btnstat_del = 'disabled hidden';
+                                    break;
+								case 'D':
+                                    $order_status = 'โอนเงินคืน';
+                                    $btnorder = 'โอนเงินคืน';
+                                    $btnstat = 'disabled hidden';
+                                    $btnstat_del = 'disabled hidden';
                                     break;
                                 default:
                                     $order_status = 'ผิดพลาด';
