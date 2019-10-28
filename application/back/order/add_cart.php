@@ -1,18 +1,24 @@
 <?php
+/*
+ * Name: add cart file.
+ * Description: เพิ่มหรืออัพเดทสินค้าในตระกร้าทุกครั้งที่กดปุ่มเพิ่มสินค้าลงในตระกร้าจะต้องมาทำในไฟล์นี้เพื่อจัดเก็บข้อมูลสินค้าลง Session ก่อนที่จะวิ่งไปที่ render cart file
+ * Author: Benjaphon
+ * Last Modified: Benjaphon
+ */
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+//ดึงค่าที่ส่งมาจากส่วนของการเพิ่มสินค้าเอามาเก็บไว้ในตัวแปรเพื่อความสะดวกในการเรียกใช้
 $product_id = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[0] : 0;
 $agent_price = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[1] : 0;
 $weight = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[2] : 0;
 $wholesale_price = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[3] : 0;
 $sale_price = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[4] : 0;
 
-$db = new database();
-
-//Add new or update product to session order detail
 $qty = isset($_POST['qty']) && !empty($_POST['qty']) ? $_POST['qty'] : 0;
 
+//ดึงข้อมูลสินค้าที่สั่งซื้อขึ้นมาเก็บไว้ในตัวแปรเพื่อนำไปตรวจสอบในภายหลัง
+$db = new database();
 $option_pd = array(
     "table" => "products",
     "condition" => "id={$product_id}"
@@ -21,6 +27,7 @@ $option_pd = array(
 $query_pd = $db->select($option_pd);
 $rs_pd = $db->get($query_pd);
 
+//ถ้ายังไม่เคยมีการสร้างตระกร้าสินค้าขึ้นมาก่อนให้ดำเนินการสร้าง
 if (!isset($_SESSION[_ss . 'cart'])) {
     $_SESSION[_ss . 'cart'] = array();
     $_SESSION[_ss . 'qty'][] = $_SESSION[_ss . 'temp_qty'][] = array();
@@ -34,6 +41,7 @@ if (!isset($_SESSION[_ss . 'cart'])) {
     $_SESSION[_ss . 'total_weight'] = 0;
 }
 
+//ถ้าในตระกร้าสินค้าไม่เคยมีสินค้า ที่สั่งซื้อเข้ามา ให้สร้างรายการสินค้าขึ้นมาใหม่
 if (in_array($product_id, $_SESSION[_ss . 'cart'])) {
     $key = array_search($product_id, $_SESSION[_ss . 'cart']);
 } else {
@@ -53,6 +61,7 @@ if (in_array($product_id, $_SESSION[_ss . 'cart'])) {
     }
 }
 
+//ถ้าในตระกร้าสินค้ามีสินค้าที่เคยสั่งซื้อเข้ามาอยู่แล้วให้ใช้ key อ้างอิงจากรายการสินค้าเดิมที่มีอยู่
 if(isset($key)){
 
     if (!isset($_SESSION[_ss . 'temp_qty'][$key]))
@@ -69,7 +78,7 @@ if(isset($key)){
         $_SESSION[_ss . 'total_price'] -= $_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key];
         $_SESSION[_ss . 'qty'][$key] += $qty;
 
-        //Whole Sale Price Calculation
+        //การคำนวณราคาขายส่ง
         if(($_SESSION[_ss . 'levelaccess'] == 'agent_vip')){
 
             $_SESSION[_ss . 'price'][$key] = $sale_price;
@@ -95,7 +104,7 @@ if(isset($key)){
 }
 
 
-//keep note session
+//ส่วนของการเพิ่มรายละเอียดสินค้า
 if (isset($_POST['note'])) {
     for ($i = 0; $i < count($_POST['note']); $i++) {
         $key = $_POST['arr_key_' . $i];

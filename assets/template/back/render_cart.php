@@ -1,7 +1,15 @@
 <?php
+/*
+ * Name: render cart file.
+ * Description: สำหรับแสดงผลสินค้าที่มีในตระกร้าแต่ละครั้งที่เกิด Action Insert/Update/Delete กับตระกร้าสินค้า ก็จะต้อง Render ไฟล์นี้เสมอ
+ * Author: Benjaphon
+ * Last Modified: Benjaphon
+ */
 
 $db = new database();
 $total_weight = 0;
+
+//ตรวจสอบว่ามีสินค้าในตระกร้าหรือไม่ ถ้ามี ก็จะหาผลรวม ของจำนวนสินค้า ของแต่ละรายการทั้งหมด
 $item_count = isset($_SESSION[_ss . 'cart']) ? count($_SESSION[_ss . 'cart']) : 0;
 if ($item_count > 0 && isset($_SESSION[_ss . 'qty'])) {
     $me_qty = 0;
@@ -12,6 +20,7 @@ if ($item_count > 0 && isset($_SESSION[_ss . 'qty'])) {
     $me_qty = 0;
 }
 
+//ตรวจสอบว่ามีสินค้าในตระกร้าหรือไม่ ถ้ามี ก็จะนำรหัสสินค้าแต่ละรายการที่มีในตระกร้าไปคิวรี่ select ขึ้นมาเก็บไว้ในตัวแปร
 $me_count = 0;
 if (isset($_SESSION[_ss . 'cart']) and $item_count > 0) {
     $items_id = "";
@@ -27,6 +36,7 @@ if (isset($_SESSION[_ss . 'cart']) and $item_count > 0) {
     $me_count = $db->rows($query_ct);
 }
 
+//ตรวจสอบว่ามีรายการสินค้าหรือไม่ ถ้ามีก็จะแสดงส่วนหัวของตารางแสดงตระกร้าสินค้า ถ้าไม่มีก็จะแสดงผลว่าไม่มีสินค้าในตระกร้า
 if ($me_count > 0) { 
 echo   "<table class='table table-bordered table-striped'>
 	        <thead>
@@ -46,16 +56,20 @@ $i = 0;
 $product_qty = 0;
 $kerry_shipping = 0;
 $total_price = 0;
+
+//วนลูปแสดงสินค้าในแต่ละรายการที่คิวรี่เก็บไว้ในตัวแปรข้างต้น
 while ($rs_ct = $db->get($query_ct)) {
+
+//ใช้รหัสสินค้าค้นหา session key ที่ใช้อ้างอิงรายการสินค้าแต่ละแถวในตระกร้าสินค้า
 $key = array_search($rs_ct['id'], $_SESSION[_ss . 'cart']);
-//For Culculate kerry shipping
+
+//หาจำนวนสินค้าที่มีในตระกร้าสินค้าของรายการ
 $product_qty = $_SESSION[_ss . 'qty'][$key];
+
+//ดึงราคาสินค้าค่าขนส่งสินค้าด้วย kerry ของสินค้ามาเก็บไว้ในตัวแปรเพื่อนำไปแสดงผล
 $kerry_shipping = (isset($rs_ct['kerry']) && trim($rs_ct['kerry']) <> '')?$rs_ct['kerry']:0;
 
-/*$total_price += ($_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key]);
-$total_weight += ($_SESSION[_ss . 'weight'][$key] * $_SESSION[_ss . 'qty'][$key]);*/
-
-//Select Product Picture
+//ดึงรูปแบบสินค้ามาแสดงในตระกร้า
 $option_img = array(
     "table" => "images",
     "condition" => "ref_id='{$rs_ct['id']}' AND filetype='product'",
@@ -72,6 +86,10 @@ else {
     $filename_img = 'ecimage.jpg';
 }
 
+/*
+ * ส่วนแสดงผลของสินค้าในตระกร้าสินค้าแต่ละแถว
+ * แสดง รูปสินค้า/ชื่อสินค้า/ราคาต่อหน่วย/จำนวน/เงินรวม/action และรายละเอียดสินค้าของแต่ละรายการสินค้า
+ */
 echo   "<tr>
             <td>
                 <a href='{$baseUrl}/assets/upload/product/{$filename_img}' class='fancybox'>
@@ -120,6 +138,10 @@ echo   "<tr>
         </div>";
 $i++; }
 
+/*
+ * แสดงผลส่วนท้ายของตระกร้าสินค้า ส่วนสรุปผลจำนวนเงินรวมราคาสินค้าทั้งตระกร้า 
+ * ก่อนและหลังรวมค่าขนส่ง, น้ำหนักรวมสินค้าทั้งตระกร้า, แสดงประเภทและราคาค่าขนส่ง
+ */
 echo    "
         <tr>
             <td colspan='6' style='text-align: right;'>
@@ -156,7 +178,7 @@ echo    "
         </tbody>
     </table>";
 
-//Calculation Shipping Rate Show
+//การคำนวณหาอัตราค่าขนส่งของแต่ละประเภทการขนส่งเพื่อนำไปแสดงผลส่วนท้ายของตระกร้าสินค้า
 $option_shipping = array(
     "table" => "shipping_rate",
     "condition" => "'{$_SESSION[_ss . 'total_weight']}' >= min_wg AND '{$_SESSION[_ss . 'total_weight']}' <= max_wg "
