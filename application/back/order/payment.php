@@ -239,12 +239,13 @@ MAIN CONTENT
                     <div class="form-group clearfix">
                         <div class="col-sm-6">
                             <label for="pay_money" class="text-bold control-label required">จำนวนเงิน</label>
-                            <input type="text" id="pay_money" name="pay_money" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
+                            <input type="text" id="pay_money" name="pay_money" value="<?php echo $grand_total_with_ship; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                         </div>
                     </div>
                     <div class="form-group clearfix">
                         <div class="col-xs-6">
                             <label for="url_picture" class="control-label">รูปภาพ</label>
+                            <input type="file" name="image[]" id="image" accept="image/*">
                             <input type="file" name="image[]" id="image" accept="image/*">
                         </div>
                     </div>

@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "quantity" => trim($_POST['quantity']),
         "weight" => trim($_POST['weight']),
         "video_filename" => $vdo_filename,
+        "product_status" => $_POST['product_status'],
         "created_at" => date('Y-m-d H:i:s'),
         "modified_at" => date('Y-m-d H:i:s')
     );

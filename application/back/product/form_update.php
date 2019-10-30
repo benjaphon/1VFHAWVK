@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "quantity" => trim($_POST['quantity']),
         "weight" => trim($_POST['weight']),
         "video_filename" => $vdo_filename,
+        "product_status" => $_POST['product_status'],
         "modified_at" => date('Y-m-d H:i:s'),
     );
     $query_pd = $db->update("products", $value_pd, "id='{$_POST['id']}'");

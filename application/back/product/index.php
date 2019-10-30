@@ -25,6 +25,8 @@ $option_product = array(
 
 
 $search = (isset($_GET['search']))?$_GET['search']:'';
+$status = (isset($_GET['status']))?$_GET['status']:'';
+$in_stock = (isset($_GET['in_stock']))?$_GET['in_stock']:'';
 
 if(isset($search) && !empty($search)){
     $option_product["condition"] .= " AND (";
@@ -36,6 +38,14 @@ if(isset($search) && !empty($search)){
     $option_product["condition"] .= " p.sale_price LIKE'%{$search}%' OR";
     $option_product["condition"] .= " DATE_FORMAT(p.start_ship_date, '%d/%m/%Y') LIKE'%{$search}%' OR";
     $option_product["condition"] .= " p.quantity LIKE'%{$search}%')";
+}
+
+if(isset($status) && !empty($status)){
+    $option_product["condition"] .= " AND (p.product_status='{$status}')";
+}
+
+if(isset($in_stock) && !empty($in_stock)){
+    $option_product["condition"] .= " AND (p.quantity>0)";
 }
 
 $query_product = $db->select($option_product);
@@ -111,6 +121,19 @@ MAIN CONTENT
                 <div class="form-group">
                     <input id="search" name="search" type="text" class="form-control form-control-lg" placeholder="Search Here">
                 </div>
+                <div class="form-group">
+                    <select id="select_status" name="status" class="form-control">
+                        <option value="">สถานะ</option>
+                        <option value="P">พรีออเดอร์</option>
+                        <option value="S">พร้อมส่ง</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="btn btn-primary">
+                        <input type="checkbox" name="in_stock" id="chk_in_stock" value="true" autocomplete="off"> In stock
+                    </label>
+                </div>
+                
                 <button id="btn_search" type="submit" class="btn btn-primary">ค้นหา</button>
                 <button type="reset" class="btn btn-primary">เคลียร์</button>
             </form>
@@ -127,6 +150,9 @@ MAIN CONTENT
                             </th>
                             <th id="user-grid_c0">
                                 <a class="sort-link">สินค้า</a>
+                            </th>
+                            <th id="user-grid_c0">
+                                <a class="sort-link">สถานะ</a>
                             </th>
                             <th id="user-grid_c0">
                                 <a class="sort-link">วันที่ส่งได้</a>
@@ -186,6 +212,25 @@ MAIN CONTENT
                                 <td>
                                     <a class="load_data" href="<?php echo $baseUrl; ?>/back/product/view/<?php echo $rs_pd['id']; ?>"><?php echo $rs_pd['name']; ?></a>
                                 </td>
+
+                                <td>
+                                    <?php 
+
+                                    switch ($rs_pd['product_status']) {
+                                        case 'P':
+                                            echo 'พรีออเดอร์';
+                                            break;
+                                        case 'S':
+                                            echo 'พร้อมส่ง';
+                                            break;
+                                        default:
+                                            echo 'NONE';
+                                            break;
+                                    }
+                                    
+                                    ?>
+                                </td>
+
                                 <td>
                                     <?php echo ($rs_pd['start_ship_date']!=null)? date('d/m/Y', strtotime($rs_pd['start_ship_date'])) : ''; ?>
                                 </td>
@@ -208,7 +253,8 @@ MAIN CONTENT
                                     <a class="btn btn-warning btn-sm" title="" href="<?php echo $baseUrl; ?>/back/product/update/<?php echo $rs_pd['id']; ?>"><i class="glyphicon glyphicon-edit"></i> แก้ไข</a>
                                     <a class="btn btn-primary btn-sm" title="" href="#" data-toggle="modal" data-target="#duplicateModal<?php echo $rs_pd['id'];?>"><i class="glyphicon glyphicon-duplicate"></i> สำเนา</a>
                                     <a class="btn btn-danger btn-sm confirm" title="" href="#" data-toggle="modal" data-target="#deleteModal<?php echo $rs_pd['id'];?>"><i class="glyphicon glyphicon-remove"></i> ลบ</a>
-                                    
+                                    <a class="btn btn-success btn-sm" href="<?php echo $baseUrl; ?>/back/product/form_change_product_status/<?php echo $rs_pd['id']; ?>?page=<?php echo $page; ?>"><i class="glyphicon glyphicon-refresh"></i> Change Status</a>
+
                                     <!-- Modal Duplicate -->
                                     <div class="modal fade" id="duplicateModal<?php echo $rs_pd['id'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -255,15 +301,15 @@ MAIN CONTENT
                 <nav>
                     <ul class="pagination pull-lg-right">
                         <li>
-                            <a href="?page=1&search=<?php echo $search ?>" aria-label="Previous">
+                            <a href="?page=1&search=<?php echo $search ?>&status=<?php echo $status ?>&in_stock=<?php echo $in_stock ?>" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
                             <?php for($i=$page_start; ($i<$page_start+$page_number) && ($i<=$total_page); $i++){ ?>
-                                <li><a href="?page=<?php echo $i; ?>&search=<?php echo $search ?>"><?php echo $i; ?></a></li>
+                                <li><a href="?page=<?php echo $i; ?>&search=<?php echo $search ?>&status=<?php echo $status ?>&in_stock=<?php echo $in_stock ?>"><?php echo $i; ?></a></li>
                             <?php } ?>
                         <li>
-                            <a href="?page=<?php echo $total_page;?>&search=<?php echo $search ?>" aria-label="Next">
+                            <a href="?page=<?php echo $total_page;?>&search=<?php echo $search ?>&status=<?php echo $status ?>&in_stock=<?php echo $in_stock ?>" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -295,6 +341,8 @@ require 'assets/template/back/footer.php';
         });*/
         $('a.fancybox').fancybox();
 
+        $("#chk_in_stock").prop('checked', '<?php echo $in_stock; ?>');
+        $("#select_status").val("<?php echo $status; ?>");
         $("#search").val("<?php echo $search; ?>");
         $("button[type=reset]").click(function(){
             $(this).parent("form")[0].reset();

@@ -25,6 +25,12 @@ $sql_od .= "ON d.product_id=p.id ";
 $sql_od .="WHERE d.order_id='{$_GET['id']}' ";
 $query_od = $db->query($sql_od);
 
+$option_payment_img = array(
+    "table" => "images LEFT JOIN payments ON payments.id = images.ref_id",
+    "condition" => "payments.order_id = '{$_GET['id']}' AND images.filetype = 'payment' "
+);
+$query_payment_img = $db->select($option_payment_img);
+
 $title = 'รายละเอียดการสั่งซื้อสินค้า';
 /*
  * php code///////////**********************************************************
@@ -186,9 +192,15 @@ MAIN CONTENT
                         <li class="list-group-item"><strong>จำนวน</strong> : <?php echo number_format($rs_os['pay_money'],2); ?></li>
                         <li class="list-group-item"><strong>เพิ่มเติม</strong> : <?php echo $rs_os['detail']; ?></li>
                         <li class="list-group-item"><strong>หลักฐานการโอน</strong> : 
-                            <a href="<?php echo base_url(); ?>/assets/upload/payment/<?php echo !empty($rs_os['url_picture'])?$rs_os['url_picture']:'ecimage.jpg'; ?>" class="fancybox">
-                                <img src="<?php echo base_url(); ?>/assets/upload/payment/md_<?php echo !empty($rs_os['url_picture'])?$rs_os['url_picture']:'ecimage.jpg'; ?>" class="img-responsive" alt="Responsive image">
-                            </a>
+
+                            <?php while ($rs_img = $db->get($query_payment_img)) { ?>
+                                <p>
+                                    <a href="<?php echo $baseUrl ?>/assets/upload/payment/<?php echo $rs_img['filename']; ?>" class="fancybox">
+                                        <img src="<?php echo $baseUrl ?>/assets/upload/payment/md_<?php echo $rs_img['filename'];?>" class="img-responsive" alt="Responsive image">
+                                    </a>
+                                </p>
+                            <?php } ?>
+
                         </li>
                         <li class="list-group-item"><strong>วันที่ชำระเงิน</strong> : <?php echo thaidate($rs_os['pay_created_at'], true); ?></li>
                         <?php if($_SESSION[_ss . 'levelaccess'] == 'admin' && $rs_os['order_status']=='P') { ?>

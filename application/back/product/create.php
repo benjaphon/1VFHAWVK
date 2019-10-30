@@ -147,9 +147,18 @@ border:1px solid #e8debd
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="    weight" class="col-sm-2 control-label">น้ำหนัก</label>
+                        <label for="weight" class="col-sm-2 control-label">น้ำหนัก</label>
                         <div class="col-sm-4">
                             <input type="text" id="weight" name="weight" value="0" class="form-control input-sm" data-validation="number">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="product_status" class="col-sm-2 control-label">สถานะ</label>
+                        <div class="col-sm-4">
+                            <select class="form-control input-sm" name="product_status" id="product_status">
+                                <option value="P" selected="selected">พรีออเดอร์</option>
+                                <option value="S">พร้อมส่ง</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
