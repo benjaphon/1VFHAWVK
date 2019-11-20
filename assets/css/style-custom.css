@@ -3,3 +3,11 @@
 }
 
 .form-group label.required:after {content: " *"; color: red;}
+
+.order-in-stock {
+    background-color: #dff0d8 !important;
+}
+
+.product-in-stock {
+    color: #449d44 !important;
+}

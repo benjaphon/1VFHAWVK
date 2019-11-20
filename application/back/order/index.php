@@ -15,8 +15,11 @@ $start = ($page - 1) * $perpage;
 
 $db = new database();
 
+//For checking if there is no preorder in the order (in other word every products in the order in stock)
+$product_preorder_sum = "SUM(EXISTS(SELECT products.id FROM products WHERE products.id=d.product_id AND products.product_status='P')) AS product_preorder_sum";
+
 $option_or = array(
-    "fields" => "o.id, o.order_datetime, o.receiver, o.tracking_no, o.ship_date, o.order_status",
+    "fields" => "o.id, o.order_datetime, o.receiver, o.tracking_no, o.ship_date, o.order_status, {$product_preorder_sum}",
     "table" => "orders AS o LEFT JOIN order_details AS d ON o.id = d.order_id INNER JOIN products AS p ON d.product_id = p.id",
     "order" => "o.id DESC",
     "limit" => "{$start},{$perpage}"
@@ -227,7 +230,7 @@ MAIN CONTENT
                             }
 
                             ?>
-                            <tr>
+                            <tr <?php if ($rs_or['order_status']=='R' && $rs_or['product_preorder_sum']==0) echo "class='order-in-stock'"; ?> >
                                 <td>
                                     <a href="<?php echo $baseUrl; ?>/back/order/view/<?php echo $rs_or['id']; ?>"><?php echo $rs_or['id']; ?></a>
                                 </td>
@@ -235,7 +238,7 @@ MAIN CONTENT
                                 <td>
                                     <ul>
                                     <?php
-                                        $sql_od = "SELECT d.*,p.id,p.name,p.start_ship_date FROM order_details d INNER JOIN products p ";
+                                        $sql_od = "SELECT d.*,p.id,p.name,p.start_ship_date,p.product_status FROM order_details d INNER JOIN products p ";
                                         $sql_od .= "ON d.product_id=p.id ";
                                         $sql_od .="WHERE d.order_id='{$rs_or['id']}' ";
                                         $query_od = $db->query($sql_od);
@@ -245,10 +248,16 @@ MAIN CONTENT
                                         <li>- <?php 
 
                                             if ($rs_od['start_ship_date']==null) {
-                                                echo $rs_od['name'];
+                                                $product_name = $rs_od['name'];
                                             }else{
-                                                echo $rs_od['name']." (".date('d-m-Y', strtotime($rs_od['start_ship_date'])).")";
+                                                $product_name = $rs_od['name']." (".date('d-m-Y', strtotime($rs_od['start_ship_date'])).")";
                                             }
+
+                                            if ($rs_od['product_status']=='S') {
+                                                $product_name = "<span class='product-in-stock'>".$product_name."</span>";
+                                            }
+
+                                            echo $product_name;
 
                                         ?></li>
 
