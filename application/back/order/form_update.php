@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "sender_type" => trim($_POST['sender_type']),
         "receiver" => trim($_POST['receiver']),
         "note" => trim($_POST['note']),
-        "order_datetime" => date('Y-m-d H:i:s'),
         "total" => $_SESSION[_ss . 'total_price'],
         "total_weight" => $_SESSION[_ss . 'total_weight'],
         "modified_at" => date('Y-m-d H:i:s')
