@@ -67,6 +67,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }  
             }
         }
+
+        $db->delete("products", "parent_product_id='{$product_id}'");
+
+        //Save Child Products
+        if (isset($_POST['child_name'])) {
+
+            for ($key = 0; $key < count($_POST['child_name']); $key++) {
+                
+                $value_child_pd = array(
+                    "name" => trim($_POST['child_name'][$key]),
+                    "price" => trim($_POST['child_price'][$key]),
+                    "wholesale_price" => trim($_POST['child_wholesale_price'][$key]),
+                    "agent_price" => trim($_POST['child_agent_price'][$key]),
+                    "sale_price" => trim($_POST['child_sale_price'][$key]),
+                    "kerry" => trim($_POST['child_kerry'][$key]),
+                    "start_ship_date" => date("Y-m-d", strtotime($_POST['start_ship_date'])), //Same as parent
+                    "description" => trim($_POST['description']), //Same as parent
+                    "quantity" => trim($_POST['child_quantity'][$key]),
+                    "weight" => trim($_POST['child_weight'][$key]),
+                    "video_filename" => $vdo_filename, //Same as parent
+                    "parent_product_id" => $product_id,
+                    "created_at" => date('Y-m-d H:i:s'),
+                    "modified_at" => date('Y-m-d H:i:s')
+                );
+                $db->insert("products", $value_child_pd);
+
+            }
+        }
             
         header("location:" . $baseUrl . "/back/product");
     }

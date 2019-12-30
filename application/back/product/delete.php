@@ -31,6 +31,7 @@ if ($query == TRUE) {
     @unlink($path . $rs_product['video_filename']);
 
     $query = $db->delete("images", "ref_id='{$_GET['id']}'");
+    $db->delete("products", "parent_product_id='{$_GET['id']}'");
 } else {
     //error can't delete foreign key just update status
     $value_pd = array(

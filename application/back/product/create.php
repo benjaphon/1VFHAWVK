@@ -79,18 +79,19 @@ border:1px solid #e8debd
         </div>
     </div>
     <div class="row mt">
-        <div class="col-lg-12">
-            <div class="form-horizontal" style="margin-top: 10px;">
-                <form id="product-form" action="<?php echo $baseUrl; ?>/back/product/form_create" method="post" enctype="multipart/form-data">
+        <div class="form-horizontal" style="margin-top: 10px;">
+            <form id="product-form" action="<?php echo $baseUrl; ?>/back/product/form_create" method="post" enctype="multipart/form-data">
+                <div class="col-lg-6">
+                    
                     <div class="form-group">
                         <label for="image" class="col-sm-2 control-label">รูปภาพ</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <input type="button" id="add_more" class="upload" value="Add More Files"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="video" class="col-sm-2 control-label">วิดีโอ</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <!--<video width="400" controls>
                                 <source id="video_here">
                                     Your browser does not support HTML5 video.
@@ -100,55 +101,55 @@ border:1px solid #e8debd
                     </div>
                     <div class="form-group">
                         <label for="Product_name" class="col-sm-2 control-label required">ชื่อสินค้า</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <input type="text" id="name" name="name" class="form-control input-sm" data-validation="required" >
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="price" class="col-sm-2 control-label required">ราคา</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <input type="text" id="price" name="price" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="wholesale_price" class="col-sm-2 control-label required">ราคาขายส่ง</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <input type="text" id="wholesale_price" name="wholesale_price" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="agent_price" class="col-sm-2 control-label required">ราคา ตท.</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <input type="text" id="agent_price" name="agent_price" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="sale_price" class="col-sm-2 control-label required">ราคาขาย</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <input type="text" id="sale_price" name="sale_price" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">ค่าส่ง (KERRY)</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <input type="text" name="kerry" value="0" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="start_ship_date" class="col-sm-2 control-label">วันที่ส่งได้</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <input type="text" id="start_ship_date" name="start_ship_date" class="form-control input-sm" autocomplete='off'>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="quantity" class="col-sm-2 control-label">จำนวน</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <input type="text" id="quantity" name="quantity" value="0" class="form-control input-sm" data-validation="number">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="    weight" class="col-sm-2 control-label">น้ำหนัก</label>
-                        <div class="col-sm-4">
+                        <label for="weight" class="col-sm-2 control-label">น้ำหนัก</label>
+                        <div class="col-sm-8">
                             <input type="text" id="weight" name="weight" value="0" class="form-control input-sm" data-validation="number">
                         </div>
                     </div>
@@ -157,13 +158,23 @@ border:1px solid #e8debd
                             <textarea id="editor" name="description" class="form-control input-sm"></textarea>
                         </div>
                     </div>
-                </form>
-            </div>
+                        
+                </div>
+                <div class="col-lg-6">
+                    
+                    <div id="product_childs"></div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="button" id="add_more_product_child" class="form-control" value="เพิ่มสินค้าย่อย"/>
+                        </div>
+                    </div>
+                        
+                </div>
+            </form>
         </div>
     </div>
   </section><!--/wrapper -->
 </section><!-- /MAIN CONTENT -->
-
 
 <?php
 /*
@@ -178,6 +189,7 @@ require 'assets/template/back/footer.php';
 <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/jquery.form-validator.min.js"></script>
 <script type="text/javascript">
     var abc = 0;      // Declaring and defining global increment variable.
+    var product_child_id = 0;
     $(document).ready(function () {
         ClassicEditor
             .create( document.querySelector( '#editor' ) )
@@ -232,6 +244,19 @@ require 'assets/template/back/footer.php';
                 id: 'image',
                 accept: 'image/*'
             })).after("<br>"));
+        });
+
+        $('#add_more_product_child').click(function(){
+            var url = '<?php echo $baseUrl; ?>/back/product/form_generate_product_child';
+            product_child_id += 1;
+            $.get(url, {product_child_id: product_child_id}, function (data) {
+                $(data).fadeIn('slow').appendTo($("#product_childs"));
+            });
+        });
+
+        $('body').on('click', '.close.product-child', function(){
+            var id = $(this).attr('product-child-id');
+            $('#product_child_'+id).remove();
         });
 
         // Following function will executes on change event of file input to select different file.

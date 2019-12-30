@@ -20,7 +20,7 @@ $option_product = array(
     "table" => "products AS p LEFT JOIN shipping_rate AS s ON p.weight >= s.min_wg AND p.weight <= s.max_wg",
     "order" => "p.id DESC",
     "limit" => "{$start},{$perpage}",
-    "condition" => "p.flag_status = 1"
+    "condition" => "p.flag_status = 1 AND p.parent_product_id IS NULL"
 );
 
 
