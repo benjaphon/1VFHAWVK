@@ -243,6 +243,13 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                   </li>-->
 
                   <li>
+                    <a href="<?php echo $baseUrl; ?>/back/payment">
+                        <i class="fa fa-credit-card"></i>
+                        <span>แจ้งชำระเงินหลายรายการ</span>
+                    </a>
+                  </li>
+
+                  <li>
                       <a href="<?php echo $baseUrl; ?>/back/user">
                           <i class="fa fa-user"></i>
                           <span>ผู้ใช้</span>
