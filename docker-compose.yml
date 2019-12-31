@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    networks:
+      - default
+  phpmyadmin:
+    depends_on:
+      - db
+    volumes: 
+      - ./uploads.ini:/usr/local/etc/php/php.ini
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root 
+    networks:
+      - default
+  web:
+    build: Dockerfile
+    container_name: php_web
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/html/
+      - ./uploads.ini:/usr/local/etc/php/php.ini
+    ports:
+      - "80:80"
+    stdin_open: true
+    tty: true
+
+# Names our volume
+networks:
+  default:
