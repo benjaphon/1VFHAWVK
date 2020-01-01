@@ -10,12 +10,6 @@ $option_order = array(
 );
 $query_order = $db->select($option_order);
 
-// $sql_od = "SELECT d.*,p.id,p.name,p.kerry FROM order_details d INNER JOIN products p ";
-// $sql_od .= "ON d.product_id=p.id ";
-// $sql_od .="WHERE d.order_id='{$_GET['id']}' ";
-// $query_od = $db->query($sql_od);
-// $rows_count = $db->rows($query_od);
-
 $title = 'แจ้งชำระเงินหลายรายการ';
 /*
  * php code///////////**********************************************************
@@ -29,12 +23,6 @@ require 'assets/template/back/header.php';
  * header***********************************************************************
  */
 ?>
-<style>
-.vertical-align {
-    display: flex;
-    align-items: center;
-}
-</style>
 <!-- **********************************************************************************************************************************************************
 MAIN CONTENT
 *********************************************************************************************************************************************************** -->
@@ -49,119 +37,138 @@ MAIN CONTENT
     <form id="payment_form" action="<?php echo $baseUrl; ?>/back/payment/form_create" method="post" enctype="multipart/form-data">
     <div class="row mt">
         <div class="col-lg-6">
-            <div class="row">
+            <!-- <div class="row">
                 <div class="form-group col-md-6">
-                    <!--R จองสินค้า
-                        P ชำระเงินแล้ว
-                        F รับออเดอร์
-                        S ส่งแล้ว-->
                     <select id="select_status" name="status" onchange="list_order_id()" class="form-control">
                         <option value="R" selected="selected">ยังไม่ได้ชำระเงิน</option>
                         <option value="P">ชำระเงินแล้ว</option>
                         <option value="">ทั้งหมด</option>
                     </select>
                 </div>
-            </div>
+            </div> -->
             <div class="row vertical-align">
                 <div class="col-xs-5">
                     <div class="form-group">
-                      <label for="select_left">เลือกชำระเงิน (รหัสสั่งซื้อ)</label>
-                      <select size="10" onclick="show_order_detail()" ondblclick="listbox_moveacross('select_left', 'select_right')" multiple class="form-control" name="order_id_choosed" id="select_left">
+                      <label for="select_left">รหัสสั่งซื้อที่ยังไม่ได้ชำระเงิน</label>
+                      <select id="select_left" name="order_id_choosed" size="10" class="form-control">
                         <?php while ($rs_order = $db->get($query_order)) { ?>
                             <option value="<?php echo $rs_order['id']; ?>"><?php echo $rs_order['id']; ?></option>
                         <?php } ?>
                       </select>
                     </div>
-                    <span>
-                        <a href="#" onclick="listbox_selectall('select_left', true)">all</a>
+                    <!-- <span>
+                        <a role="button" onclick="listbox_selectall('select_left', true)">all</a>
                          / 
-                         <a href="#" onclick="listbox_selectall('select_left', false)">none</a>
-                    </span>                    
+                         <a role="button" onclick="listbox_selectall('select_left', false)">none</a>
+                    </span> -->                
                 </div>
                 <div class="col-xs-2" style="text-align:center;">
-                    <span>
-                        <a href="#" onclick="listbox_moveacross('select_left', 'select_right')">&gt;&gt;</a>
-                        <br>
-                        <a href="#" onclick="listbox_moveacross('select_right', 'select_left')">&lt;&lt;</a>
-                    </span>
+                    <div class="form-group">
+                        <button type="button" onclick="listbox_moveacross('select_left', 'select_right')" class="btn btn-primary">&gt;&gt;</button>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" onclick="listbox_moveacross('select_right', 'select_left')" class="btn btn-primary">&lt;&lt;</button>
+                    </div>
                 </div>
                 <div class="col-xs-5">
                     <div class="form-group">
-                      <label for="select_right">ต้องการชำระเงิน (รหัสสั่งซื้อ)</label>
-                      <select size="10" onclick="show_order_detail()" ondblclick="listbox_moveacross('select_right', 'select_left')"  multiple class="form-control" name="order_id_selected" id="select_right">
+                      <label for="select_right">รหัสสั่งซื้อที่ต้องการชำระเงิน</label>
+                      <select id="select_right" name="order_id_selected" size="10" class="form-control">
                       </select>
                     </div>
-                    <span>
-                        <a href="#" onclick="listbox_selectall('select_right', true)">all</a>
+                    <!-- <span>
+                        <a role="button" onclick="listbox_selectall('select_right', true)">all</a>
                          / 
-                         <a href="#" onclick="listbox_selectall('select_right', false)">none</a>
-                    </span>
+                         <a role="button" onclick="listbox_selectall('select_right', false)">none</a>
+                    </span> -->
                 </div>
             </div>
-            <div id="order_detail_table" class="row">
-                
+            <div class="row">
+                <div id="order_detail_table" class="col-xs-12">
+
+                </div>
             </div>
         </div>
         <div class="col-lg-6">
             <div class="form-horizontal" style="margin-top: 10px;">
-                    <input type="hidden" name="order_id" value="<?php echo $_GET['id']; ?>">
 
-
-                    <div class="form-group col-xs-12 clearfix">
-                        <h3>การชำระเงิน</h3>
+                    
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">สรุปรายการ</h3>
                     </div>
-                    <div class="form-group clearfix">  
-                        <label for="pay_type" class="text-bold col-xs-12">ช่องทางการชำระเงิน</label>
-                        <div class="col-xs-6">
-                            <div class="radio">
-                              <label><input type="radio" name="pay_type" value="กสิกรไทย" data-validation="required">กสิกรไทย</label>
-                            </div>
-                            <div class="radio">
-                              <label><input type="radio" name="pay_type" value="กรุงไทย">กรุงไทย</label>
-                            </div>
-                            <div class="radio">
-                              <label><input type="radio" name="pay_type" value="other"><input type="text" placeholder="Other" class="form-control" name="txt_pay_type"></label>
+                    <ul class="list-group">
+                        <li class="list-group-item"><strong>รวมทั้งหมด</strong> : <span id="grand_order_total"></span> บาท</li>
+                        <li class="list-group-item"><strong>น้ำหนักรวม</strong> : <span id="grand_order_weight"></span> กรัม</li>
+                    </ul>
+                </div>
 
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="radio">
-                              <label><input type="radio" name="pay_type" value="ไทยพาณิชย์">ไทยพาณิชย์</label>
-                            </div>
-                            <div class="radio">
-                              <label><input type="radio" name="pay_type" value="พร้อมเพย์">พร้อมเพย์</label>
-                            </div>
-                        </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">การชำระเงิน</h3>
                     </div>
+                    <div class="panel-body">
 
-                    <div class="form-group clearfix">
-                        <div class="col-sm-6">
-                            <label for="pay_money" class="text-bold control-label required">จำนวนเงิน</label>
-                            <input type="text" id="pay_money" name="pay_money" value="<?php echo $grand_total_with_ship; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
+                        <div class="form-group clearfix">  
+                            <label for="pay_type" class="text-bold col-xs-12">ช่องทางการชำระเงิน</label>
+                            <div class="col-xs-6">
+                                <div class="radio">
+                                  <label><input type="radio" name="pay_type" value="กสิกรไทย" data-validation="required">กสิกรไทย</label>
+                                </div>
+                                <div class="radio">
+                                  <label><input type="radio" name="pay_type" value="กรุงไทย">กรุงไทย</label>
+                                </div>
+                                <div class="radio">
+                                  <label><input type="radio" name="pay_type" value="other"><input type="text" placeholder="Other" class="form-control" name="txt_pay_type"></label>
+    
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="radio">
+                                  <label><input type="radio" name="pay_type" value="ไทยพาณิชย์">ไทยพาณิชย์</label>
+                                </div>
+                                <div class="radio">
+                                  <label><input type="radio" name="pay_type" value="พร้อมเพย์">พร้อมเพย์</label>
+                                </div>
+                            </div>
                         </div>
+                        <div class="form-group clearfix">
+                            <div class="col-sm-6">
+                                <label for="pay_money" class="text-bold control-label required">จำนวนเงิน</label>
+                                <input type="text" id="pay_money" name="pay_money" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <div class="col-xs-6">
+                                <label for="url_picture" class="control-label">รูปภาพ</label>
+                                <input type="file" name="image[]" id="image" accept="image/*">
+                                <input type="file" name="image[]" id="image" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <div class="col-sm-6">
+                                <label for="detail" class="text-bold">เพิ่มเติม</label>
+                                <input type="text" id="detail" name="detail" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">ยืนยันการชำระเงิน</button>
+
                     </div>
-                    <div class="form-group clearfix">
-                        <div class="col-xs-6">
-                            <label for="url_picture" class="control-label">รูปภาพ</label>
-                            <input type="file" name="image[]" id="image" accept="image/*">
-                            <input type="file" name="image[]" id="image" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="form-group clearfix">
-                        <div class="col-sm-6">
-                            <label for="detail" class="text-bold">เพิ่มเติม</label>
-                            <input type="text" id="detail" name="detail" class="form-control" autocomplete="off">
-                        </div>
-                    </div>     
-
-
-                
+                </div>
+    
             </div>
         </div>
     </div>
     </form>
   </section><!--/wrapper -->
 </section><!--/MAIN CONTENT -->
+
+<!-- AJAX Loading -->
+<div id="overlay">
+    <div class="cv-spinner">
+        <span class="spinner"></span>
+    </div>
+</div>
 
 <?php
 /*
@@ -179,16 +186,34 @@ require 'assets/template/back/footer.php';
 <script type='text/javascript' src="<?php echo $baseUrl; ?>/assets/js/jquery.datetimepicker.js"></script>
 
 <script>
-    function listbox_selectall(listID, isSelect) {
-            var listbox = document.getElementById(listID);
-            for(var count=0; count < listbox.options.length; count++) {
-                listbox.options[count].selected = isSelect;
-            }
-    }
+    var grand_order_total = 0;
+    var grand_order_weight = 0;
+    var current_total = 0;
+    var current_weight = 0;
+    // function listbox_selectall(listID, isSelect) {
+    //     var listbox = document.getElementById(listID);
+    //     for(var count=0; count < listbox.options.length; count++) {
+    //         listbox.options[count].selected = isSelect;
+    //     }
+    // }
 
     function listbox_moveacross(sourceID, destID) {
         var src = document.getElementById(sourceID);
         var dest = document.getElementById(destID);
+
+        if (destID == "select_left") {
+            grand_order_total -= current_total;
+            grand_order_weight -= current_weight;
+        }
+
+        if (destID == "select_right") {
+            grand_order_total += current_total;
+            grand_order_weight += current_weight;
+        }
+
+        $('#grand_order_total').text(grand_order_total);
+        $('#grand_order_weight').text(grand_order_weight);
+        $('#pay_money').attr("placeholder", grand_order_total);
 
         for(var count=0; count < src.options.length; count++) {
 
@@ -211,13 +236,18 @@ require 'assets/template/back/footer.php';
         }
     }
 
-    function show_order_detail() {
+    $('#select_left, #select_right').change(function(){
+        var value = $(this).val();
+
+        var url = '<?php echo $baseUrl; ?>/back/payment/form_gen_order_detail';
+
+        $.get(url, {order_id: value}, function (data) {
+            $('#order_detail_table').html(data);
+            current_total = parseInt($(data).find('#hidden_grand_total').val());
+            current_weight = parseInt($(data).find('#hidden_grand_weight').val());
+        });
         
-    }
-
-    function list_order_id() {
-
-    }
+    });
 
     $(document).ready(function () {
 
@@ -273,6 +303,10 @@ require 'assets/template/back/footer.php';
         });
     });
     $.validate();
+    $(document).on({
+        ajaxStart: function() { $("#overlay").fadeIn(300); },
+        ajaxStop: function() { $("#overlay").fadeOut(300); }    
+    });
 </script>
 
 

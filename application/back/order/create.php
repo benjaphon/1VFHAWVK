@@ -179,9 +179,14 @@ MAIN CONTENT
     </div>
   </section><!--/wrapper -->
 </section><!-- /MAIN CONTENT -->
-<div id="wait" style="display:none;position: fixed; text-align: center; height: 100%; width: 100%; top: 0; right: 0; left: 0; z-index: 9999999; background-color: #000000; opacity: 0.7;">
-            <span style="border-width: 0px; position: fixed; padding: 50px; background-color: #FFFFFF; font-size: 36px; left: 40%; top: 40%;">Loading ...</span>
+
+<!-- AJAX Loading -->
+<div id="overlay">
+    <div class="cv-spinner">
+        <span class="spinner"></span>
+    </div>
 </div>
+
 <?php
 /*
  * footer***********************************************************************
@@ -201,13 +206,10 @@ $(document).ready(function(){
     /* Initial */
     $('a.fancybox').fancybox();
     $.validate();
-    $(document)
-      .ajaxStart(function () {
-        $('#wait').show();
-      })
-      .ajaxStop(function () {
-        $('#wait').hide();
-      });
+    $(document).on({
+        ajaxStart: function() { $("#overlay").fadeIn(300); },
+        ajaxStop: function() { $("#overlay").fadeOut(300); }    
+    });
     //$("#tbl_Order_Detail").DataTable();
 
     /* Element Event */
