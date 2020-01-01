@@ -118,6 +118,11 @@ MAIN CONTENT
                     <i class="glyphicon glyphicon-refresh"></i>
                     โหลดหน้าจอใหม่
                 </a>
+                <a role="button" class="btn btn-primary"
+                   href="<?php echo $baseUrl; ?>/back/payment/create">
+                    <i class="fa fa-credit-card"></i>
+                    แจ้งชำระเงินหลายรายการ
+                </a>
             </div>
         </div>
         <div class="col-lg-6">
