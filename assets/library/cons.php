@@ -1,3 +1,3 @@
 <?php
 
-define("_ss", "1VFHAWVK");
+define("_ss", "playitnow");
