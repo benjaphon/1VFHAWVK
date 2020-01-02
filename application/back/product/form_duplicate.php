@@ -69,6 +69,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SESSION[_ss . 'levelaccess'] == 'ad
 
             $db->insert("images", $value_img);
         }
+
+        //Duplicate Child Products
+        $option_child_pd = array(
+            "table" => "products",
+            "condition" => "parent_product_id='{$_GET['id']}' "
+        );
+        $query_child_pd = $db->select($option_child_pd);
+
+        while ($rs_child_pd = $db->get($query_child_pd)){
+            
+            $value_child_pd = array(
+                "name" => trim($rs_child_pd['name']),
+                "price" => trim($rs_child_pd['price']),
+                "wholesale_price" => trim($rs_child_pd['wholesale_price']),
+                "agent_price" => trim($rs_child_pd['agent_price']),
+                "sale_price" => trim($rs_child_pd['sale_price']),
+                "kerry" => trim($rs_child_pd['kerry']),
+                "start_ship_date" => date("Y-m-d", strtotime($rs_child_pd['start_ship_date'])), //Same as parent
+                "description" => trim($rs_child_pd['description']), //Same as parent
+                "quantity" => trim($rs_child_pd['quantity']),
+                "weight" => trim($rs_child_pd['weight']),
+                "video_filename" => $vdo_filename, //Same as parent
+                "parent_product_id" => $product_id,
+                "created_at" => date('Y-m-d H:i:s'),
+                "modified_at" => date('Y-m-d H:i:s')
+            );
+            $db->insert("products", $value_child_pd);
+
+        }
             
         header("location:" . $baseUrl . "/back/product");
     }

@@ -1,0 +1,1 @@
+ALTER TABLE `products` ADD `product_status` VARCHAR(10) NULL DEFAULT 'P';

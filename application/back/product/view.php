@@ -15,6 +15,13 @@ $option_product = array(
 $query_product = $db->select($option_product);
 $rs_product = $db->get($query_product);
 
+$option_child_pd = array(
+    "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
+    "table" => "products AS p LEFT JOIN shipping_rate AS s ON p.weight >= s.min_wg AND p.weight <= s.max_wg",
+    "condition" => "p.parent_product_id='{$_GET['id']}'"
+);
+$query_child_pd = $db->select($option_child_pd);
+
 $option_img = array(
     "table" => "images",
     "condition" => "ref_id='{$_GET['id']}' AND filetype = 'product' "
@@ -65,8 +72,9 @@ border:1px solid #e8debd
         </div>
     </div>
     <div class="row mt">
-        <div class="col-lg-12">
-            <div class="form-horizontal">
+        <div class="form-horizontal">
+            <div class="col-lg-6">
+                
                 <div class="form-group">
                     <div class="col-sm-6">
                         <?php while ($rs_img = $db->get($query_img)) { ?>
@@ -88,32 +96,32 @@ border:1px solid #e8debd
                 <?php } ?>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p id="p_start_ship_date">วันที่ส่งได้ <?php echo date('d/m/Y', strtotime($rs_product['start_ship_date'])); ?></p>
+                        <p id="p_start_ship_date_0">วันที่ส่งได้ <?php echo date('d/m/Y', strtotime($rs_product['start_ship_date'])); ?></p>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <h4 id="h_product_name"><b><?php echo $rs_product['name']; ?></b></h4>
+                        <h4 id="h_product_name_0"><b><?php echo $rs_product['name']; ?></b></h4>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <div id="div_desc"><?php echo $rs_product['description']; ?></div>
+                        <div id="div_desc_0"><?php echo $rs_product['description']; ?></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p id="p_price">ราคา <?php echo $rs_product['agent_price']; ?> บาท</p>
+                        <p id="p_price_0">ราคา <?php echo $rs_product['agent_price']; ?> บาท</p>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p id="p_shipping">ค่าส่ง <?php echo round($rs_product['cal_parcel']); ?>/<?php echo round($rs_product['cal_register']); ?>/<?php echo round($rs_product['cal_EMS']); ?>/<?php echo round($rs_product['kerry']); ?></p>
+                        <p id="p_shipping_0">ค่าส่ง <?php echo round($rs_product['cal_parcel']); ?>/<?php echo round($rs_product['cal_register']); ?>/<?php echo round($rs_product['cal_EMS']); ?>/<?php echo round($rs_product['kerry']); ?></p>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <button onclick="copyToClipboard()">คัดลอกข้อความ</button>
+                        <button onclick="copyToClipboard(0)">คัดลอกข้อความ</button>
                     </div>
                 </div>
                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
@@ -150,7 +158,29 @@ border:1px solid #e8debd
                 </div>
                 <?php } ?>
 
+            </div>
+            <div class="col-lg-6">
+                                
+                <div id="product_childs">
+                    <?php
 
+                        $product_child_id = 0;
+
+                        while ($row = $db->get($query_child_pd)){
+
+                            $product_child_id += 1;
+                            
+                            ob_start();
+                            include(base_path().'/application/back/inc/product_child_show.php');
+                            $var=ob_get_contents(); 
+                            ob_end_clean();
+                            echo $var;
+                            
+                        }
+
+                    ?>
+                </div>
+                    
             </div>
         </div>
     </div>
@@ -170,14 +200,14 @@ require 'assets/template/back/footer.php';
 
 <script type="text/javascript">
 
-    function copyToClipboard() {
+    function copyToClipboard(child_id) {
         var $temp = $("<textarea cols='40' rows='5'>");
         $("body").append($temp);
-        start_ship_date = $('#p_start_ship_date').text();
-        product_name = $('#h_product_name').text();
-        desc = $('#div_desc').text();
-        price = $('#p_price').text();
-        shipping = $('#p_shipping').text();
+        start_ship_date = $('#p_start_ship_date_'+child_id).text();
+        product_name = $('#h_product_name_'+child_id).text();
+        desc = $('#div_desc_'+child_id).text();
+        price = $('#p_price_'+child_id).text();
+        shipping = $('#p_shipping_'+child_id).text();
         $temp.val(start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\n'+price+'\n\n'+shipping).select();
         document.execCommand("copy");
         $temp.remove();

@@ -10,6 +10,12 @@ $option_pd = array(
 $query_pd = $db->select($option_pd);
 $rs_pd = $db->get($query_pd);
 
+$option_child_pd = array(
+    "table" => "products",
+    "condition" => "parent_product_id='{$_GET['id']}' "
+);
+$query_child_pd = $db->select($option_child_pd);
+
 $option_img = array(
     "table" => "images",
     "condition" => "ref_id='{$_GET['id']}' AND filetype = 'product' "
@@ -85,9 +91,11 @@ border:1px solid #e8debd
         </div>
     </div>
     <div class="row mt">
-        <div class="col-lg-12">
-            <div class="form-horizontal" style="margin-top: 10px;">
-                <form id="product-form" action="<?php echo $baseUrl; ?>/back/product/form_update" method="post" enctype="multipart/form-data">
+        <div class="form-horizontal" style="margin-top: 10px;">
+            <form id="product-form" action="<?php echo $baseUrl; ?>/back/product/form_update" method="post" enctype="multipart/form-data">
+
+                <div class="col-lg-6">
+
                     <input type="hidden" name="id" value="<?php echo $rs_pd['id'];?>">
                     <div class="form-group">
                         <label for="product_image" class="col-sm-2 control-label required">รูปภาพประจำสินค้า</label>
@@ -204,8 +212,38 @@ border:1px solid #e8debd
                             <textarea id="editor" name="description" class="form-control input-sm"><?php echo $rs_pd['description']; ?></textarea>
                         </div>
                     </div>
-                </form>
-            </div>
+
+                </div>
+                <div class="col-lg-6">
+                            
+                    <div id="product_childs">
+                        <?php
+
+                            $product_child_id = 0;
+
+                            while ($row = $db->get($query_child_pd)){
+
+                                $product_child_id += 1;
+                                
+                                ob_start();
+                                include(base_path().'/application/back/inc/product_child_update.php');
+                                $var=ob_get_contents(); 
+                                ob_end_clean();
+                                echo $var;
+                                
+                            }
+
+                        ?>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="button" id="add_more_product_child" class="form-control" value="เพิ่มสินค้าย่อย"/>
+                        </div>
+                    </div>
+                        
+                </div>
+
+            </form>
         </div>
     </div>
   </section><!--/wrapper -->
@@ -223,7 +261,8 @@ require 'assets/template/back/footer.php';
 <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/jquery-ui.js"></script>
 <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/js/jquery.form-validator.min.js"></script>
 <script type="text/javascript">
-    var abc = 0;      // Declaring and defining global increment variable.
+    var abc = 0;
+    var product_child_id = <?php echo $product_child_id ?>;      // Declaring and defining global increment variable.
     $(document).ready(function () {
         ClassicEditor
             .create( document.querySelector( '#editor' ) )
@@ -280,6 +319,19 @@ require 'assets/template/back/footer.php';
                 id: 'image',
                 accept: 'image/*'
             })).after("<br>"));
+        });
+
+        $('#add_more_product_child').click(function(){
+            var url = '<?php echo $baseUrl; ?>/back/product/form_generate_product_child';
+            product_child_id += 1;
+            $.get(url, {product_child_id: product_child_id}, function (data) {
+                $(data).fadeIn('slow').appendTo($("#product_childs"));
+            });
+        });
+
+        $('body').on('click', '.close.product-child', function(){
+            var id = $(this).attr('product-child-id');
+            $('#product_child_'+id).remove();
         });
 
         // Following function will executes on change event of file input to select different file.
