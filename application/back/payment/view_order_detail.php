@@ -35,7 +35,6 @@
             <td colspan="3"></td>
             <td colspan="2" style="text-align: right;">
                 
-                <input type="hidden" name="grand_total" value="<?php echo $grand_total; ?>">
                 <label for="pay_money" class="text-bold control-label required">ค่าส่ง (ตามเงื่อนไข)</label>
 
                 <?php 
@@ -73,13 +72,14 @@
 
                         $grand_total_with_ship = $grand_total + $shipping_fees;
                     }else{
-                        $shipping_fee = $rs_order['ship_price'];
-                        $grand_total_with_ship = $grand_total + $shipping_fee;
+                        $shipping_fees = $rs_order['ship_price'];
+                        $grand_total_with_ship = $grand_total + $shipping_fees;
                     }
 
                 ?>
 
                 <h4>
+                    <input type="hidden" id="hidden_ship_price" value="<?php echo $shipping_fees; ?>">
                     <p><?php echo $shipping_fees; ?> บาท</p>
                 </h4>
             </td>

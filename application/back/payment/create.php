@@ -50,9 +50,9 @@ MAIN CONTENT
                 <div class="col-xs-5">
                     <div class="form-group">
                       <label for="select_left">รหัสสั่งซื้อที่ยังไม่ได้ชำระเงิน</label>
-                      <select id="select_left" name="order_id_choosed" size="10" class="form-control">
+                      <select id="select_left" size="10" class="form-control">
                         <?php while ($rs_order = $db->get($query_order)) { ?>
-                            <option value="<?php echo $rs_order['id']; ?>"><?php echo $rs_order['id']; ?></option>
+                            <option order_id="<?php echo $rs_order['id']; ?>"><?php echo $rs_order['id']; ?></option>
                         <?php } ?>
                       </select>
                     </div>
@@ -73,7 +73,7 @@ MAIN CONTENT
                 <div class="col-xs-5">
                     <div class="form-group">
                       <label for="select_right">รหัสสั่งซื้อที่ต้องการชำระเงิน</label>
-                      <select id="select_right" name="order_id_selected" size="10" class="form-control">
+                      <select id="select_right" name="order_id_selected[]" size="10" class="form-control">
                       </select>
                     </div>
                     <!-- <span>
@@ -98,8 +98,10 @@ MAIN CONTENT
                         <h3 class="panel-title">สรุปรายการ</h3>
                     </div>
                     <ul class="list-group">
-                        <li class="list-group-item"><strong>รวมทั้งหมด</strong> : <span id="grand_order_total"></span> บาท</li>
-                        <li class="list-group-item"><strong>น้ำหนักรวม</strong> : <span id="grand_order_weight"></span> กรัม</li>
+                        <input type="hidden" name="grand_order_total">
+                        <li class="list-group-item"><strong>รวมทุกออเดอร์</strong> : <span id="grand_order_total"></span> บาท</li>
+                        <!-- <li class="list-group-item"><strong>น้ำหนักรวม</strong> : <span id="grand_order_weight"></span> กรัม</li>
+                        <li class="list-group-item"><strong>ค่าส่งรวม</strong> : <span id="grand_ship_price"></span> บาท</li> -->
                     </ul>
                 </div>
 
@@ -141,8 +143,8 @@ MAIN CONTENT
                         <div class="form-group clearfix">
                             <div class="col-xs-6">
                                 <label for="url_picture" class="control-label">รูปภาพ</label>
-                                <input type="file" name="image[]" id="image" accept="image/*">
-                                <input type="file" name="image[]" id="image" accept="image/*">
+                                <input type="file" name="image[]" accept="image/*">
+                                <input type="file" name="image[]" accept="image/*">
                             </div>
                         </div>
                         <div class="form-group clearfix">
@@ -151,7 +153,7 @@ MAIN CONTENT
                                 <input type="text" id="detail" name="detail" class="form-control" autocomplete="off">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block">ยืนยันการชำระเงิน</button>
+                        <button type="submit" class="btn btn-success btn-block saveform">แจ้งชำระเงิน</button>
 
                     </div>
                 </div>
@@ -186,10 +188,6 @@ require 'assets/template/back/footer.php';
 <script type='text/javascript' src="<?php echo $baseUrl; ?>/assets/js/jquery.datetimepicker.js"></script>
 
 <script>
-    var grand_order_total = 0;
-    var grand_order_weight = 0;
-    var current_total = 0;
-    var current_weight = 0;
     // function listbox_selectall(listID, isSelect) {
     //     var listbox = document.getElementById(listID);
     //     for(var count=0; count < listbox.options.length; count++) {
@@ -201,20 +199,6 @@ require 'assets/template/back/footer.php';
         var src = document.getElementById(sourceID);
         var dest = document.getElementById(destID);
 
-        if (destID == "select_left") {
-            grand_order_total -= current_total;
-            grand_order_weight -= current_weight;
-        }
-
-        if (destID == "select_right") {
-            grand_order_total += current_total;
-            grand_order_weight += current_weight;
-        }
-
-        $('#grand_order_total').text(grand_order_total);
-        $('#grand_order_weight').text(grand_order_weight);
-        $('#pay_money').attr("placeholder", grand_order_total);
-
         for(var count=0; count < src.options.length; count++) {
 
             if(src.options[count].selected == true) {
@@ -223,6 +207,10 @@ require 'assets/template/back/footer.php';
                     var newOption = document.createElement("option");
                     newOption.value = option.value;
                     newOption.text = option.text;
+                    newOption.setAttribute('order_id', option.getAttribute('order_id'));
+                    newOption.setAttribute('total', option.getAttribute('total'));
+                    newOption.setAttribute('weight', option.getAttribute('weight'));
+                    newOption.setAttribute('ship_price', option.getAttribute('ship_price'));
                     newOption.selected = true;
                     try {
                             dest.add(newOption, null); //Standard
@@ -234,17 +222,45 @@ require 'assets/template/back/footer.php';
                     count--;
             }
         }
+
+        summary_price();
+    }
+
+    function summary_price() {
+        var grand_order_total = 0;
+        var grand_order_weight = 0;
+        var grand_ship_price = 0;
+        $("#select_right option").each(function(){
+            grand_order_total += parseInt($(this).attr('total'));
+            grand_order_weight += parseInt($(this).attr('weight'));
+            grand_ship_price += parseInt($(this).attr('ship_price'));
+        });
+
+        $("input[name='grand_order_total']").val(grand_order_total);
+        $('#grand_order_total').text(grand_order_total).digits();
+        $('#grand_order_weight').text(grand_order_weight).digits();
+        $('#grand_ship_price').text(grand_ship_price).digits();
+        $('#pay_money').attr("placeholder", grand_order_total);
     }
 
     $('#select_left, #select_right').change(function(){
+        $option_selected = $("option:selected", this);
         var value = $(this).val();
 
         var url = '<?php echo $baseUrl; ?>/back/payment/form_gen_order_detail';
 
         $.get(url, {order_id: value}, function (data) {
             $('#order_detail_table').html(data);
-            current_total = parseInt($(data).find('#hidden_grand_total').val());
-            current_weight = parseInt($(data).find('#hidden_grand_weight').val());
+            var current_total = parseInt($(data).find('#hidden_grand_total').val());
+            var current_weight = parseInt($(data).find('#hidden_grand_weight').val());
+            var current_ship_price = parseInt($(data).find('#hidden_ship_price').val());
+            var arr = [$option_selected.attr('order_id'), current_total, current_ship_price];
+
+            $option_selected.val(arr.join(", "));
+
+            $option_selected.attr('total', current_total);
+            $option_selected.attr('weight', current_weight);
+            $option_selected.attr('ship_price', current_ship_price);
         });
         
     });
@@ -272,6 +288,14 @@ require 'assets/template/back/footer.php';
                 }
             }
 
+            if ($("#select_right option").length == 0) {
+                alert("กรุณาเลือกรหัสสั่งซื้อที่ต้องการชำระเงินอย่างน้อย 1 รายการค่ะ");
+                return false;
+            }
+
+            $("#select_right").attr("multiple", true);
+            $("#select_right option").prop("selected", true);
+
             $("#payment_form").submit();
         });
 
@@ -281,7 +305,7 @@ require 'assets/template/back/footer.php';
         //     $("#grand_total").text(addCommas(payment_total));
         // });
 
-        $('body').on('change', '#image', function() {
+        $('body').on('change', "input[type='file']", function() {
             if (this.files && this.files[0]) {
 
                 var extension = this.files[0].name.replace(/^.*\./, '').toLowerCase();
