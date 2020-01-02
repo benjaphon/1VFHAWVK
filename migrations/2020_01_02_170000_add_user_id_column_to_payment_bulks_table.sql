@@ -1,0 +1,1 @@
+ALTER TABLE `payment_bulks` ADD `user_id` INT NOT NULL AFTER `id`;

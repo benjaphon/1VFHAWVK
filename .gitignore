@@ -1,5 +1,4 @@
 upload/
-*.sql
 .htaccess
 assets/library/database.php
 assets/library/core.php
