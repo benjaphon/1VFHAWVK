@@ -7,8 +7,9 @@ $db = new database();
 $payment_bulk_id = $_GET['id'];
 
 $option_pm_b = array(
-    "table" => "payment_bulks",
-    "condition" => "id={$payment_bulk_id}"
+    "fields" => "pm_b.*, u.username",
+    "table" => "payment_bulks AS pm_b INNER JOIN users AS u ON pm_b.user_id = u.id",
+    "condition" => "pm_b.id={$payment_bulk_id}"
 );
 $query_pm_b = $db->select($option_pm_b);
 $rs_pm_b = $db->get($query_pm_b);
@@ -19,7 +20,7 @@ $option_payment_img = array(
 );
 $query_payment_img = $db->select($option_payment_img);
 
-$title = 'แจ้งชำระเงินหลายรายการ';
+$title = 'การชำระเงินหลายรายการ';
 /*
  * php code///////////**********************************************************
  */
@@ -40,7 +41,7 @@ MAIN CONTENT
   <section class="wrapper">
     <div class="row mt">
         <div class="col-lg-12">
-            <h1 class="page-header">แจ้งชำระเงินหลายรายการ</h1>
+            <h1 class="page-header">การชำระเงินหลายรายการ</h1>
         </div>
     </div>
     <div class="row mt">
@@ -112,6 +113,7 @@ MAIN CONTENT
     
                             </li>
                             <li class="list-group-item"><strong>วันที่ชำระเงิน</strong> : <?php echo thaidate($rs_pm_b['created_at'], true); ?></li>
+                            <li class="list-group-item"><strong>ชำระโดย</strong> : <?php echo $rs_pm_b['username']; ?></li>
 
                             <?php //Check if there is any order to confirm payment
                         

@@ -2,7 +2,7 @@
 /*
  * php code///////////**********************************************************
  */
-$title = 'แจ้งชำระเงินหลายรายการ';
+$title = 'ชำระเงินหลายรายการ';
 
 $perpage = 10;
 if (isset($_GET['page'])) {
@@ -16,8 +16,9 @@ $start = ($page - 1) * $perpage;
 $db = new database();
 
 $option_pm_bulk = array(
-    "table" => "payment_bulks",
-    "order" => "id DESC",
+    "fields" => "pm_b.*, u.username",
+    "table" => "payment_bulks AS pm_b INNER JOIN users AS u ON pm_b.user_id = u.id",
+    "order" => "pm_b.id DESC",
     "limit" => "{$start},{$perpage}",
     "condition" => "1=1"
 );
@@ -27,17 +28,17 @@ if($_SESSION[_ss . 'levelaccess'] == 'admin') {
 }
 else
 {
-    $option_or["condition"] = "user_id={$_SESSION[_ss . 'id']}";
+    $option_or["condition"] = "pm_b.user_id={$_SESSION[_ss . 'id']}";
 }
 
 $search = (isset($_GET['search']))?$_GET['search']:'';
 
 if(isset($search) && !empty($search)){
     $option_pm_bulk["condition"] .= " AND (";
-    $option_pm_bulk["condition"] .= " id LIKE'%{$search}%' OR";
-    $option_pm_bulk["condition"] .= " pay_type LIKE'%{$search}%' OR";
-    $option_pm_bulk["condition"] .= " detail LIKE'%{$search}%' OR";
-    $option_pm_bulk["condition"] .= " DATE_FORMAT(created_at, '%d/%m/%Y') LIKE'%{$search}%')";
+    $option_pm_bulk["condition"] .= " pm_b.id LIKE'%{$search}%' OR";
+    $option_pm_bulk["condition"] .= " pm_b.pay_type LIKE'%{$search}%' OR";
+    $option_pm_bulk["condition"] .= " pm_b.detail LIKE'%{$search}%' OR";
+    $option_pm_bulk["condition"] .= " DATE_FORMAT(pm_b.created_at, '%d/%m/%Y') LIKE'%{$search}%')";
 }
 
 $query_pm_bulk = $db->select($option_pm_bulk);
@@ -83,7 +84,7 @@ require 'assets/template/back/header.php';
   <section class="wrapper">
     <div class="row mt">
         <div class="col-lg-12">
-            <h1 class="page-header">ยืนยันการชำระเงินหลายรายการ</h1>
+            <h1 class="page-header">ชำระเงินหลายรายการ</h1>
         </div>
     </div>
     <div class="row mt">
@@ -129,6 +130,11 @@ require 'assets/template/back/header.php';
                             <th id="payment-grid_c5">
                                 <a class="sort-link">สร้างเมื่อ</a>
                             </th>
+                            <?php if($_SESSION[_ss . 'levelaccess'] == 'admin') { ?>
+                            <th id="payment-grid_c5">
+                                <a class="sort-link">สร้างโดย</a>
+                            </th>
+                            <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -140,6 +146,9 @@ require 'assets/template/back/header.php';
                                 <td><?php echo $rs_pm_bulk['pay_type']; ?></td>
                                 <td><?php echo $rs_pm_bulk['detail']; ?></td>
                                 <td><?php echo thaidate($rs_pm_bulk['created_at']); ?></td>
+                                <?php if($_SESSION[_ss . 'levelaccess'] == 'admin') { ?>
+                                    <td><?php echo $rs_pm_bulk['username']; ?></td>
+                                <?php } ?>
                             </tr>
                             <tr>
                                 <td colspan="5">
