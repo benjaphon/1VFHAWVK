@@ -64,7 +64,7 @@ MAIN CONTENT
                         ?>
 
                         <?php while ($rs_order = $db->get($query_order)) { ?>
-                            <option order_id="<?php echo $rs_order['o_id']; ?>"><?php echo $rs_order['o_id']; ?></option>
+                            <option order_id="<?php echo $rs_order['o_id']; ?>"><?php echo $rs_order['o_id']; ?> (<?php echo $rs_order['order_status']; ?>)</option>
                         <?php } ?>
                       </select>
                     </div>           

@@ -202,12 +202,6 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
               	  <p class="centered"><a href="<?php echo $baseUrl; ?>/back/user/update/<?php echo $_SESSION[_ss . 'id'] ?>"><img src="<?php echo $baseUrl; ?>/assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p>
               	  <h5 class="centered"><?php echo $_SESSION[_ss . 'username'] ?></h5>
 
-                  <!--<li class="mt">
-                      <a href="<?php echo $baseUrl; ?>/back/home">
-                          <i class="fa fa-dashboard"></i>
-                          <span>Dashboard</span>
-                      </a>
-                  </li>-->
                   <li class="menu">
                       <a href="<?php echo $baseUrl; ?>/back/order">
                           <i class="fa fa-align-justify"></i>
@@ -215,39 +209,19 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                       </a>
                   </li>
                   <li>
-                      <a href="<?php echo $baseUrl; ?>/back/product">
-                          <i class="fa fa-shopping-cart"></i>
-                          <span>สินค้า</span>
-                      </a>
-                  </li>
-                  
-                  <!--<li>
-                      <a href="<?php echo $baseUrl; ?>/back/categorie">
-                          <i class="glyphicon glyphicon-list-alt"></i>
-                          <span>หมวดหมู่สินค้า</span>
-                      </a>
-                  </li>-->            
-                  <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
-                  <!--<li>
-                      <a href="<?php echo $baseUrl; ?>/back/import">
-                          <i class="fa fa-arrow-right"></i>
-                          <span>สินค้านำเข้า</span>
-                      </a>
-                  </li>
-
-                  <li>
-                      <a href="<?php echo $baseUrl; ?>/back/export">
-                          <i class="fa fa-arrow-left"></i>
-                          <span>สินค้าส่งออก</span>
-                      </a>
-                  </li>-->
-
-                  <li>
                     <a href="<?php echo $baseUrl; ?>/back/payment/index">
                         <i class="fa fa-credit-card"></i>
                         <span>ชำระเงินหลายรายการ</span>
                     </a>
                   </li>
+                  <li>
+                      <a href="<?php echo $baseUrl; ?>/back/product">
+                          <i class="fa fa-shopping-cart"></i>
+                          <span>สินค้า</span>
+                      </a>
+                  </li>
+                         
+                  <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
 
                   <li>
                       <a href="<?php echo $baseUrl; ?>/back/user">
@@ -255,10 +229,12 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                           <span>ผู้ใช้</span>
                       </a>
                   </li>
-                  <li>
-                      <span>Version 5.0</span>
-                  </li>
+                  
                   <?php } ?>
+
+                  <li>
+                    <span>Version 6.0</span>
+                </li>
               </ul>
               <!-- sidebar menu end-->
           </div>
