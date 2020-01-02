@@ -1,0 +1,1 @@
+ALTER TABLE `order_details` CHANGE `remark1` `remark1` INT(8) NULL, CHANGE `remark2` `remark2` INT(8) NULL, CHANGE `remark3` `remark3` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL, CHANGE `remark4` `remark4` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL;
