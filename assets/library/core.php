@@ -1,11 +1,11 @@
 <?php
 
 function base_url() {
-    return "http://borbaimai.thddns.net:5530/1VFHAWVK";
+    return "http://localhost/playitnow";
 }
 
 function base_path() {
-    return $_SERVER['DOCUMENT_ROOT'] . "/1VFHAWVK";
+    return $_SERVER['DOCUMENT_ROOT'] . "/playitnow";
 }
 
 function salt_pass($pass) {

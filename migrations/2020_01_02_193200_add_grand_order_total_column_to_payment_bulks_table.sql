@@ -1,0 +1,1 @@
+ALTER TABLE `payment_bulks` ADD `grand_order_total` INT NOT NULL AFTER `pay_type`;

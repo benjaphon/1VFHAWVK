@@ -1,1 +1,5 @@
 upload/
+.htaccess
+assets/library/database.php
+assets/library/core.php
+assets/library/cons.php
