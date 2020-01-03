@@ -1,8 +1,7 @@
 <?php
 
-/*
- * php code///////////**********************************************************
- */
+require(base_path() . "/application/back/product/functions.php");
+
 $db = new database();
 
 /************** Child Product *********************/
@@ -19,30 +18,12 @@ while ($rs_product_child = $db->get($query_product_child)) {
 
     if ($query==TRUE) {
 
-        $option_img = array(
-            "table" => "images",
-            "fields" => "filename",
-            "condition" => "ref_id='{$rs_product_child['id']}' AND filetype='product'"
-        );
-        $query_img = $db->select($option_img);
-
-        while($rs_im = $db->get($query_img)){
-            @unlink($path . $rs_im['filename']);
-            @unlink($path . "thumb_" . $rs_im['filename']);
-            @unlink($path . "md_" . $rs_im['filename']);
-            @unlink($path . "sm_" . $rs_im['filename']);
-        }
-
-        $query = $db->delete("images", "ref_id='{$rs_product_child['id']}'");
+        delete_img($rs_product_child['id'], "product");
 
     } else {
 
         //error can't delete foreign key just update status
-        $arr_update = array(
-            "flag_status" => 0
-        );
-
-        $query_pd = $db->update("products", $arr_update, "id={$rs_product_child['id']}");
+        soft_delete($rs_product_child['id'], "products");
         
     }
     
@@ -63,47 +44,24 @@ if ($rows==0) {
     );
     $query_product = $db->select($option_product);
     $rs_product = $db->get($query_product);
-
-    $option_img = array(
-        "table" => "images",
-        "fields" => "filename",
-        "condition" => "ref_id='{$_GET['id']}' AND filetype='product'"
-    );
-    $query_img = $db->select($option_img);
     
     $query = $db->delete("products", "id='{$_GET['id']}'");
 
     if ($query == TRUE) {
 
-        $path = base_path() . "/assets/upload/product/";
-        while($rs_im = $db->get($query_img)){
-            @unlink($path . $rs_im['filename']);
-            @unlink($path . "thumb_" . $rs_im['filename']);
-            @unlink($path . "md_" . $rs_im['filename']);
-            @unlink($path . "sm_" . $rs_im['filename']);
-        }
-        @unlink($path . $rs_product['video_filename']);
-
-        $query = $db->delete("images", "ref_id='{$_GET['id']}'");
+        delete_img($_GET['id'], "product");
 
     } else {
 
         //error can't delete foreign key just update status
-        $value_pd = array(
-            "flag_status" => 0
-        );
-        $query_pd = $db->update("products", $value_pd, "id={$_GET['id']}");
+        soft_delete($_GET['id'], "products");
 
     }
 
 } else {
 
     //error can't delete foreign key just update status
-    $value_pd = array(
-        "flag_status" => 0
-    );
-
-    $query_pd = $db->update("products", $value_pd, "id={$_GET['id']}");
+    soft_delete($_GET['id'], "products");
 
 }
 

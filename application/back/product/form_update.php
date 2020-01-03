@@ -1,28 +1,12 @@
 <?php
 
 require(base_path() . "/assets/library/uploadimg.php");
+require(base_path() . "/application/back/product/functions.php");
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $db = new database();
-    $option_vdo = array(
-        "table" => "products",
-        "fields" => "video_filename",
-        "condition" => "id='{$_POST['id']}'"
-    );
-    $query_vdo = $db->select($option_vdo);
-    $rs_vdo = $db->get($query_vdo);
 
-    $vdo_filename = $rs_vdo['video_filename'];
-    
-    if (file_exists($_FILES['file_video']['tmp_name']) && is_uploaded_file($_FILES['file_video']['tmp_name'])) {
-        if ($_FILES["file_video"]["size"] < 100000000) {
-            $ext_vdo = explode('.', basename($_FILES['file_video']['name'])); 
-            $vdo_filename = date('YmdHis') . md5(uniqid()). "." . end($ext_vdo);
-            $path = base_path() . "/assets/upload/product/";
-            move_uploaded_file($_FILES["file_video"]["tmp_name"], $path . $vdo_filename);
-
-            @unlink($path . $rs_vdo['video_filename']);
-        }
-    }
+    $vdo_filename = upload_new_video($_POST['id'], "video_filename", "products");
 
     $value_pd = array(
         "name" => trim($_POST['name']),
@@ -42,32 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $query_pd = $db->update("products", $value_pd, "id='{$_POST['id']}'");
 
     if ($query_pd == TRUE) {
-        $product_id = $_POST['id'];
-        $path = base_path() . "/assets/upload/product/";
 
-        if (isset($_FILES['image'])) {
-            for ($i = 0; $i < count($_FILES['image']['name']); $i++) {
-                $validextensions = array("jpeg", "jpg", "png");      // Extensions which are allowed.
-                $ext = explode('.', basename($_FILES['image']['name'][$i]));   // Explode file name from dot(.)
-                $file_extension = end($ext); // Store extensions in the variable.
-                $filename = date('YmdHis') . md5(uniqid());     // Set the target path with a new name of image.
-                
-                if (($_FILES["image"]["size"][$i] < 1000000) && in_array($file_extension, $validextensions)) { // 1000 B = 1 KB = 1000 KB = 1 MB 
-                    $full_filename = uploadimg($filename, 600, 600, $path, $i);
-                    uploadimg("thumb_" . $filename, 400, 400, $path, $i);
-                    uploadimg("md_" . $filename, 150, 150, $path, $i);
-                    uploadimg("sm_" . $filename, 70, 70, $path, $i);
-    
-                    $value_img = array(
-                        "ref_id" => $product_id,
-                        "filename" => $full_filename,
-                        "filetype" => "product"
-                    );
-        
-                    $db->insert("images", $value_img);
-                }  
-            }
-        }
+        $product_id = $_POST['id'];
+
+        upload_img($product_id, "product");
 
         /************* Delete & Save All Child Product ************/
 
@@ -82,22 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $query = $db->delete("products", "id='{$rs_product_child['id']}'");
 
             if ($query==TRUE) {
-
-                $option_img = array(
-                    "table" => "images",
-                    "fields" => "filename",
-                    "condition" => "ref_id='{$rs_product_child['id']}' AND filetype='product'"
-                );
-                $query_img = $db->select($option_img);
-
-                while($rs_im = $db->get($query_img)){
-                    @unlink($path . $rs_im['filename']);
-                    @unlink($path . "thumb_" . $rs_im['filename']);
-                    @unlink($path . "md_" . $rs_im['filename']);
-                    @unlink($path . "sm_" . $rs_im['filename']);
-                }
-
-                $db->delete("images", "ref_id='{$rs_product_child['id']}'");
+                
+                delete_img($rs_product_child['id'], "product");
 
             } else {
                 //error can't delete foreign key just update status
@@ -136,32 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     $child_product_id = $db->insert_id();
 
-                    $option_img = array(
-                        "table" => "images",
-                        "fields" => "filename",
-                        "condition" => "ref_id='{$product_id}' AND filetype='product'"
-                    );
-                    $query_img = $db->select($option_img);
+                    duplicate_img($product_id, $child_product_id, "product");
 
-                    while ($rs_img = $db->get($query_img)) {
-                        $ext = explode('.', basename($rs_img['filename']));   // Explode file name from dot(.)
-                        $file_extension = end($ext); // Store extensions in the variable.
-                        $filename = date('YmdHis') . md5(uniqid());     // Set the target path with a new name of image.
-                        $full_filename = $filename . "." . $file_extension; 
-                        
-                        copy($path . $rs_img['filename'], $path . $full_filename);
-                        copy($path . "thumb_" . $rs_img['filename'], $path . "thumb_" . $full_filename);
-                        copy($path . "md_" . $rs_img['filename'], $path . "md_" . $full_filename);
-                        copy($path . "sm_" . $rs_img['filename'], $path . "sm_" . $full_filename);
-
-                        $value_img = array(
-                            "ref_id" => $child_product_id,
-                            "filename" => $full_filename,
-                            "filetype" => "product"
-                        );
-
-                        $db->insert("images", $value_img);
-                    }
                 }
             }
         }
