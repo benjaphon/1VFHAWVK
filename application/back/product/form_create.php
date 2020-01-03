@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     "wholesale_price" => trim($_POST['child_wholesale_price'][$key]),
                     "agent_price" => trim($_POST['child_agent_price'][$key]),
                     "sale_price" => trim($_POST['child_sale_price'][$key]),
-                    "kerry" => trim($_POST['child_kerry'][$key]),
+                    "kerry" => trim($_POST['kerry']), //Same as parent
                     "start_ship_date" => date("Y-m-d", strtotime($_POST['start_ship_date'])), //Same as parent
                     "description" => trim($_POST['description']), //Same as parent
                     "quantity" => trim($_POST['child_quantity'][$key]),

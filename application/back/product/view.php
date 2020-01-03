@@ -171,7 +171,7 @@ border:1px solid #e8debd
                             $product_child_id += 1;
                             
                             ob_start();
-                            include(base_path().'/application/back/inc/product_child_show.php');
+                            include(base_path().'/application/back/product/inc/product_child_show.php');
                             $var=ob_get_contents(); 
                             ob_end_clean();
                             echo $var;
