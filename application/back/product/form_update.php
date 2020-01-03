@@ -69,9 +69,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
+        /************* Delete & Save All Child Product ************/
+
+        $option_product_child = array(
+            "table" => "products",
+            "condition" => "parent_product_id='{$product_id}'"
+        );
+        $query_product_child = $db->select($option_product_child);
+
         $db->delete("products", "parent_product_id='{$product_id}'");
 
-        //Save Child Products
+        while ($rs_product_child = $db->get($query_product_child)) {
+
+            $option_img = array(
+                "table" => "images",
+                "fields" => "filename",
+                "condition" => "ref_id='{$rs_product_child['id']}' AND filetype='product'"
+            );
+            $query_img = $db->select($option_img);
+
+            while($rs_im = $db->get($query_img)){
+                @unlink($path . $rs_im['filename']);
+                @unlink($path . "thumb_" . $rs_im['filename']);
+                @unlink($path . "md_" . $rs_im['filename']);
+                @unlink($path . "sm_" . $rs_im['filename']);
+            }
+
+            $query = $db->delete("images", "ref_id='{$rs_product_child['id']}'");
+            
+        }
+
         if (isset($_POST['child_name'])) {
 
             for ($key = 0; $key < count($_POST['child_name']); $key++) {
@@ -92,8 +119,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     "created_at" => date('Y-m-d H:i:s'),
                     "modified_at" => date('Y-m-d H:i:s')
                 );
-                $db->insert("products", $value_child_pd);
+                $query_pd_c = $db->insert("products", $value_child_pd);
 
+                if ($query_pd_c == TRUE) {
+
+                    $child_product_id = $db->insert_id();
+
+                    $option_img = array(
+                        "table" => "images",
+                        "fields" => "filename",
+                        "condition" => "ref_id='{$product_id}' AND filetype='product'"
+                    );
+                    $query_img = $db->select($option_img);
+
+                    while ($rs_img = $db->get($query_img)) {
+                        $ext = explode('.', basename($rs_img['filename']));   // Explode file name from dot(.)
+                        $file_extension = end($ext); // Store extensions in the variable.
+                        $filename = date('YmdHis') . md5(uniqid());     // Set the target path with a new name of image.
+                        $full_filename = $filename . "." . $file_extension; 
+                        
+                        copy($path . $rs_img['filename'], $path . $full_filename);
+                        copy($path . "thumb_" . $rs_img['filename'], $path . "thumb_" . $full_filename);
+                        copy($path . "md_" . $rs_img['filename'], $path . "md_" . $full_filename);
+                        copy($path . "sm_" . $rs_img['filename'], $path . "sm_" . $full_filename);
+
+                        $value_img = array(
+                            "ref_id" => $child_product_id,
+                            "filename" => $full_filename,
+                            "filetype" => "product"
+                        );
+
+                        $db->insert("images", $value_img);
+                    }
+                }
             }
         }
             

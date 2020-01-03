@@ -83,7 +83,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     "created_at" => date('Y-m-d H:i:s'),
                     "modified_at" => date('Y-m-d H:i:s')
                 );
-                $db->insert("products", $value_child_pd);
+                $query_pd_c = $db->insert("products", $value_child_pd);
+
+                if ($query_pd_c == TRUE) {
+
+                    $child_product_id = $db->insert_id();
+                    $path = base_path() . "/assets/upload/product/";
+
+                    if (isset($_FILES['image'])) {
+                        for ($i = 0; $i < count($_FILES['image']['name']); $i++) {
+                            $validextensions = array("jpeg", "jpg", "png");      // Extensions which are allowed.
+                            $ext = explode('.', basename($_FILES['image']['name'][$i]));   // Explode file name from dot(.)
+                            $file_extension = end($ext); // Store extensions in the variable.
+                            $filename = date('YmdHis') . md5(uniqid());     // Set the target path with a new name of image.
+                            
+                            if (($_FILES["image"]["size"][$i] < 1000000) && in_array($file_extension, $validextensions)) { // 1000 B = 1 KB = 1000 KB = 1 MB 
+                                $full_filename = uploadimg($filename, 600, 600, $path, $i);
+                                uploadimg("thumb_" . $filename, 400, 400, $path, $i);
+                                uploadimg("md_" . $filename, 150, 150, $path, $i);
+                                uploadimg("sm_" . $filename, 70, 70, $path, $i);
+
+                                $value_img = array(
+                                    "ref_id" => $child_product_id,
+                                    "filename" => $full_filename,
+                                    "filetype" => "product"
+                                );
+                    
+                                $db->insert("images", $value_img);
+                            }  
+                        }
+                    }
+                }
             
             }
         }
