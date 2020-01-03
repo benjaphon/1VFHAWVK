@@ -258,7 +258,18 @@ require 'assets/template/back/footer.php';
         $('#add_more_product_child').click(function(){
             var url = '<?php echo $baseUrl; ?>/back/product/form_generate_product_child';
             product_child_id += 1;
-            $.get(url, {product_child_id: product_child_id}, function (data) {
+
+            var data = {
+                product_child_id: product_child_id,
+                price: $('#price').val(),
+                wholesale_price: $('#wholesale_price').val(),
+                agent_price: $('#agent_price').val(),
+                sale_price: $('#sale_price').val(),
+                quantity: $('#quantity').val(),
+                weight: $('#weight').val(),
+            };
+
+            $.get(url, data, function (data) {
                 $(data).fadeIn('slow').appendTo($("#product_childs"));
             });
         });
