@@ -18,7 +18,7 @@ $rs_product = $db->get($query_product);
 $option_child_pd = array(
     "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
     "table" => "products AS p LEFT JOIN shipping_rate AS s ON p.weight >= s.min_wg AND p.weight <= s.max_wg",
-    "condition" => "p.parent_product_id='{$_GET['id']}'"
+    "condition" => "p.parent_product_id='{$_GET['id']}' AND flag_status=1"
 );
 $query_child_pd = $db->select($option_child_pd);
 

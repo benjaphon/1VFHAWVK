@@ -12,7 +12,7 @@ $rs_pd = $db->get($query_pd);
 
 $option_child_pd = array(
     "table" => "products",
-    "condition" => "parent_product_id='{$_GET['id']}' "
+    "condition" => "parent_product_id='{$_GET['id']}' AND flag_status=1 "
 );
 $query_child_pd = $db->select($option_child_pd);
 

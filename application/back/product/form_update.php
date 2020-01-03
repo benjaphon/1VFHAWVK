@@ -73,29 +73,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $option_product_child = array(
             "table" => "products",
-            "condition" => "parent_product_id='{$product_id}'"
+            "condition" => "parent_product_id='{$product_id}' AND flag_status=1"
         );
         $query_product_child = $db->select($option_product_child);
 
-        $db->delete("products", "parent_product_id='{$product_id}'");
-
         while ($rs_product_child = $db->get($query_product_child)) {
 
-            $option_img = array(
-                "table" => "images",
-                "fields" => "filename",
-                "condition" => "ref_id='{$rs_product_child['id']}' AND filetype='product'"
-            );
-            $query_img = $db->select($option_img);
+            $query = $db->delete("products", "id='{$rs_product_child['id']}'");
 
-            while($rs_im = $db->get($query_img)){
-                @unlink($path . $rs_im['filename']);
-                @unlink($path . "thumb_" . $rs_im['filename']);
-                @unlink($path . "md_" . $rs_im['filename']);
-                @unlink($path . "sm_" . $rs_im['filename']);
+            if ($query==TRUE) {
+
+                $option_img = array(
+                    "table" => "images",
+                    "fields" => "filename",
+                    "condition" => "ref_id='{$rs_product_child['id']}' AND filetype='product'"
+                );
+                $query_img = $db->select($option_img);
+
+                while($rs_im = $db->get($query_img)){
+                    @unlink($path . $rs_im['filename']);
+                    @unlink($path . "thumb_" . $rs_im['filename']);
+                    @unlink($path . "md_" . $rs_im['filename']);
+                    @unlink($path . "sm_" . $rs_im['filename']);
+                }
+
+                $db->delete("images", "ref_id='{$rs_product_child['id']}'");
+
+            } else {
+                //error can't delete foreign key just update status
+                $arr_update = array(
+                    "flag_status" => 0
+                );
+
+                $query_pd = $db->update("products", $arr_update, "id={$rs_product_child['id']}");
             }
-
-            $query = $db->delete("images", "ref_id='{$rs_product_child['id']}'");
             
         }
 
