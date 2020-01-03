@@ -302,7 +302,6 @@ require 'assets/template/back/footer.php';
                     src: '<?php echo $baseUrl; ?>/assets/img/x.png',
                     alt: 'delete'
                 }).click(function() {
-                    $(this).parent().parent().next().remove();
                     $(this).parent().parent().remove();
                 }));
             }

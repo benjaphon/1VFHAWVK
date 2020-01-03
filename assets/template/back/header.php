@@ -57,7 +57,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
 
     <!-- Custom styles for this template -->
     <link href="<?php echo $baseUrl; ?>/assets/css/style.css" rel="stylesheet">
-    <link href="<?php echo $baseUrl; ?>/assets/css/style-custom.css?v=1.6" rel="stylesheet">
+    <link href="<?php echo $baseUrl; ?>/assets/css/style-custom.css?v=1.7" rel="stylesheet">
     <link href="<?php echo $baseUrl; ?>/assets/css/style-responsive.css" rel="stylesheet">
 
     <!--<script src="<?php echo $baseUrl; ?>/assets/js/chart-master/Chart.js"></script>-->

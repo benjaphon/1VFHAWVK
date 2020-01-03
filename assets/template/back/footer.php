@@ -30,6 +30,8 @@
     <script src="<?php echo $baseUrl; ?>/assets/DataTables/datatables.min.js" type="text/javascript"></script>
     <!-- Editor -->
     <script type="text/javascript" src="<?php echo $baseUrl; ?>/assets/ckeditor5/ckeditor.js"></script>
+    <!-- SWEETALERT2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 	<script type="text/javascript">
         /*$(document).ready(function () {
 

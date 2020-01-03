@@ -101,40 +101,22 @@ border:1px solid #e8debd
                         <label for="product_image" class="col-sm-2 control-label required">รูปภาพประจำสินค้า</label>
                         <div class="col-sm-10">
                             <?php while ($rs_img = $db->get($query_img)) { ?>
-                                <div id="div-image-<?php echo $rs_img['id']; ?>" class="abcd col-sm-3">
-                                    <a title="" download="<?php echo $rs_img['filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/product/<?php echo $rs_img['filename']; ?>"><img src="<?php echo $baseUrl ?>/assets/upload/product/<?php echo $rs_img['filename'];?>"></a>
-                                    <a title="" href="#" data-toggle="modal" data-target="#deleteModal<?php echo $rs_img['id'];?>"><img id="x-img" src="<?php echo $baseUrl; ?>/assets/img/x.png" alt="delete"></a>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="deleteModal<?php echo $rs_img['id'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                    <h4 class="modal-title" id="myModalLabel">แจ้งเตือนการลบข้อมูล</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    คุณยืนยันต้องการจะลบข้อมูลนี้ ใช่หรือไม่?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">ไม่ใช่</button>
-                                                    <button type="button" class="btn btn-primary btn_delete_image" href="<?php echo $baseUrl; ?>/back/product/delete_image" data-dismiss="modal" value="<?php echo $rs_img['id']; ?>">ใช่ ยืนยันการลบ</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div id="div-image-<?php echo $rs_img['id']; ?>" class="abcd">
+                                    <a download="<?php echo $rs_img['filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/product/<?php echo $rs_img['filename']; ?>"><img src="<?php echo $baseUrl ?>/assets/upload/product/<?php echo $rs_img['filename'];?>"></a>
+                                    <a role="button" class="btn_delete_image" href="<?php echo $baseUrl; ?>/back/product/delete_image" value="<?php echo $rs_img['id']; ?>"><img id="x-img" src="<?php echo $baseUrl; ?>/assets/img/x.png" alt="delete"></a>
                                 </div>
                             <?php } ?>                  
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="image" class="col-sm-2 control-label">รูปภาพใหม่</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                         <input type="button" id="add_more" class="upload" value="Add More Files"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="video" class="col-sm-2 control-label">วิดีโอ</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-8">
                             <?php  if (!empty($rs_pd['video_filename'])) { ?>
                                 <video width="400" controls>
                                     <source src="<?php echo $baseUrl ?>/assets/upload/product/<?php echo $rs_pd['video_filename']; ?>" id="video_here">
@@ -368,7 +350,6 @@ require 'assets/template/back/footer.php';
                     src: '<?php echo $baseUrl; ?>/assets/img/x.png',
                     alt: 'delete'
                 }).click(function() {
-                    $(this).parent().parent().next().remove();
                     $(this).parent().parent().remove();
                 }));
             }
@@ -378,18 +359,6 @@ require 'assets/template/back/footer.php';
         function imageIsLoaded(e) {
             $('#previewimg' + abc).attr('src', e.target.result);
         };
-
-        /* Delete Image */
-        $(document).on('click','.btn_delete_image',function(){
-            var url = $(this).attr("href");
-            var val_image_id = $(this).attr("value");
-
-            $.post(url, { image_id: val_image_id }, function(){
-                $('#div-image-'+val_image_id).remove();
-            });
-
-        });
-        /***********************/
 
         $(document).on("change", "#file_video", function() {
             if (this.files && this.files[0]) {
@@ -403,6 +372,40 @@ require 'assets/template/back/footer.php';
         });
 
         $("#product_status").val("<?php echo $rs_pd['product_status']; ?>");
+
+        /* Delete Image */
+        $(".btn_delete_image").click(function(e){
+
+            e.preventDefault();
+
+            var url = $(this).attr("href");
+            var val_image_id = $(this).attr("value");
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                if (result.value) {
+
+                    $.post(url, { image_id: val_image_id }, function(){
+                        $('#div-image-'+val_image_id).remove();
+                    });
+
+                    Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                    )
+                }
+            });
+            
+        });
+        
     });
     $.validate();
 </script>

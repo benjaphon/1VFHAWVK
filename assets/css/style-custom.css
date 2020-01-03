@@ -51,3 +51,7 @@
         transform: rotate(359deg); 
     }
 }
+
+.swal2-popup {
+    font-size: inherit !important;
+}
