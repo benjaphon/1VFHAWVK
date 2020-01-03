@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SESSION[_ss . 'levelaccess'] == 'ad
 
     header("location:" . $baseUrl . "/back/product?page=" . $_GET['page']);
     
-    $db->close();
 }
 
 ?>

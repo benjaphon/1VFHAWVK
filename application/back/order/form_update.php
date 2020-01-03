@@ -45,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         header("location:" . base_url() . "/back/order");
     }
-    $db->close();
 }
 
 ?>

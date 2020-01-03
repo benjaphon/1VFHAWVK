@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $query = $db->query($sql);
     header("location:" . $baseUrl . "/back/payment");
-    mysql_close();
 }
 
 ?>

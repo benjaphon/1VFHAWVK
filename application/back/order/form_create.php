@@ -52,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //$_SESSION[_ss . 'order_id'] = $order_id;
         header("location:" . base_url() . "/back/order");
     }
-    $db->close();
 }
 
 ?>
