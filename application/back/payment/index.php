@@ -24,11 +24,11 @@ $option_pm_bulk = array(
 );
 
 if($_SESSION[_ss . 'levelaccess'] == 'admin') {
-    $option_or["condition"] = "1=1";
+    $option_pm_bulk["condition"] = "1=1";
 }
 else
 {
-    $option_or["condition"] = "pm_b.user_id={$_SESSION[_ss . 'id']}";
+    $option_pm_bulk["condition"] = "pm_b.user_id={$_SESSION[_ss . 'id']}";
 }
 
 $search = (isset($_GET['search']))?$_GET['search']:'';

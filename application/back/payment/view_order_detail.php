@@ -15,7 +15,7 @@
         $grand_total_weight = 0;
         while ($rs_od = $db->get($query_od)) {
             $product_qty = $rs_od['quantity'];
-            $kerry_shipping = $rs_od['kerry'];
+            $kerry_shipping = !empty($rs_od['kerry'])?$rs_od['kerry']:0;
 
             $total_price = $rs_od['price'] * $rs_od['quantity'];
             $grand_total += $total_price;
