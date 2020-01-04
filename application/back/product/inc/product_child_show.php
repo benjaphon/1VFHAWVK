@@ -16,7 +16,28 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <h4 id="h_product_name_<?php echo $product_child_id?>"><b><?php echo $row['name']; ?></b></h4>
+                    <h4 id="h_product_name_<?php echo $product_child_id?>">
+
+                        <?php
+
+                            $product_name = $row['name'];
+
+                            if (isset($row['parent_product_id'])) {
+                                $option_pd_parent = array(
+                                    "table" => "products",
+                                    "condition" => "id={$row['parent_product_id']}"
+                                );
+
+                                $query_pd_parent = $db->select($option_pd_parent);
+                                $rs_pd_parent = $db->get($query_pd_parent);
+
+                                $product_name = $rs_pd_parent['name'] . ' ' . $row['name'];
+                            }
+
+                        ?>
+
+                        <b><?php echo $product_name; ?></b>
+                    </h4>
                 </div>
             </div>
             <div class="form-group">
