@@ -133,6 +133,9 @@ MAIN CONTENT
                         <div class="radio">
                           <label><input type="radio" name="shipping_type" value="EMS">EMS</label>
                         </div>
+                        <div class="radio">
+                            <label><input type="radio" name="shipping_type" value="อื่นๆ">อื่นๆ</label>
+                        </div>
                     </div>
                     <div class="col-xs-6">
                         <div class="radio">
@@ -142,12 +145,10 @@ MAIN CONTENT
                           <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">เอกชน (สำหรับสินค้าจำนวนมาก)</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="อื่นๆ">อื่นๆ</label>
+                          <label><input type="radio" name="shipping_type" value="Shopee">Shopee</label>
                         </div>
                     </div>
                 </div>
-
-
 
                 <div class="form-group col-xs-12 clearfix">
                         <label for="sender" class="text-bold required">ที่อยู่ผู้ส่ง</label>
@@ -161,12 +162,13 @@ MAIN CONTENT
                           <label><input type="radio" name="sender_type" value="address_other" data-validation="required">ที่อยู่อื่นๆ (ระบุ)</label>
                         </div>
                         <textarea class="form-control" rows="5" name="sender" id="sender" data-validation="required"></textarea>
+                        <input type="file" name="sender_file" id="sender_file" style="display:none" accept="application/pdf, image/jpg, image/jpeg, image/png">
                 </div>
-
 
                 <div class="form-group col-xs-12 clearfix">
                         <label for="receiver" class="text-bold required">ที่อยู่ผู้รับ</label>
                         <textarea class="form-control" rows="5" name="receiver" id="receiver" data-validation="required"></textarea>
+                        <input type="file" name="receiver_file" id="receiver_file" style="display:none" accept="application/pdf, image/jpg, image/jpeg, image/png">
                 </div>
 
                 <div class="form-group col-xs-12 clearfix">
@@ -301,6 +303,27 @@ $(document).ready(function(){
 
         var $form = $("#AddOrderDetailForm");
         var url = '<?php echo $baseUrl; ?>/back/order/update_cart';
+
+        if ($("input[type=file]")[0].files && $("input[type=file]")[0].files[0]) {
+            var filename = $("input[type=file]")[0].files[0].name;
+            var extension = filename.replace(/^.*\./, '').toLowerCase();
+            switch (extension) {
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'pdf':
+                    break;
+                default:
+                    alert("นามสกุลไฟล์ไม่ถูกต้องค่ะ");
+                    return false;
+            }
+
+            if($("input[type=file]")[0].files[0].size > 1000000){
+                alert("ขนาดไฟล์ห้ามใหญ่เกิน 1MB ค่ะ");
+                return false;
+            }
+        }
+
         //update cart
         $.post(url, $form.serialize(),function(data){
             $("#divTable").html(data);
@@ -315,13 +338,61 @@ $(document).ready(function(){
 
         });  
     });
+    /****************************/
+    var shipping_type_old_val='';
+    $('input[name=shipping_type]').change(function () {
+
+        if (shipping_type_old_val=='Shopee') {
+            $('#sender').val('').prop( "disabled", false );
+            $('#sender_file').hide();
+            $('#receiver').val('').prop( "disabled", false );
+            $('#receiver_file').hide();
+
+            $('input[name=sender_type]').prop( "disabled", false );
+        }
+
+        if ($(this).val()=='Shopee') {
+            $('#sender').val('shopee ข้อมูลตามใบปะหน้า').prop( "disabled", true );
+            $('#sender_file').show();
+            $('#receiver').val('shopee ข้อมูลตามใบปะหน้า').prop( "disabled", true );
+            $('#receiver_file').show();
+            
+            $("input[name=sender_type][value=address_other]").prop("checked", true);
+            $('input[name=sender_type]').prop( "disabled", true );
+        }
+
+        shipping_type_old_val = $(this).val();
+
+    });
     /*************/
-    $('input[type=radio][name=sender_type]').change(function () {
+    $('input[name=sender_type]').change(function () {
         $.post("<?php echo $baseUrl; ?>/back/user/check_address", { sender_type: this.value }, function(data){
             $('#sender').val(data);
-        })
+        });
     });
     /***************************/
+
+    $('body').on('change', 'input[type=file]', function() {
+        if (this.files && this.files[0]) {
+
+            var extension = this.files[0].name.replace(/^.*\./, '').toLowerCase();
+            switch (extension) {
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'pdf':
+                    break;
+                default:
+                    alert("นามสกุลไฟล์ไม่ถูกต้องค่ะ");
+                    return false;
+            }
+
+            if(this.files[0].size > 1000000){
+                alert("ขนาดไฟล์ห้ามใหญ่เกิน 1MB ค่ะ");
+                return false;
+            }
+        }
+    });
 
 });
 </script>
