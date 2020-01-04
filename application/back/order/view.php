@@ -20,7 +20,7 @@ if($rows_os != 1){
     $rs_os = $db->get($query_os);
 }
 
-$sql_od = "SELECT d.*,p.id,p.name,p.start_ship_date,p.url_picture FROM order_details d INNER JOIN products p ";
+$sql_od = "SELECT d.*, p.id , p.name, p.start_ship_date, p.url_picture, p.parent_product_id FROM order_details d INNER JOIN products p ";
 $sql_od .= "ON d.product_id=p.id ";
 $sql_od .="WHERE d.order_id='{$_GET['id']}' ";
 $query_od = $db->query($sql_od);
@@ -112,12 +112,29 @@ MAIN CONTENT
                                 </a>
                             </td>
                             <td><?php 
-                                if ($rs_od['start_ship_date']==null) {
-                                    echo $rs_od['name'];
-                                }else{
-                                    echo $rs_od['name']." (".date('d-m-Y', strtotime($rs_od['start_ship_date'])).")";
-                                }
-                            ?></td>
+
+                                    $product_name = $rs_od['name'];
+
+                                    if (isset($rs_od['parent_product_id'])) {
+                                        $option_pd_parent = array(
+                                            "table" => "products",
+                                            "condition" => "id={$rs_od['parent_product_id']}"
+                                        );
+
+                                        $query_pd_parent = $db->select($option_pd_parent);
+                                        $rs_pd_parent = $db->get($query_pd_parent);
+
+                                        $product_name = $rs_pd_parent['name'] . ' ' . $rs_od['name'];
+                                    }
+
+                                    if (isset($rs_od['start_ship_date'])) {
+                                        $product_name .= " (".date('d-m-Y', strtotime($rs_od['start_ship_date'])).")";
+                                    }
+
+                                    echo $product_name;
+
+                                ?>
+                            </td>
                             <td style="text-align: right;"><?php echo number_format($rs_od['price'], 2); ?></td>
                             <td style="text-align: right;"><?php echo $rs_od['quantity']; ?></td>
                             <td style="text-align: right;"><?php echo number_format($total_price, 2); ?></td>

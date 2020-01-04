@@ -243,7 +243,7 @@ MAIN CONTENT
                                 <td>
                                     <ul>
                                     <?php
-                                        $sql_od = "SELECT d.*,p.id,p.name,p.start_ship_date,p.product_status FROM order_details d INNER JOIN products p ";
+                                        $sql_od = "SELECT d.*, p.id, p.name, p.start_ship_date, p.product_status, p.parent_product_id FROM order_details d INNER JOIN products p ";
                                         $sql_od .= "ON d.product_id=p.id ";
                                         $sql_od .="WHERE d.order_id='{$rs_or['id']}' ";
                                         $query_od = $db->query($sql_od);
@@ -252,10 +252,22 @@ MAIN CONTENT
 
                                         <li>- <?php 
 
-                                            if ($rs_od['start_ship_date']==null) {
-                                                $product_name = $rs_od['name'];
-                                            }else{
-                                                $product_name = $rs_od['name']." (".date('d-m-Y', strtotime($rs_od['start_ship_date'])).")";
+                                            $product_name = $rs_od['name'];
+
+                                            if (isset($rs_od['parent_product_id'])) {
+                                                $option_pd_parent = array(
+                                                    "table" => "products",
+                                                    "condition" => "id={$rs_od['parent_product_id']}"
+                                                );
+
+                                                $query_pd_parent = $db->select($option_pd_parent);
+                                                $rs_pd_parent = $db->get($query_pd_parent);
+
+                                                $product_name = $rs_pd_parent['name'] . ' ' . $rs_od['name'];
+                                            }
+
+                                            if (isset($rs_od['start_ship_date'])) {
+                                                $product_name .= " (".date('d-m-Y', strtotime($row['start_ship_date'])).")";
                                             }
 
                                             if ($rs_od['product_status']=='S') {

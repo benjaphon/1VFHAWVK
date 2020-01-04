@@ -94,13 +94,26 @@ MAIN CONTENT
                     <div class="col-sm-7">
                         <select class="selectpicker form-control" data-live-search="true" name="product_id">
                             <?php while ($row = $db->get($query_pd)){
-                                if ($row['start_ship_date']==null) {
-                                    $product = $row['name'];
-                                }else{
-                                    $product = $row['name']." (".date('d-m-Y', strtotime($row['start_ship_date'])).")";
+                                
+                                $product_name = $row['name'];
+
+                                if (isset($row['parent_product_id'])) {
+                                    $option_pd_parent = array(
+                                        "table" => "products",
+                                        "condition" => "id={$row['parent_product_id']}"
+                                    );
+
+                                    $query_pd_parent = $db->select($option_pd_parent);
+                                    $rs_pd_parent = $db->get($query_pd_parent);
+
+                                    $product_name = $rs_pd_parent['name'] . ' ' . $row['name'];
                                 }
 
-                                echo "<option value='".$row['id'].",".$row['agent_price'].",".$row['weight'].",".$row['wholesale_price'].",".$row['sale_price']."'>".$product."</option>";
+                                if (isset($row['start_ship_date'])) {
+                                    $product_name .= " (".date('d-m-Y', strtotime($row['start_ship_date'])).")";
+                                }
+
+                                echo "<option value='".$row['id'].",".$row['agent_price'].",".$row['weight'].",".$row['wholesale_price'].",".$row['sale_price']."'>".$product_name."</option>";
                             }
                             ?>
                         </select>
@@ -260,15 +273,29 @@ $(document).ready(function(){
     /***********************/
 
     /* Delete Product Detail */
-    $(document).on('click','.btn_delete_cart',function(){
+    $(document).on('click','.btn_delete_cart',function(e){
+
+        e.preventDefault();
+
         var url = $(this).attr("href");
         var val_product_id = $(this).attr("value");
 
-        $.post(url, { product_id: val_product_id },function(data){
-            $("#divTable").html(data);         
-        });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.value) {
 
-        $( ".modal-backdrop" ).remove();
+                $.post(url, { product_id: val_product_id },function(data){
+                    $("#divTable").html(data);
+                });
+            }
+        });
 
     });
     /***********************/

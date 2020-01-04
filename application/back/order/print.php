@@ -17,7 +17,7 @@ if($rows_os == 0){
     $rs_os = $db->get($query_os);
 }
 
-$sql_od = "SELECT d.*,p.name FROM order_details d INNER JOIN products p ";
+$sql_od = "SELECT d.*, p.name, p.parent_product_id FROM order_details d INNER JOIN products p ";
 $sql_od .= "ON d.product_id=p.id ";
 $sql_od .="WHERE d.order_id='{$_GET['id']}' ";
 $query_od = $db->query($sql_od);
@@ -30,6 +30,7 @@ $query_od = $db->query($sql_od);
     <link href="<?php echo $baseUrl; ?>/assets/css/print-style.css" rel="stylesheet" media="screen, print">
 </head>
 <body>
+	
 <printarea>
 
 <div class="container">
@@ -62,7 +63,26 @@ $query_od = $db->query($sql_od);
 						?>
 				<tr>
 					<td></td>
-					<td><?php echo $rs_od['name']; ?></td>
+					<td>
+						<?php 
+
+							$product_name = $rs_od['name'];
+
+							if (isset($rs_od['parent_product_id'])) {
+								$option_pd_parent = array(
+									"table" => "products",
+									"condition" => "id={$rs_od['parent_product_id']}"
+								);
+
+								$query_pd_parent = $db->select($option_pd_parent);
+								$rs_pd_parent = $db->get($query_pd_parent);
+
+								$product_name = $rs_pd_parent['name'] . ' ' . $rs_od['name'];
+							}
+
+							echo $product_name;
+						?>
+					</td>
 					<td><?php echo number_format($rs_od['price'], 2); ?></td>
 					<td><?php echo $rs_od['quantity']; ?></td>
 					<td><?php echo number_format($total_price, 2); ?></td>
