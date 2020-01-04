@@ -2,13 +2,16 @@ version: '3'
 
 services:
   db:
-    image: mysql
+    image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: playitnow
+    volumes: 
+      - ./migrations/1vfhawvk.sql:/docker-entrypoint-initdb.d/dump.sql
     ports:
       # <Port exposed> : < MySQL Port running inside container>
       - '3306:3306'
@@ -33,7 +36,9 @@ services:
     networks:
       - default
   web:
-    build: Dockerfile
+    build: 
+      context: .
+      dockerfile: Dockerfile
     container_name: php_web
     restart: always
     depends_on:
