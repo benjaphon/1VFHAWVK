@@ -1,6 +1,26 @@
 <?php
 
-function upload_video()
+require(base_path() . "/assets/library/uploadimg.php");
+
+function upload_file($input_file_name, $allowed_ext, $path)
+{
+    $filename = '';
+
+    if (isset($_FILES[$input_file_name])) {
+        $validextensions = $allowed_ext;      // Extensions which are allowed.
+        $ext = explode('.', basename($_FILES[$input_file_name]['name']));   // Explode file name from dot(.)
+        $file_extension = end($ext); // Store extensions in the variable.
+        $filename = date('YmdHis') . md5(uniqid()). "." . $file_extension;     // Set the target path with a new name of image.
+        
+        if (($_FILES[$input_file_name]["size"] < 1000000) && in_array($file_extension, $validextensions)) { // 1000 B = 1 KB = 1000 KB = 1 MB 
+            move_uploaded_file($_FILES[$input_file_name]["tmp_name"], $path . $filename);
+        }  
+    }
+
+    return $filename;
+}
+
+function upload_video($path)
 {
     $vdo_filename = '';
 
@@ -8,7 +28,6 @@ function upload_video()
         if ($_FILES["file_video"]["size"] < 100000000) {
             $ext_vdo = explode('.', basename($_FILES['file_video']['name'])); 
             $vdo_filename = date('YmdHis') . md5(uniqid()). "." . end($ext_vdo);
-            $path = base_path() . "/assets/upload/product/";
             move_uploaded_file($_FILES["file_video"]["tmp_name"], $path . $vdo_filename);
         }
     }
@@ -16,10 +35,9 @@ function upload_video()
     return $vdo_filename;
 }
 
-function upload_img($ref_id, $type)
+function upload_img($ref_id, $type, $path)
 {
     $db = new database();
-    $path = base_path() . "/assets/upload/product/";
 
     if (isset($_FILES['image'])) {
         for ($i = 0; $i < count($_FILES['image']['name']); $i++) {
@@ -46,7 +64,7 @@ function upload_img($ref_id, $type)
     }
 }
 
-function upload_new_video($ref_id, $field, $table)
+function upload_new_video($ref_id, $field, $table, $path)
 {
     $db = new database();
 
@@ -64,7 +82,6 @@ function upload_new_video($ref_id, $field, $table)
         if ($_FILES["file_video"]["size"] < 100000000) {
             $ext_vdo = explode('.', basename($_FILES['file_video']['name'])); 
             $vdo_filename = date('YmdHis') . md5(uniqid()). "." . end($ext_vdo);
-            $path = base_path() . "/assets/upload/product/";
             move_uploaded_file($_FILES["file_video"]["tmp_name"], $path . $vdo_filename);
 
             @unlink($path . $rs_vdo[$field]);
@@ -74,10 +91,9 @@ function upload_new_video($ref_id, $field, $table)
     return $vdo_filename;
 }
 
-function delete_img($ref_id, $type)
+function delete_img($ref_id, $type, $path)
 {
     $db = new database();
-    $path = base_path() . "/assets/upload/product/";
 
     $option_img = array(
         "table" => "images",
@@ -97,10 +113,9 @@ function delete_img($ref_id, $type)
     return $db->delete("images", "ref_id='{$ref_id}'");
 }
 
-function duplicate_img($src_id, $des_id, $type)
+function duplicate_img($src_id, $des_id, $type, $path)
 {
     $db = new database();
-    $path = base_path() . "/assets/upload/product/";
 
     $option_img = array(
         "table" => "images",
@@ -139,5 +154,5 @@ function soft_delete($id, $table)
         "flag_status" => 0
     );
 
-    $query_pd = $db->update($table, $arr_update, "id={$id}");
+    $query = $db->update($table, $arr_update, "id={$id}");
 }

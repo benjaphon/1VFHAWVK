@@ -1,13 +1,11 @@
 <?php
 
-require(base_path() . "/assets/library/uploadimg.php");
-require(base_path() . "/application/back/product/functions.php");
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     date_default_timezone_set('Asia/Bangkok');
     $db = new database();
+    $path = base_path() . "/assets/upload/product/";
 
-    $vdo_filename = upload_video();
+    $vdo_filename = upload_video($path);
     
     $value_pd = array(
         "name" => trim($_POST['name']),
@@ -32,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $product_id = $db->insert_id();
 
-        upload_img($product_id, "product");
+        upload_img($product_id, "product", $path);
 
         //Save Child Products
         if (isset($_POST['child_name'])) {
@@ -61,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     $child_product_id = $db->insert_id();
 
-                    upload_img($child_product_id, "product");
+                    upload_img($child_product_id, "product", $path);
                 }
             }
         }           

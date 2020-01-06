@@ -1,11 +1,9 @@
 <?php
 
-require(base_path() . "/assets/library/uploadimg.php");
-require(base_path() . "/application/back/product/functions.php");
-
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SESSION[_ss . 'levelaccess'] == 'admin') {
     date_default_timezone_set('Asia/Bangkok');
     $db = new database();
+    $path = base_path() . "/assets/upload/product/";
 
     $option_product = array(
         "table" => "products",
@@ -45,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SESSION[_ss . 'levelaccess'] == 'ad
 
         $product_id = $db->insert_id();
 
-        duplicate_img($_GET['id'], $product_id, "product");
+        duplicate_img($_GET['id'], $product_id, "product", $path);
 
         /*********** Duplicate Child Products **************/
 
@@ -78,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SESSION[_ss . 'levelaccess'] == 'ad
             if ($query_pd_child == TRUE) {
                 $child_product_id = $db->insert_id();
 
-                duplicate_img($rs_child_pd['id'], $child_product_id, "product");
+                duplicate_img($rs_child_pd['id'], $child_product_id, "product", $path);
 
             }
 

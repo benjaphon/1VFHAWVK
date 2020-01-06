@@ -9,6 +9,7 @@ require 'assets/library/cons.php';
 require 'assets/library/database.php';
 require 'assets/library/security.php';
 require 'assets/library/thaidate.php';
+require 'assets/library/functions.php';
 
 $baseUrl = base_url();
 $basePath = base_path();

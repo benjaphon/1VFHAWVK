@@ -1,8 +1,7 @@
 <?php
 
-require(base_path() . "/application/back/product/functions.php");
-
 $db = new database();
+$path = base_path() . "/assets/upload/product/";
 
 /************** Child Product *********************/
 
@@ -18,7 +17,7 @@ while ($rs_product_child = $db->get($query_product_child)) {
 
     if ($query==TRUE) {
 
-        delete_img($rs_product_child['id'], "product");
+        delete_img($rs_product_child['id'], "product", $path);
 
     } else {
 
@@ -49,7 +48,7 @@ if ($rows==0) {
 
     if ($query == TRUE) {
 
-        delete_img($_GET['id'], "product");
+        delete_img($_GET['id'], "product", $path);
 
     } else {
 

@@ -1,12 +1,10 @@
 <?php
 
-require(base_path() . "/assets/library/uploadimg.php");
-require(base_path() . "/application/back/product/functions.php");
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $db = new database();
+    $path = base_path() . "/assets/upload/product/";
 
-    $vdo_filename = upload_new_video($_POST['id'], "video_filename", "products");
+    $vdo_filename = upload_new_video($_POST['id'], "video_filename", "products", $path);
 
     $value_pd = array(
         "name" => trim($_POST['name']),
@@ -29,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $product_id = $_POST['id'];
 
-        upload_img($product_id, "product");
+        upload_img($product_id, "product", $path);
 
         /************* Delete & Save All Child Product ************/
 
@@ -45,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if ($query==TRUE) {
                 
-                delete_img($rs_product_child['id'], "product");
+                delete_img($rs_product_child['id'], "product", $path);
 
             } else {
                 //error can't delete foreign key just update status
@@ -84,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     $child_product_id = $db->insert_id();
 
-                    duplicate_img($product_id, $child_product_id, "product");
+                    duplicate_img($product_id, $child_product_id, "product", $path);
 
                 }
             }
