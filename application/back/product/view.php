@@ -73,7 +73,7 @@ border:1px solid #e8debd
     </div>
     <div class="row mt">
         <div class="form-horizontal">
-            <div class="col-lg-6">
+            <div class="col-lg-4">
                 
                 <div class="form-group">
                     <div class="col-sm-6">
@@ -142,31 +142,31 @@ border:1px solid #e8debd
                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                 <h3>ส่วนแสดงผลเฉพาะแอดมิน</h3>
                 <div class="form-group">
-                    <label for="price" class="col-sm-2 control-label text-bold">ราคาต้นทุน</label>
+                    <label for="price" class="col-sm-4 control-label text-bold">ราคาต้นทุน</label>
                     <div class="col-sm-4">
                         <label name="price" class="control-label"><?php echo $rs_product['price']; ?></label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="price" class="col-sm-2 control-label text-bold">ราคาขายส่ง</label>
+                    <label for="price" class="col-sm-4 control-label text-bold">ราคาขายส่ง</label>
                     <div class="col-sm-4">
                         <label name="price" class="control-label"><?php echo $rs_product['wholesale_price']; ?></label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="sale_price" class="col-sm-2 control-label text-bold">ราคาขาย</label>
+                    <label for="sale_price" class="col-sm-4 control-label text-bold">ราคาขาย</label>
                     <div class="col-sm-4">
                         <label name="sale_price" class="control-label"><?php echo $rs_product['sale_price']; ?></label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="quantity" class="col-sm-2 control-label text-bold">คงเหลือ</label>
+                    <label for="quantity" class="col-sm-4 control-label text-bold">คงเหลือ</label>
                     <div class="col-sm-4">
                         <label name="quantity" class="control-label"><?php echo $rs_product['quantity']; ?></label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="weight" class="col-sm-2 control-label text-bold">น้ำหนัก</label>
+                    <label for="weight" class="col-sm-4 control-label text-bold">น้ำหนัก</label>
                     <div class="col-sm-4">
                         <label name="weight" class="control-label"><?php echo $rs_product['weight']; ?></label>
                     </div>
@@ -174,24 +174,31 @@ border:1px solid #e8debd
                 <?php } ?>
 
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-8">
                                 
                 <div id="product_childs">
                     <?php
 
-                        $product_child_id = 0;
+                        ob_start();
+                        include(base_path().'/application/back/product/inc/product_child_table.php');
+                        $var=ob_get_contents(); 
+                        ob_end_clean();
+                        echo $var;
 
-                        while ($row = $db->get($query_child_pd)){
 
-                            $product_child_id += 1;
+                        // $product_child_id = 0;
+
+                        // while ($row = $db->get($query_child_pd)){
+
+                        //     $product_child_id += 1;
                             
-                            ob_start();
-                            include(base_path().'/application/back/product/inc/product_child_show.php');
-                            $var=ob_get_contents(); 
-                            ob_end_clean();
-                            echo $var;
+                        //     ob_start();
+                        //     include(base_path().'/application/back/product/inc/product_child_show.php');
+                        //     $var=ob_get_contents(); 
+                        //     ob_end_clean();
+                        //     echo $var;
                             
-                        }
+                        // }
 
                     ?>
                 </div>
@@ -227,6 +234,23 @@ require 'assets/template/back/footer.php';
         quantity = $('#p_quantity_'+child_id).text();
         shipping = $('#p_shipping_'+child_id).text();
         $temp.val(start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\n'+wholesale_price+'\n\n'+cost_price+'\n\n'+price+'\n\n'+quantity+'\n\n'+shipping).select();
+        document.execCommand("copy");
+        $temp.remove();
+        alert("คัดลอกข้อความแล้ว");
+    }
+
+    function copyToClipboardTable(child_id) {
+        var $temp = $("<textarea cols='40' rows='5'>");
+        $("body").append($temp);
+        start_ship_date = $('#p_start_ship_date_'+child_id).text();
+        product_name = $('#h_product_name_'+child_id).text();
+        desc = $('#div_desc_'+child_id).text();
+        wholesale_price = $('#p_wholesale_price_'+child_id).text();
+        cost_price = $('#p_cost_price_'+child_id).text();
+        price = $('#p_price_'+child_id).text();
+        quantity = $('#p_quantity_'+child_id).text();
+        shipping = $('#p_shipping_'+child_id).text();
+        $temp.val('วันที่ส่งได้ '+start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\nราคาส่ง '+wholesale_price+'\n\nราคาต้นทุน '+cost_price+'\n\nราคา '+price+'\n\nจำนวน '+quantity+'\n\nค่าส่ง '+shipping).select();
         document.execCommand("copy");
         $temp.remove();
         alert("คัดลอกข้อความแล้ว");

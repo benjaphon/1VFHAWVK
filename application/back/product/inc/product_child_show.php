@@ -1,17 +1,17 @@
-<div id="product_child_<?php echo $product_child_id?>" class="panel panel-default">
-    <div data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $product_child_id?>" class="panel-heading">
+<div id="product_child_<?php echo $product_child_id; ?>" class="panel panel-default">
+    <div data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $product_child_id; ?>" class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $product_child_id?>">
-                สินค้าย่อย <?php echo $product_child_id?>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $product_child_id; ?>">
+                สินค้าย่อย <?php echo $product_child_id; ?>
             </a>
-            <a data-toggle="collapse" product-child-id="<?php echo $product_child_id?>"  class="close product-child" >&times </a>
+            <a data-toggle="collapse" product-child-id="<?php echo $product_child_id; ?>"  class="close product-child" >&times </a>
         </h4>
     </div>
-    <div id="collapse_<?php echo $product_child_id?>" class="panel-collapse collapse">
+    <div id="collapse_<?php echo $product_child_id; ?>" class="panel-collapse collapse">
         <div class="panel-body">
             <div class="form-group">
                 <div class="col-sm-6">
-                    <p id="p_start_ship_date_<?php echo $product_child_id?>">วันที่ส่งได้ <?php echo date('d/m/Y', strtotime($row['start_ship_date'])); ?></p>
+                    <p id="p_start_ship_date_<?php echo $product_child_id; ?>">วันที่ส่งได้ <?php echo date('d/m/Y', strtotime($row['start_ship_date'])); ?></p>
                 </div>
             </div>
             <div class="form-group">
@@ -33,42 +33,42 @@
                         }
 
                     ?>
-                    <h4 id="h_product_name_<?php echo $product_child_id?>"><b><?php echo $product_name; ?></b></h4>
+                    <h4 id="h_product_name_<?php echo $product_child_id; ?>"><b><?php echo $product_name; ?></b></h4>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <div id="div_desc_<?php echo $product_child_id?>"><?php echo $row['description']; ?></div>
+                    <div id="div_desc_<?php echo $product_child_id; ?>"><?php echo $row['description']; ?></div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <p id="p_wholesale_price_<?php echo $product_child_id?>">ราคาส่ง <?php echo $row['wholesale_price']; ?> บาท</p>
+                    <p id="p_wholesale_price_<?php echo $product_child_id; ?>">ราคาส่ง <?php echo $row['wholesale_price']; ?> บาท</p>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <p id="p_cost_price_<?php echo $product_child_id?>">ราคาต้นทุน <?php echo $row['price']; ?> บาท</p>
+                    <p id="p_cost_price_<?php echo $product_child_id; ?>">ราคาต้นทุน <?php echo $row['price']; ?> บาท</p>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <p id="p_price_<?php echo $product_child_id?>">ราคา <?php echo $row['agent_price']; ?> บาท</p>
+                    <p id="p_price_<?php echo $product_child_id; ?>">ราคา <?php echo $row['agent_price']; ?> บาท</p>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <p id="p_quantity_<?php echo $product_child_id?>">จำนวน <?php echo $row['quantity']; ?></p>
+                    <p id="p_quantity_<?php echo $product_child_id; ?>">จำนวน <?php echo $row['quantity']; ?></p>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <p id="p_shipping_<?php echo $product_child_id?>">ค่าส่ง <?php echo round($row['cal_parcel']); ?>/<?php echo round($row['cal_register']); ?>/<?php echo round($row['cal_EMS']); ?>/<?php echo round($row['kerry']); ?></p>
+                    <p id="p_shipping_<?php echo $product_child_id; ?>">ค่าส่ง <?php echo round($row['cal_parcel']); ?>/<?php echo round($row['cal_register']); ?>/<?php echo round($row['cal_EMS']); ?>/<?php echo round($row['kerry']); ?></p>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <button onclick="copyToClipboard(<?php echo $product_child_id?>)">คัดลอกข้อความ</button>
+                    <button onclick="copyToClipboard(<?php echo $product_child_id; ?>)">คัดลอกข้อความ</button>
                 </div>
             </div>
             <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
