@@ -111,7 +111,22 @@ border:1px solid #e8debd
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
+                        <p id="p_wholesale_price_0">ราคาส่ง <?php echo $rs_product['wholesale_price']; ?> บาท</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <p id="p_cost_price_0">ราคาต้นทุน <?php echo $rs_product['price']; ?> บาท</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
                         <p id="p_price_0">ราคา <?php echo $rs_product['agent_price']; ?> บาท</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <p id="p_quantity_0">จำนวน <?php echo $rs_product['quantity']; ?></p>
                     </div>
                 </div>
                 <div class="form-group">
@@ -206,9 +221,12 @@ require 'assets/template/back/footer.php';
         start_ship_date = $('#p_start_ship_date_'+child_id).text();
         product_name = $('#h_product_name_'+child_id).text();
         desc = $('#div_desc_'+child_id).text();
+        wholesale_price = $('#p_wholesale_price_'+child_id).text();
+        cost_price = $('#p_cost_price_'+child_id).text();
         price = $('#p_price_'+child_id).text();
+        quantity = $('#p_quantity_'+child_id).text();
         shipping = $('#p_shipping_'+child_id).text();
-        $temp.val(start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\n'+price+'\n\n'+shipping).select();
+        $temp.val(start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\n'+wholesale_price+'\n\n'+cost_price+'\n\n'+price+'\n\n'+quantity+'\n\n'+shipping).select();
         document.execCommand("copy");
         $temp.remove();
         alert("คัดลอกข้อความแล้ว");

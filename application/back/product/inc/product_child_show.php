@@ -16,28 +16,24 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <h4 id="h_product_name_<?php echo $product_child_id?>">
+                    <?php
 
-                        <?php
+                        $product_name = $row['name'];
 
-                            $product_name = $row['name'];
+                        if (isset($row['parent_product_id'])) {
+                            $option_pd_parent = array(
+                                "table" => "products",
+                                "condition" => "id={$row['parent_product_id']}"
+                            );
 
-                            if (isset($row['parent_product_id'])) {
-                                $option_pd_parent = array(
-                                    "table" => "products",
-                                    "condition" => "id={$row['parent_product_id']}"
-                                );
+                            $query_pd_parent = $db->select($option_pd_parent);
+                            $rs_pd_parent = $db->get($query_pd_parent);
 
-                                $query_pd_parent = $db->select($option_pd_parent);
-                                $rs_pd_parent = $db->get($query_pd_parent);
+                            $product_name = $rs_pd_parent['name'] . ' ' . $row['name'];
+                        }
 
-                                $product_name = $rs_pd_parent['name'] . ' ' . $row['name'];
-                            }
-
-                        ?>
-
-                        <b><?php echo $product_name; ?></b>
-                    </h4>
+                    ?>
+                    <h4 id="h_product_name_<?php echo $product_child_id?>"><b><?php echo $product_name; ?></b></h4>
                 </div>
             </div>
             <div class="form-group">
@@ -47,7 +43,22 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
+                    <p id="p_wholesale_price_<?php echo $product_child_id?>">ราคาส่ง <?php echo $row['wholesale_price']; ?> บาท</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <p id="p_cost_price_<?php echo $product_child_id?>">ราคาต้นทุน <?php echo $row['price']; ?> บาท</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
                     <p id="p_price_<?php echo $product_child_id?>">ราคา <?php echo $row['agent_price']; ?> บาท</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <p id="p_quantity_<?php echo $product_child_id?>">จำนวน <?php echo $row['quantity']; ?></p>
                 </div>
             </div>
             <div class="form-group">
