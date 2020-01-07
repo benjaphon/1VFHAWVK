@@ -5,11 +5,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     date_default_timezone_set('Asia/Bangkok');
     $db = new database();
 
+    $validextensions = array("jpeg", "jpg", "png", "pdf");
+    $path = base_path() . "/assets/upload/order/";
+
+    $sender_filename = upload_file('sender_file', $validextensions, $path);
+
+    if (empty($sender_filename)) {
+        $sender_filename = $_POST['sender_filename_hidden'];
+    } else {
+        @unlink($path . $_POST['sender_filename_hidden']);
+    }
+
+    $receiver_filename = upload_file('receiver_file', $validextensions, $path);
+
+    if (empty($receiver_filename)) {
+        $receiver_filename = $_POST['receiver_filename_hidden'];
+    } else {
+        @unlink($path . $_POST['receiver_filename_hidden']);
+    }
+
     $value_or = array(
         "shipping_type" => trim($_POST['shipping_type']),
         "sender" => trim($_POST['sender']),
         "sender_type" => trim($_POST['sender_type']),
+        "sender_filename" => $sender_filename,
         "receiver" => trim($_POST['receiver']),
+        "receiver_filename" => $receiver_filename,
         "note" => trim($_POST['note']),
         "total" => $_SESSION[_ss . 'total_price'],
         "total_weight" => $_SESSION[_ss . 'total_weight'],

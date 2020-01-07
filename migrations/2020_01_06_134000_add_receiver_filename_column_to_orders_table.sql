@@ -1,0 +1,1 @@
+ALTER TABLE `orders` ADD `receiver_filename` VARCHAR(250) NULL AFTER `receiver`;

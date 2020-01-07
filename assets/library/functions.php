@@ -6,13 +6,12 @@ function upload_file($input_file_name, $allowed_ext, $path)
 {
     $filename = '';
 
-    if (isset($_FILES[$input_file_name])) {
-        $validextensions = $allowed_ext;      // Extensions which are allowed.
+    if(file_exists($_FILES[$input_file_name]['tmp_name']) && is_uploaded_file($_FILES[$input_file_name]['tmp_name'])) {
         $ext = explode('.', basename($_FILES[$input_file_name]['name']));   // Explode file name from dot(.)
         $file_extension = end($ext); // Store extensions in the variable.
         $filename = date('YmdHis') . md5(uniqid()). "." . $file_extension;     // Set the target path with a new name of image.
         
-        if (($_FILES[$input_file_name]["size"] < 1000000) && in_array($file_extension, $validextensions)) { // 1000 B = 1 KB = 1000 KB = 1 MB 
+        if (($_FILES[$input_file_name]["size"] < 1000000) && in_array($file_extension, $allowed_ext)) { // 1000 B = 1 KB = 1000 KB = 1 MB 
             move_uploaded_file($_FILES[$input_file_name]["tmp_name"], $path . $filename);
         }  
     }

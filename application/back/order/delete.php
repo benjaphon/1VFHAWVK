@@ -3,6 +3,19 @@
  * php code///////////**********************************************************
  */
 $db = new database();
+$path = base_path() . "/assets/upload/order/";
+
+$option = array(
+    "table" => "orders",
+    "condition" => "id='{$_GET['id']}'"
+);
+
+$query = $db->select($option);
+$rs = $db->get($query);
+
+@unlink($path . $rs['sender_filename']);
+@unlink($path . $rs['receiver_filename']);
+
 $query = $db->delete("orders", "id='{$_GET['id']}'");
 if($query == TRUE){
 

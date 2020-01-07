@@ -208,15 +208,7 @@ if($rows_shipping > 0){
 
 <script>
 
-    if (<?php echo $_SESSION[_ss . 'total_weight']; ?> > 30000) {
-        $("#rdo_register").attr("disabled", true);
-        if($("#rdo_register").prop("checked"))
-            $("#rdo_parcel").prop("checked", true);
-    }else{
-        $("#rdo_register").attr("disabled", false);
-    }
-
-    $("input[name=shipping_type]").change(function() {
+    function Update_shipping_type_price() {
 
         var shipping_rate = 0; 
 
@@ -264,10 +256,24 @@ if($rows_shipping > 0){
         }
 
         $("#sp_total_price").text(addCommas(<?php echo $_SESSION[_ss . 'total_price']; ?>+shipping_rate));
+        
+    }
+
+    if (<?php echo $_SESSION[_ss . 'total_weight']; ?> > 30000) {
+        $("#rdo_register").attr("disabled", true);
+        if($("#rdo_register").prop("checked"))
+            $("#rdo_parcel").prop("checked", true);
+    }else{
+        $("#rdo_register").attr("disabled", false);
+    }
+
+    $("input[name=shipping_type]").change(function() {
+
+        Update_shipping_type_price();
 
     });
 
-    $("input[name=shipping_type]").change();
+    Update_shipping_type_price();
 
     $("a.fancybox").fancybox();
 

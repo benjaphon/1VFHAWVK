@@ -120,7 +120,7 @@ MAIN CONTENT
             </form>
         </div>
         <div class="col-lg-6">
-            <form action="<?php echo base_url(); ?>/back/order/form_create" id="order-form" method="post">
+            <form action="<?php echo base_url(); ?>/back/order/form_create" id="order-form" method="post" enctype="multipart/form-data">
                 <div class="form-group clearfix">  
                     <label for="shipping_type" class="text-bold required col-xs-12">ประเภทการส่ง</label>
                     <div class="col-xs-6">
@@ -142,7 +142,7 @@ MAIN CONTENT
                           <label><input type="radio" name="shipping_type" value="KERRY">KERRY</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">เอกชน (สำหรับสินค้าจำนวนมาก)</label>
+                          <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">เอกชน (สำหรับสินค้าจำนวนมาก แบบสต็อค)</label>
                         </div>
                         <div class="radio">
                           <label><input type="radio" name="shipping_type" value="Shopee">Shopee</label>
@@ -162,12 +162,14 @@ MAIN CONTENT
                           <label><input type="radio" name="sender_type" value="address_other" data-validation="required">ที่อยู่อื่นๆ (ระบุ)</label>
                         </div>
                         <textarea class="form-control" rows="5" name="sender" id="sender" data-validation="required"></textarea>
+                        <br>
                         <input type="file" name="sender_file" id="sender_file" style="display:none" accept="application/pdf, image/jpg, image/jpeg, image/png">
                 </div>
 
                 <div class="form-group col-xs-12 clearfix">
                         <label for="receiver" class="text-bold required">ที่อยู่ผู้รับ</label>
                         <textarea class="form-control" rows="5" name="receiver" id="receiver" data-validation="required"></textarea>
+                        <br>
                         <input type="file" name="receiver_file" id="receiver_file" style="display:none" accept="application/pdf, image/jpg, image/jpeg, image/png">
                 </div>
 
@@ -216,6 +218,38 @@ require 'assets/template/back/footer.php';
 <script src="<?php echo $baseUrl; ?>/assets/js/bootstrap-select.js" type="text/javascript"></script>
 
 <script>
+
+function check_file($input_file) {
+
+    var check = true;
+    var file_list = $input_file.files
+
+    if (file_list && file_list[0]) {
+
+        var file = file_list[0];
+
+        switch (file.type) {
+            case 'application/pdf':
+            case 'image/jpg':
+            case 'image/jpeg':
+            case 'image/png':
+                break;
+            default:
+                alert("นามสกุลไฟล์ไม่ถูกต้องค่ะ");
+                check = false;
+        }
+
+        if(file.size > 1000000){
+            alert("ขนาดไฟล์ห้ามใหญ่เกิน 1MB ค่ะ");
+            check = false;
+        }
+
+    }
+    
+    return check;
+
+}
+
 $(document).ready(function(){
 
     /* Initial */
@@ -285,7 +319,7 @@ $(document).ready(function(){
     /***********************/
   
     /* Calculate All Price */
-    $(document).on('click','.recal',function(){
+    $(document).on('click','.recal',function(event){
         event.preventDefault();
 
         var $form = $("#AddOrderDetailForm");
@@ -298,30 +332,22 @@ $(document).ready(function(){
     /***************************/
 
     /* Save Order */
-    $('.saveform').click(function () {
+    $('.saveform').click(function (event) {
         event.preventDefault();
 
         var $form = $("#AddOrderDetailForm");
         var url = '<?php echo $baseUrl; ?>/back/order/update_cart';
 
-        if ($("input[type=file]")[0].files && $("input[type=file]")[0].files[0]) {
-            var filename = $("input[type=file]")[0].files[0].name;
-            var extension = filename.replace(/^.*\./, '').toLowerCase();
-            switch (extension) {
-                case 'jpg':
-                case 'jpeg':
-                case 'png':
-                case 'pdf':
-                    break;
-                default:
-                    alert("นามสกุลไฟล์ไม่ถูกต้องค่ะ");
-                    return false;
-            }
+        //Sender File
+        var check_1 = check_file($("input[name=sender_file]")[0]);
+        if (!check_1) {
+            return false;
+        }
 
-            if($("input[type=file]")[0].files[0].size > 1000000){
-                alert("ขนาดไฟล์ห้ามใหญ่เกิน 1MB ค่ะ");
-                return false;
-            }
+        //Receiver File
+        var check_2 = check_file($("input[name=receiver_file]")[0]);
+        if (!check_2) {
+            return false;
         }
 
         //update cart
@@ -339,26 +365,28 @@ $(document).ready(function(){
         });  
     });
     /****************************/
-    var shipping_type_old_val='';
+    var shipping_type_old_val;
+    var old_sender_type;
     $('input[name=shipping_type]').change(function () {
 
-        if (shipping_type_old_val=='Shopee') {
-            $('#sender').val('').prop( "disabled", false );
-            $('#sender_file').hide();
-            $('#receiver').val('').prop( "disabled", false );
-            $('#receiver_file').hide();
-
-            $('input[name=sender_type]').prop( "disabled", false );
+        //Shipping Type Shopee Set
+        if ($(this).val()=='Shopee') {
+            $('#sender, #receiver').val('shopee ข้อมูลตามใบปะหน้า').attr('readonly', true);
+            $('#sender_file, #receiver_file').attr('data-validation', 'required').show();
+            
+            old_sender_type = $('input[name=sender_type]:checked').val();
+            $('input[name=sender_type][value=address_other]').prop('checked', true);
+            $('input[name=sender_type]:not(:checked)').prop( "disabled", true );
+            
         }
 
-        if ($(this).val()=='Shopee') {
-            $('#sender').val('shopee ข้อมูลตามใบปะหน้า').prop( "disabled", true );
-            $('#sender_file').show();
-            $('#receiver').val('shopee ข้อมูลตามใบปะหน้า').prop( "disabled", true );
-            $('#receiver_file').show();
-            
-            $("input[name=sender_type][value=address_other]").prop("checked", true);
-            $('input[name=sender_type]').prop( "disabled", true );
+        //Shipping Type Shopee Cancel
+        if (shipping_type_old_val=='Shopee') {
+            $('#sender, #receiver').val('').attr('readonly', false)
+            $('#sender_file, #receiver_file').removeAttr('data-validation').hide();
+
+            $("input[name=sender_type][value='"+old_sender_type+"']").prop("checked", true).change();
+            $('input[name=sender_type]').prop( "disabled", false );
         }
 
         shipping_type_old_val = $(this).val();
@@ -373,25 +401,9 @@ $(document).ready(function(){
     /***************************/
 
     $('body').on('change', 'input[type=file]', function() {
-        if (this.files && this.files[0]) {
 
-            var extension = this.files[0].name.replace(/^.*\./, '').toLowerCase();
-            switch (extension) {
-                case 'jpg':
-                case 'jpeg':
-                case 'png':
-                case 'pdf':
-                    break;
-                default:
-                    alert("นามสกุลไฟล์ไม่ถูกต้องค่ะ");
-                    return false;
-            }
+        return check_file(this);
 
-            if(this.files[0].size > 1000000){
-                alert("ขนาดไฟล์ห้ามใหญ่เกิน 1MB ค่ะ");
-                return false;
-            }
-        }
     });
 
 });

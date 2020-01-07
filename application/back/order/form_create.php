@@ -5,12 +5,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     date_default_timezone_set('Asia/Bangkok');
     $db = new database();
 
+    $validextensions = array("jpeg", "jpg", "png", "pdf");
+    $path = base_path() . "/assets/upload/order/";
+    
+    $sender_filename = upload_file('sender_file', $validextensions, $path);
+    $receiver_filename = upload_file('receiver_file', $validextensions, $path);
+
     $value_or = array(
         "order_status" => "R",
         "shipping_type" => trim($_POST['shipping_type']),
         "sender" => trim($_POST['sender']),
         "sender_type" => trim($_POST['sender_type']),
+        "sender_filename" => $sender_filename,
         "receiver" => trim($_POST['receiver']),
+        "receiver_filename" => $receiver_filename,
         "note" => trim($_POST['note']),
         "order_datetime" => date('Y-m-d H:i:s'),
         "total" => $_SESSION[_ss . 'total_price'],
