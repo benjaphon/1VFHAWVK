@@ -243,7 +243,22 @@ MAIN CONTENT
                                     <td><?php echo $rs_pd['sale_price']; ?></td>
                                 <?php } ?>
                                 <td><?php echo round($rs_pd['cal_parcel']); ?>/<?php echo round($rs_pd['cal_register']); ?>/<?php echo round($rs_pd['cal_EMS']); ?>/<?php echo round($rs_pd['kerry']); ?></td>
-                                <td><?php echo $rs_pd['quantity']; ?></td>
+                                <td>
+                                    <?php
+
+                                        $quantity = $rs_pd['quantity'];
+
+                                        //หาผลรวมของสินค้าลูกค้ามาบวกเข้าไป
+                                        $sql = "SELECT SUM(quantity) AS quantity_sum FROM products WHERE parent_product_id={$rs_pd['id']}";
+                                        $query = $db->query($sql);
+                                        $rs = $db->get($query);
+                                        if (isset($rs['quantity_sum'])) {
+                                            $quantity += $rs['quantity_sum'];
+                                        }
+                                    ?>
+
+                                    <?php echo $quantity; ?>
+                                </td>
                             </tr>
                             <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                             <tr>
