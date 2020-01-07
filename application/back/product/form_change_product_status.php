@@ -13,10 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SESSION[_ss . 'levelaccess'] == 'ad
 
     switch ($rs_product['product_status']) {
         case 'P':
-            $db->update("products", array("product_status"=>"S", "start_ship_date"=>date('Y-m-d')), "id='{$_GET['id']}'");
+            $db->update("products", array("product_status"=>"S", "start_ship_date"=>date('Y-m-d')), "id='{$_GET['id']}' OR parent_product_id='{$_GET['id']}'");
             break;
         case 'S':
-            $db->update("products", array("product_status"=>"P"), "id='{$_GET['id']}'");
+            $db->update("products", array("product_status"=>"P"), "id='{$_GET['id']}' OR parent_product_id='{$_GET['id']}'");
             break;
         default:
             break;

@@ -72,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     "quantity" => trim($_POST['child_quantity'][$key]),
                     "weight" => trim($_POST['child_weight'][$key]),
                     "video_filename" => $vdo_filename, //Same as parent
+                    "product_status" => $_POST['product_status'], //Same as parent
                     "parent_product_id" => $product_id,
                     "created_at" => date('Y-m-d H:i:s'),
                     "modified_at" => date('Y-m-d H:i:s')
