@@ -14,9 +14,11 @@
                 <th id="user-grid_c0" style="display:none;">
                     <a class="sort-link">วันที่ส่ง</a>
                 </th>
+                <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                 <th id="user-grid_c1">
                     <a class="sort-link">ราคา</a>
                 </th>
+                <?php } ?>
                 <th id="user-grid_c1">
                     <a class="sort-link">ราคาขายส่ง</a>
                 </th>
@@ -50,14 +52,18 @@
 
                     <td id="p_start_ship_date_<?php echo $i; ?>" style="display:none"><?php echo ($rs_pd['start_ship_date']!=null)? date('d/m/Y', strtotime($rs_pd['start_ship_date'])) : ''; ?></td>
 
-                    <td id="p_cost_price_<?php echo $i; ?>"><?php echo $rs_pd['price']; ?></td>
+                    <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
+                        <td id="p_cost_price_<?php echo $i; ?>"><?php echo $rs_pd['price']; ?></td>
+                    <?php } ?>
 
                     <td id="p_wholesale_price_<?php echo $i; ?>"><?php echo $rs_pd['wholesale_price']; ?></td>
 
-                    <td id="p_price_<?php echo $i; ?>"><?php echo $rs_pd['agent_price']; ?></td>
+                    <td id="p_agent_price_<?php echo $i; ?>"><?php echo $rs_pd['agent_price']; ?></td>
+
                     <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                         <td><?php echo $rs_pd['sale_price']; ?></td>
                     <?php } ?>
+
                     <td id="p_shipping_<?php echo $i; ?>"><?php echo round($rs_pd['cal_parcel']); ?>/<?php echo round($rs_pd['cal_register']); ?>/<?php echo round($rs_pd['cal_EMS']); ?>/<?php echo round($rs_pd['kerry']); ?></td>
                     <td id="p_quantity_<?php echo $i; ?>"><?php echo $rs_pd['quantity']; ?></td>
                 </tr>

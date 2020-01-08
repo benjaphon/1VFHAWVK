@@ -48,12 +48,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <p id="p_cost_price_<?php echo $product_child_id; ?>">ราคาต้นทุน <?php echo $row['price']; ?> บาท</p>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <p id="p_price_<?php echo $product_child_id; ?>">ราคา <?php echo $row['agent_price']; ?> บาท</p>
+                    <p id="p_agent_price_<?php echo $product_child_id; ?>">ราคา <?php echo $row['agent_price']; ?> บาท</p>
                 </div>
             </div>
             <div class="form-group">

@@ -116,12 +116,7 @@ border:1px solid #e8debd
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p id="p_cost_price_0">ราคาต้นทุน <?php echo $rs_product['price']; ?> บาท</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-6">
-                        <p id="p_price_0">ราคา <?php echo $rs_product['agent_price']; ?> บาท</p>
+                        <p id="p_agent_price_0">ราคา ตท. <?php echo $rs_product['agent_price']; ?> บาท</p>
                     </div>
                 </div>
                 <div class="form-group">
@@ -229,11 +224,10 @@ require 'assets/template/back/footer.php';
         product_name = $('#h_product_name_'+child_id).text();
         desc = $('#div_desc_'+child_id).text();
         wholesale_price = $('#p_wholesale_price_'+child_id).text();
-        cost_price = $('#p_cost_price_'+child_id).text();
-        price = $('#p_price_'+child_id).text();
+        agent_price = $('#p_agent_price_'+child_id).text();
         quantity = $('#p_quantity_'+child_id).text();
         shipping = $('#p_shipping_'+child_id).text();
-        $temp.val(start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\n'+wholesale_price+'\n\n'+cost_price+'\n\n'+price+'\n\n'+quantity+'\n\n'+shipping).select();
+        $temp.val(start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\n'+wholesale_price+'\n\n'+agent_price+'\n\n'+quantity+'\n\n'+shipping).select();
         document.execCommand("copy");
         $temp.remove();
         alert("คัดลอกข้อความแล้ว");
@@ -246,11 +240,10 @@ require 'assets/template/back/footer.php';
         product_name = $('#h_product_name_'+child_id).text();
         desc = $('#div_desc_'+child_id).text();
         wholesale_price = $('#p_wholesale_price_'+child_id).text();
-        cost_price = $('#p_cost_price_'+child_id).text();
-        price = $('#p_price_'+child_id).text();
+        agent_price = $('#p_agent_price_'+child_id).text();
         quantity = $('#p_quantity_'+child_id).text();
         shipping = $('#p_shipping_'+child_id).text();
-        $temp.val('วันที่ส่งได้ '+start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\nราคาส่ง '+wholesale_price+'\n\nราคาต้นทุน '+cost_price+'\n\nราคา '+price+'\n\nจำนวน '+quantity+'\n\nค่าส่ง '+shipping).select();
+        $temp.val('วันที่ส่งได้ '+start_ship_date+'\n\n'+product_name+'\n\n'+desc+'\n\nราคาส่ง '+wholesale_price+'\n\nราคา ตท. '+agent_price+'\n\nจำนวน '+quantity+'\n\nค่าส่ง '+shipping).select();
         document.execCommand("copy");
         $temp.remove();
         alert("คัดลอกข้อความแล้ว");
