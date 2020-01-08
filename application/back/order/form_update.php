@@ -8,29 +8,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $validextensions = array("jpeg", "jpg", "png", "pdf");
     $path = base_path() . "/assets/upload/order/";
 
-    $sender_filename = upload_file('sender_file', $validextensions, $path);
+    $cover_page_filename = upload_file('cover_page_file', $validextensions, $path);
 
-    if (empty($sender_filename)) {
-        $sender_filename = $_POST['sender_filename_hidden'];
+    if (empty($cover_page_filename)) {
+        $cover_page_filename = $_POST['cover_page_filename_hidden'];
     } else {
-        @unlink($path . $_POST['sender_filename_hidden']);
-    }
-
-    $receiver_filename = upload_file('receiver_file', $validextensions, $path);
-
-    if (empty($receiver_filename)) {
-        $receiver_filename = $_POST['receiver_filename_hidden'];
-    } else {
-        @unlink($path . $_POST['receiver_filename_hidden']);
+        @unlink($path . $_POST['cover_page_filename_hidden']);
     }
 
     $value_or = array(
         "shipping_type" => trim($_POST['shipping_type']),
         "sender" => trim($_POST['sender']),
         "sender_type" => trim($_POST['sender_type']),
-        "sender_filename" => $sender_filename,
         "receiver" => trim($_POST['receiver']),
-        "receiver_filename" => $receiver_filename,
+        "cover_page_filename" => $cover_page_filename,
         "note" => trim($_POST['note']),
         "total" => $_SESSION[_ss . 'total_price'],
         "total_weight" => $_SESSION[_ss . 'total_weight'],

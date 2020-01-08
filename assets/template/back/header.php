@@ -233,7 +233,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                   <?php } ?>
 
                   <li>
-                    <span>Version 6.7</span>
+                    <span>Version 6.8</span>
                 </li>
               </ul>
               <!-- sidebar menu end-->

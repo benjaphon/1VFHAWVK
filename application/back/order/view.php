@@ -175,22 +175,16 @@ MAIN CONTENT
                     </div>
                     <ul class="list-group">
                         <li class="list-group-item"><strong>ประเภทการส่ง</strong> : <?php echo $rs_os['shipping_type'];?></li>
-                        <li class="list-group-item"><strong>ที่อยู่ผู้ส่ง</strong> : 
-                            <?php if (!empty($rs_os['sender_filename'])) { ?>
 
-                                <a class="fancybox"  href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_os['sender_filename']; ?>" role="button"><?php echo $rs_os['sender']; ?></a>
-                                <a download="<?php echo $rs_os['sender_filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_os['sender_filename']; ?>"> (ดาวน์โหลด)</a>
+                        <?php if (!empty($rs_os['cover_page_filename'])) { ?>
+                            <li class="list-group-item"> 
+                                <a class="fancybox"  href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_os['cover_page_filename']; ?>" role="button">ใบปะหน้า</a>
+                                <a download="<?php echo $rs_os['cover_page_filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_os['cover_page_filename']; ?>"> (ดาวน์โหลด)</a>
+                            </li>
+                        <?php } ?>
 
-                            <?php } else { echo $rs_os['sender']; } ?>
-                        </li>
-                        <li class="list-group-item"><strong>ที่อยู่ผู้รับ</strong> : 
-                            <?php if (!empty($rs_os['receiver_filename'])) { ?>
-
-                                <a class="fancybox" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_os['receiver_filename']; ?>" role="button"><?php echo $rs_os['receiver']; ?></a>
-                                <a download="<?php echo $rs_os['receiver_filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_os['receiver_filename']; ?>"> (ดาวน์โหลด)</a>
-
-                            <?php } else { echo $rs_os['receiver']; } ?>
-                        </li>
+                        <li class="list-group-item"><strong>ที่อยู่ผู้ส่ง</strong> : <?php echo $rs_os['sender']; ?></li>
+                        <li class="list-group-item"><strong>ที่อยู่ผู้รับ</strong> : <?php  echo $rs_os['receiver']; ?></li>
                         <li class="list-group-item"><strong>ข้อมูลเพิ่มเติม</strong> : <?php echo $rs_os['note'];?></li>
                         <li class="list-group-item"><strong>วันที่สั่งซื้อ</strong> : <?php echo thaidate($rs_os['order_datetime']);?></li>
                         

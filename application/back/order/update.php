@@ -164,6 +164,20 @@ MAIN CONTENT
                     </div>
                 </div>
 
+                <div id="div_cover_page_file" style="display:none;" class="form-group col-xs-12 clearfix">
+                    <label for="cover_page_file" class="text-bold required">ใบปะหน้า</label>
+                    <input type="file" id="cover_page_file" name="cover_page_file" accept="application/pdf, image/jpg, image/jpeg, image/png">
+                    <small class="text-muted">แนบใบปะหน้า</small>
+                </div>
+
+                <?php if (!empty($rs_order['cover_page_filename'])) { ?>
+                    <div class="form-group col-xs-12 clearfix">
+                        <a class="fancybox"  href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['cover_page_filename']; ?>" role="button">ไฟล์แนบ ใบปะหน้า</a>
+                        <a download="<?php echo $rs_order['cover_page_filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['cover_page_filename']; ?>"> (ดาวน์โหลด)</a>
+                        <input type="hidden" name="cover_page_filename_hidden" value="<?php echo $rs_order['cover_page_filename']; ?>">
+                    </div>
+                <?php } ?>
+
                 <div class="form-group col-xs-12 clearfix">
                         <label for="sender" class="text-bold required">ที่อยู่ผู้ส่ง</label>
                          <div class="radio">
@@ -176,31 +190,11 @@ MAIN CONTENT
                           <label><input type="radio" name="sender_type" value="address_other" data-validation="required">ที่อยู่อื่นๆ (ระบุ)</label>
                         </div>
                         <textarea class="form-control" rows="5" name="sender" id="sender" data-validation="required"><?php echo $rs_order['sender']; ?></textarea>
-                        
-                        <?php if (!empty($rs_order['sender_filename'])) { ?>
-                            <br>
-                            <a class="fancybox"  href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['sender_filename']; ?>" role="button">ไฟล์แนบ ที่อยู่ผู้ส่ง</a>
-                            <a download="<?php echo $rs_order['sender_filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['sender_filename']; ?>"> (ดาวน์โหลด)</a>
-                            <br><br>
-                            <input type="hidden" name="sender_filename_hidden" value="<?php echo $rs_order['sender_filename']; ?>">
-                        <?php } ?>
-
-                        <input type="file" name="sender_file" id="sender_file" style="display:none" accept="application/pdf, image/jpg, image/jpeg, image/png">
                 </div>
 
                 <div class="form-group col-xs-12 clearfix">
                         <label for="receiver" class="text-bold required">ที่อยู่ผู้รับ</label>
                         <textarea class="form-control" rows="5" name="receiver" id="receiver" data-validation="required"><?php echo $rs_order['receiver']; ?></textarea>     
-
-                        <?php if (!empty($rs_order['receiver_filename'])) { ?>
-                            <br>
-                            <a class="fancybox" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['receiver_filename']; ?>" role="button">ไฟล์แนบ ที่อยู่ผู้รับ</a>
-                            <a download="<?php echo $rs_order['receiver_filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['receiver_filename']; ?>"> (ดาวน์โหลด)</a>
-                            <br><br>
-                            <input type="hidden" name="receiver_filename_hidden" value="<?php echo $rs_order['receiver_filename']; ?>">
-                        <?php } ?>
-                          
-                        <input type="file" name="receiver_file" id="receiver_file" style="display:none" accept="application/pdf, image/jpg, image/jpeg, image/png">
                 </div>
 
                 <div class="form-group col-xs-12 clearfix">
@@ -372,18 +366,10 @@ $(document).ready(function(){
    $('.saveform').click(function (event) {
         event.preventDefault();
 
-        //Sender File
-        if (!$('input[name=sender_filename_hidden]').val()) {
-            var check_1 = check_file($("input[name=sender_file]")[0]);
+        //Cover Page File
+        if (!$('input[name=cover_page_filename_hidden]').val()) {
+            var check_1 = check_file($("input[name=cover_page_file]")[0]);
             if (!check_1) {
-                return false;
-            }
-        }
-        
-        //Receiver File
-        if (!$('input[name=receiver_filename_hidden]').val()) {
-            var check_2 = check_file($("input[name=receiver_file]")[0]);
-            if (!check_2) {
                 return false;
             }
         }
@@ -413,15 +399,11 @@ $(document).ready(function(){
         if ($(this).val()=='Shopee') {
             $('#sender, #receiver').val('shopee ข้อมูลตามใบปะหน้า').attr('readonly', true);
 
-            if (!$('input[name=sender_filename_hidden]').val()) {
-                $('#sender_file').attr('data-validation', 'required');
+            if (!$('input[name=cover_page_filename_hidden]').val()) {
+                $('#cover_page_file').attr('data-validation', 'required');
             }
 
-            if (!$('input[name=receiver_filename_hidden]').val()) {
-                $('#receiver_file').attr('data-validation', 'required');
-            }
-
-            $('#sender_file, #receiver_file').show();
+            $('#div_cover_page_file').show();
             
             old_sender_type = $('input[name=sender_type]:checked').val();
             $('input[name=sender_type][value=address_other]').prop('checked', true);
@@ -432,7 +414,8 @@ $(document).ready(function(){
         //Shipping Type Shopee Cancel
         if (shipping_type_old_val=='Shopee') {
             $('#sender, #receiver').val('').attr('readonly', false)
-            $('#sender_file, #receiver_file').removeAttr('data-validation').hide();
+            $('#div_cover_page_file').hide();
+            $('#cover_page_file').removeAttr('data-validation')
 
             $("input[name=sender_type][value='"+old_sender_type+"']").prop("checked", true).change();
             $('input[name=sender_type]').prop( "disabled", false );

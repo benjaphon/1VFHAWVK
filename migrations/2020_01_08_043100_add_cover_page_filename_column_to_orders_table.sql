@@ -1,0 +1,1 @@
+ALTER TABLE `orders` ADD `cover_page_filename` VARCHAR(250) NULL AFTER `receiver_filename`;

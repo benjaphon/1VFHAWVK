@@ -194,32 +194,28 @@ MAIN CONTENT
                     </tr>
                     <tr class="info">
                         <td colspan="5">
-                            ที่อยู่ผู้ส่ง :<br>
-
-                            <?php if (!empty($rs_order['sender_filename'])) { ?>
-
-                                <a class="fancybox"  href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['sender_filename']; ?>" role="button"><?php echo $rs_order['sender']; ?></a>
-                                <a download="<?php echo $rs_order['sender_filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['sender_filename']; ?>"> (ดาวน์โหลด)</a>
-
-                            <?php } else { echo $rs_order['sender']; } ?>
-
+                            ที่อยู่ผู้ส่ง :<br><?php echo $rs_order['sender']; ?>
                         </td>
                     </tr>
                     <tr class="info">
                         <td colspan="5">
-                            ที่อยู่ผู้รับ :<br>
-
-                            <?php if (!empty($rs_order['receiver_filename'])) { ?>
-
-                                <a class="fancybox" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['receiver_filename']; ?>" role="button"><?php echo $rs_order['receiver']; ?></a>
-                                <a download="<?php echo $rs_order['receiver_filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['receiver_filename']; ?>"> (ดาวน์โหลด)</a>
-
-                            <?php } else { echo $rs_order['receiver']; } ?>
+                            ที่อยู่ผู้รับ :<br><?php echo $rs_order['receiver']; ?>
                         </td>
                     </tr>
+
                     <tr class="info">
                         <td colspan="5">ประเภทการส่ง :<br><?php echo $rs_order['shipping_type']; ?></td>
                     </tr>
+
+                    <?php if (!empty($rs_order['cover_page_filename'])) { ?>
+                        <tr class="info">
+                            <td colspan="5">
+                                <a class="fancybox"  href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['cover_page_filename']; ?>" role="button">ใบปะหน้า</a>
+                                <a download="<?php echo $rs_order['cover_page_filename']; ?>" href="<?php echo $baseUrl ?>/assets/upload/order/<?php echo $rs_order['cover_page_filename']; ?>"> (ดาวน์โหลด)</a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+
                 </tbody>
             </table>
         </div>

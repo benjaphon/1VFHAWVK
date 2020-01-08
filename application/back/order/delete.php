@@ -13,8 +13,7 @@ $option = array(
 $query = $db->select($option);
 $rs = $db->get($query);
 
-@unlink($path . $rs['sender_filename']);
-@unlink($path . $rs['receiver_filename']);
+@unlink($path . $rs['cover_page_filename']);
 
 $query = $db->delete("orders", "id='{$_GET['id']}'");
 if($query == TRUE){
