@@ -68,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SESSION[_ss . 'levelaccess'] == 'ad
                 "weight" => trim($rs_child_pd['weight']),
                 "video_filename" => $vdo_filename, //Same as parent
                 "parent_product_id" => $product_id,
+                "product_full_name" => $rs_product['name'] . ' ' . trim($rs_child_pd['name']),
                 "created_at" => date('Y-m-d H:i:s'),
                 "modified_at" => date('Y-m-d H:i:s')
             );

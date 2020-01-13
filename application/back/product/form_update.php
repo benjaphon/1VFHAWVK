@@ -74,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     "video_filename" => $vdo_filename, //Same as parent
                     "product_status" => $_POST['product_status'], //Same as parent
                     "parent_product_id" => $product_id,
+                    "product_full_name" => trim($_POST['name']) . ' ' . trim($_POST['child_name'][$key]),
                     "created_at" => date('Y-m-d H:i:s'),
                     "modified_at" => date('Y-m-d H:i:s')
                 );
