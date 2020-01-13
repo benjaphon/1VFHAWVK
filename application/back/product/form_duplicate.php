@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && $_SESSION[_ss . 'levelaccess'] == 'ad
         "weight" => $rs_product['weight'],
         "video_filename" => $vdo_filename,
         "product_status" => $rs_product['product_status'],
+        "product_full_name" => $rs_product['name'],
         "created_at" => date('Y-m-d H:i:s'),
         "modified_at" => date('Y-m-d H:i:s')
     );
