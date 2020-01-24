@@ -267,7 +267,7 @@ MAIN CONTENT
                                             }
 
                                             if (isset($rs_od['start_ship_date'])) {
-                                                $product_name .= " (".date('d-m-Y', strtotime($row['start_ship_date'])).")";
+                                                $product_name .= " (".date('d-m-Y', strtotime($rs_od['start_ship_date'])).")";
                                             }
 
                                             if ($rs_od['product_status']=='S') {
