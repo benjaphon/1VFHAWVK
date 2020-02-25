@@ -160,10 +160,14 @@ MAIN CONTENT
 										case 'FLASH EXPRESS':
                                             $shipping_fees = $rs_shipping['Flash'];
                                             break;
+										case 'J&T':
+                                            $shipping_fees = $rs_shipping['JT'];
+                                            break;
                                         case 'KERRY':
                                             if ($rows_count == 1 && $product_qty == 1){
                                                 $shipping_fees = $kerry_shipping;
                                             }
+										
                                             break;
                                     }
 
@@ -264,6 +268,13 @@ MAIN CONTENT
                             <input type="file" name="image[]" id="image" accept="image/*">
                         </div>
                     </div>
+					
+					<div class="form-group clearfix">
+                        <div class="col-sm-6">
+                            <label for="deduct" class="text-bold">หักยอดค้าง</label>
+                            <input type="text" id="deduct" name="deduct" class="form-control" autocomplete="off">
+                        </div>
+                    </div>  
                     <div class="form-group clearfix">
                         <div class="col-sm-6">
                             <label for="detail" class="text-bold">เพิ่มเติม</label>
