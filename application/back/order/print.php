@@ -105,7 +105,7 @@ $query_od = $db->query($sql_od);
 	<div class="row">
 		<svg class="barcode"
 		  jsbarcode-value="<?php echo $rs_os['id']; ?>"
-		  jsbarcode-height="40">
+		  jsbarcode-height="30">
 		</svg>
 	</div>
 	<div class="row">
