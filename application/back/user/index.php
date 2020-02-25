@@ -159,8 +159,11 @@ require 'assets/template/back/header.php';
                                                     คุณยืนยันต้องการจะลบข้อมูลนี้ ใช่หรือไม่?
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">ไม่ใช่</button>
-                                                    <a role="button" class="btn btn-primary" href="<?php echo $baseUrl; ?>/back/user/delete/<?php echo $rs_user['id']; ?>">ใช่ ยืนยันการลบ</a>
+                                                    <form action="<?php echo $baseUrl; ?>/back/user/delete" method="post">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">ไม่ใช่</button>
+                                                        <input type="hidden" name="user_id" value="<?php echo $rs_user['id']; ?>">
+                                                        <button type="submit" class="btn btn-primary">ใช่ ยืนยันการลบ</button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
