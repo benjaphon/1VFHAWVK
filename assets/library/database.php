@@ -6,10 +6,10 @@ class database {
 
     function __construct() {
         $dbsql = array(
-            'host' => '192.168.99.100',
-            'user' => 'root',
-            'pass' => 'root',
-            'dbname' => 'playitnow'
+            'host' => 'localhost',
+            'user' => 'littleno_1',
+            'pass' => 'Q[dHF84I%aRe',
+            'dbname' => 'littleno_manage_store'
         );
         $this->con = mysqli_connect($dbsql['host'], $dbsql['user'], $dbsql['pass'], $dbsql['dbname']) or die('Error connecting to MySQL');
         //mysql_select_db($dbsql['dbname'], $this->con) or die('Database ' . $dbsql['dbname'] . ' does not exist!');
