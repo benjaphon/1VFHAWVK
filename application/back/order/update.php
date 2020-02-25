@@ -156,10 +156,13 @@ MAIN CONTENT
                           <label><input type="radio" name="shipping_type" value="KERRY">KERRY</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">เอกชน (สำหรับสินค้าจำนวนมาก แบบสต็อค)</label>
+                          <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">FLASH EXPRESS</label>
                         </div>
                         <div class="radio">
                             <label><input type="radio" name="shipping_type" value="Shopee">Shopee</label>
+                        </div>
+						  <div class="radio">
+                          <label><input type="radio" name="shipping_type" value="J&T">'J&T'</label>
                         </div>
                     </div>
                 </div>

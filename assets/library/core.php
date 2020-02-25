@@ -1,11 +1,11 @@
 <?php
 
 function base_url() {
-    return "http://localhost/playitnow";
+    return "http://www.playitnow.net";
 }
 
 function base_path() {
-    return $_SERVER['DOCUMENT_ROOT'] . "/playitnow";
+    return $_SERVER['DOCUMENT_ROOT'];
 }
 
 function salt_pass($pass) {

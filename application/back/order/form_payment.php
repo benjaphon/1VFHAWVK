@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $value_pm = array(
         "pay_money" => trim($_POST['pay_money']),
         "detail" => trim($_POST['detail']),
+		"deduct" => trim($_POST['deduct']),
         "order_id" => $_POST['order_id'],
         "pay_type" => trim($_POST['pay_type']),
         "created_at" => date('Y-m-d H:i:s')
