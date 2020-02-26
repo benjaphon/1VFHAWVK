@@ -196,12 +196,17 @@ $parcel_shipping = 0;
 $register_shipping = 0;
 $EMS_shipping = 0;
 $Flash_shipping = 0;
+$JT_shipping = 0;
+$Shopee_shipping = 0;
+
 
 if($rows_shipping > 0){
     $parcel_shipping = $rs_shipping['parcel'];
     $register_shipping = $rs_shipping['register'];
     $EMS_shipping = $rs_shipping['EMS'];
 	$Flash_shipping = $rs_shipping['Flash'];
+	$JT_shipping = $rs_shipping['JT'];
+	$Shopee_shipping = $rs_shipping['JT'];
 }
 
 ?>
@@ -239,6 +244,11 @@ if($rows_shipping > 0){
                     shipping_rate = <?php echo $Flash_shipping; ?>;
                     $("#sp_shipping_rate").text(shipping_rate);
                     break;
+				case "J&T":
+                    shipping_rate = <?php echo $JT_shipping; ?>;
+                    $("#sp_shipping_rate").text(shipping_rate);
+                    break;
+			
                 case "KERRY":
                     if (<?php echo $me_count; ?> == 1 && <?php echo $product_qty; ?> == 1){
                         shipping_rate = <?php echo $kerry_shipping; ?>;
