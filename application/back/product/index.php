@@ -249,7 +249,7 @@ MAIN CONTENT
                                         $quantity = $rs_pd['quantity'];
 
                                         //หาผลรวมของสินค้าลูกค้ามาบวกเข้าไป
-                                        $sql = "SELECT SUM(quantity) AS quantity_sum FROM products WHERE parent_product_id={$rs_pd['id']}";
+                                        $sql = "SELECT SUM(quantity) AS quantity_sum FROM products WHERE parent_product_id={$rs_pd['id']} AND flag_status=1";
                                         $query = $db->query($sql);
                                         $rs = $db->get($query);
                                         if (isset($rs['quantity_sum'])) {
