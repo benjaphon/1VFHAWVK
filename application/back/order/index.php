@@ -43,7 +43,8 @@ if(isset($search) && !empty($search)){
     $option_or["condition"] .= " o.receiver LIKE'%{$search}%' OR";
     $option_or["condition"] .= " o.tracking_no LIKE'%{$search}%' OR";
     $option_or["condition"] .= " DATE_FORMAT(o.ship_date, '%d/%m/%Y') LIKE'%{$search}%' OR";
-    $option_or["condition"] .= " p.name LIKE'%{$search}%')";
+    $option_or["condition"] .= " p.name LIKE'%{$search}%' OR";
+    $option_or["condition"] .= " p.product_full_name LIKE'%{$search}%')";
 }
 
 if(isset($status) && !empty($status)){
