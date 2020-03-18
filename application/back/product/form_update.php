@@ -30,32 +30,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         upload_img($product_id, "product", $path);
 
-        /************* Delete & Save All Child Product ************/
+        /***************** Add Product **************************/
 
-        $option_product_child = array(
-            "table" => "products",
-            "condition" => "parent_product_id='{$product_id}' AND flag_status=1"
-        );
-        $query_product_child = $db->select($option_product_child);
+        if (isset($_POST['child_name_add'])) {
 
-        while ($rs_product_child = $db->get($query_product_child)) {
-
-            $query = $db->delete("products", "id='{$rs_product_child['id']}'");
-
-            if ($query==TRUE) {
+            for ($key = 0; $key < count($_POST['child_name_add']); $key++) {
                 
-                delete_img($rs_product_child['id'], "product", $path);
-
-            } else {
-                //error can't delete foreign key just update status
-                $arr_update = array(
-                    "flag_status" => 0
+                $value_child_pd = array(
+                    "name" => trim($_POST['child_name_add'][$key]),
+                    "price" => trim($_POST['child_price_add'][$key]),
+                    "wholesale_price" => trim($_POST['child_wholesale_price_add'][$key]),
+                    "agent_price" => trim($_POST['child_agent_price_add'][$key]),
+                    "sale_price" => trim($_POST['child_sale_price_add'][$key]),
+                    "kerry" => trim($_POST['kerry']), //Same as parent
+                    "start_ship_date" => date("Y-m-d", strtotime($_POST['start_ship_date'])), //Same as parent
+                    "description" => trim($_POST['description']), //Same as parent
+                    "quantity" => trim($_POST['child_quantity_add'][$key]),
+                    "weight" => trim($_POST['child_weight_add'][$key]),
+                    "video_filename" => $vdo_filename, //Same as parent
+                    "product_status" => $_POST['product_status'], //Same as parent
+                    "parent_product_id" => $product_id,
+                    "product_full_name" => trim($_POST['name']) . ' ' . trim($_POST['child_name_add'][$key]),
+                    "created_at" => date('Y-m-d H:i:s'),
+                    "modified_at" => date('Y-m-d H:i:s')
                 );
+                $query_pd_c = $db->insert("products", $value_child_pd);
 
-                $query_pd = $db->update("products", $arr_update, "id={$rs_product_child['id']}");
+                if ($query_pd_c == TRUE) {
+
+                    $child_product_id = $db->insert_id();
+
+                    duplicate_img($product_id, $child_product_id, "product", $path);
+
+                }
             }
-            
         }
+
+        /***************** Edit Product **************************/
 
         if (isset($_POST['child_name'])) {
 
@@ -76,16 +87,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     "product_status" => $_POST['product_status'], //Same as parent
                     "parent_product_id" => $product_id,
                     "product_full_name" => trim($_POST['name']) . ' ' . trim($_POST['child_name'][$key]),
-                    "created_at" => date('Y-m-d H:i:s'),
                     "modified_at" => date('Y-m-d H:i:s')
                 );
-                $query_pd_c = $db->insert("products", $value_child_pd);
+                $query_pd_c = $db->update("products", $value_child_pd, "id={$_POST['child_id'][$key]}");
 
                 if ($query_pd_c == TRUE) {
 
-                    $child_product_id = $db->insert_id();
+                    if (isset($_FILES['image'])) {
 
-                    duplicate_img($product_id, $child_product_id, "product", $path);
+                        duplicate_img($product_id, $_POST['child_id'][$key], "product", $path);
+
+                    }
 
                 }
             }

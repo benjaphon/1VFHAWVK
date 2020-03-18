@@ -67,7 +67,7 @@ $kerry_shipping = !empty($rs_ct["kerry"])?$rs_ct["kerry"]:0;
 $option_img = array(
     "table" => "images",
     "condition" => "ref_id='{$rs_ct['id']}' AND filetype='product'",
-    "order" => "id",
+    "order" => "id DESC",
     "limit" => "1"
 );
 $query_img = $db->select($option_img);
