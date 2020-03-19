@@ -323,8 +323,39 @@ require 'assets/template/back/footer.php';
         });
 
         $('body').on('click', '.close.product-child', function(){
-            var id = $(this).attr('product-child-id');
-            $('#product_child_'+id).remove();
+
+            var url = '<?php echo $baseUrl; ?>/back/product/form_delete_product_child';
+            var product_id = $(this).attr("value");
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                if (result.value) {
+
+                    var id = $(this).attr('product-child-id');
+
+                    if (product_id) {
+
+                        $.post(url, { child_id: product_id }, function(){
+
+                            $('#product_child_'+id).remove();
+                            
+                        }); 
+
+                    } else {
+                        
+                        $('#product_child_'+id).remove();
+                    }
+                    
+                }
+            });
+
         });
 
         // Following function will executes on change event of file input to select different file.

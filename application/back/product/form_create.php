@@ -34,24 +34,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         upload_img($product_id, "product", $path);
 
         //Save Child Products
-        if (isset($_POST['child_name'])) {
+        if (isset($_POST['child_name_add'])) {
 
-            for ($key = 0; $key < count($_POST['child_name']); $key++) {
+            for ($key = 0; $key < count($_POST['child_name_add']); $key++) {
                 
                 $value_child_pd = array(
-                    "name" => trim($_POST['child_name'][$key]),
-                    "price" => trim($_POST['child_price'][$key]),
-                    "wholesale_price" => trim($_POST['child_wholesale_price'][$key]),
-                    "agent_price" => trim($_POST['child_agent_price'][$key]),
-                    "sale_price" => trim($_POST['child_sale_price'][$key]),
+                    "name" => trim($_POST['child_name_add'][$key]),
+                    "price" => trim($_POST['child_price_add'][$key]),
+                    "wholesale_price" => trim($_POST['child_wholesale_price_add'][$key]),
+                    "agent_price" => trim($_POST['child_agent_price_add'][$key]),
+                    "sale_price" => trim($_POST['child_sale_price_add'][$key]),
                     "kerry" => trim($_POST['kerry']), //Same as parent
                     "start_ship_date" => date("Y-m-d", strtotime($_POST['start_ship_date'])), //Same as parent
                     "description" => trim($_POST['description']), //Same as parent
-                    "quantity" => trim($_POST['child_quantity'][$key]),
-                    "weight" => trim($_POST['child_weight'][$key]),
+                    "quantity" => trim($_POST['child_quantity_add'][$key]),
+                    "weight" => trim($_POST['child_weight_add'][$key]),
                     "video_filename" => $vdo_filename, //Same as parent
                     "parent_product_id" => $product_id,
-                    "product_full_name" => trim($_POST['name']) . ' ' . trim($_POST['child_name'][$key]),
+                    "product_full_name" => trim($_POST['name']) . ' ' . trim($_POST['child_name_add'][$key]),
                     "created_at" => date('Y-m-d H:i:s'),
                     "modified_at" => date('Y-m-d H:i:s')
                 );

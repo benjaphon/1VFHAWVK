@@ -1,10 +1,11 @@
 <div id="product_child_<?php echo $product_child_id?>" class="panel panel-default">
+    <input type="hidden" name="child_id[]" value="<?php echo $row['id']; ?>">
     <div data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $product_child_id?>" class="panel-heading">
         <h4 class="panel-title">
             <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $product_child_id?>">
                 สินค้าย่อย <?php echo $product_child_id?> (<?php echo $row['name']; ?>)
             </a>
-            <a data-toggle="collapse" product-child-id="<?php echo $product_child_id?>"  class="close product-child" >&times </a>
+            <a data-toggle="collapse" product-child-id="<?php echo $product_child_id?>" value="<?php echo $row['id']; ?>"  class="close product-child" >&times </a>
         </h4>
     </div>
     <div id="collapse_<?php echo $product_child_id?>" class="panel-collapse collapse">

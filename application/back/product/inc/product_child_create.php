@@ -10,45 +10,45 @@
     <div id="collapse_<?php echo $product_child_id; ?>" class="panel-collapse collapse">
         <div class="panel-body">
             <div class="form-group">
-                <label for="child_name" class="col-sm-4 control-label required">ชื่อสินค้า</label>
+                <label for="child_name_add" class="col-sm-4 control-label required">ชื่อสินค้า</label>
                 <div class="col-sm-8">
-                    <input type="text" name="child_name[]" class="form-control input-sm" data-validation="required" >
+                    <input type="text" name="child_name_add[]" class="form-control input-sm" data-validation="required" >
                 </div>
             </div>
             <div class="form-group">
-                <label for="child_price" class="col-sm-4 control-label required">ราคา</label>
+                <label for="child_price_add" class="col-sm-4 control-label required">ราคา</label>
                 <div class="col-sm-8">
-                    <input type="text" name="child_price[]" value="<?php echo $price; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
+                    <input type="text" name="child_price_add[]" value="<?php echo $price; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                 </div>
             </div>
             <div class="form-group">
-                <label for="child_wholesale_price" class="col-sm-4 control-label required">ราคาขายส่ง</label>
+                <label for="child_wholesale_price_add" class="col-sm-4 control-label required">ราคาขายส่ง</label>
                 <div class="col-sm-8">
-                    <input type="text" name="child_wholesale_price[]" value="<?php echo $wholesale_price; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
+                    <input type="text" name="child_wholesale_price_add[]" value="<?php echo $wholesale_price; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                 </div>
             </div>
             <div class="form-group">
-                <label for="child_agent_price" class="col-sm-4 control-label required">ราคา ตท.</label>
+                <label for="child_agent_price_add" class="col-sm-4 control-label required">ราคา ตท.</label>
                 <div class="col-sm-8">
-                    <input type="text" name="child_agent_price[]" value="<?php echo $agent_price; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
+                    <input type="text" name="child_agent_price_add[]" value="<?php echo $agent_price; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                 </div>
             </div>
             <div class="form-group">
-                <label for="child_sale_price" class="col-sm-4 control-label required">ราคาขาย</label>
+                <label for="child_sale_price_add" class="col-sm-4 control-label required">ราคาขาย</label>
                 <div class="col-sm-8">
-                    <input type="text" name="child_sale_price[]" value="<?php echo $sale_price; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
+                    <input type="text" name="child_sale_price_add[]" value="<?php echo $sale_price; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                 </div>
             </div>
             <div class="form-group">
-                <label for="child_quantity" class="col-sm-4 control-label">จำนวน</label>
+                <label for="child_quantity_add" class="col-sm-4 control-label">จำนวน</label>
                 <div class="col-sm-8">
-                    <input type="text" name="child_quantity[]" value="<?php echo $quantity; ?>" class="form-control input-sm" data-validation="number">
+                    <input type="text" name="child_quantity_add[]" value="<?php echo $quantity; ?>" class="form-control input-sm" data-validation="number">
                 </div>
             </div>
             <div class="form-group">
-                <label for="child_weight" class="col-sm-4 control-label">น้ำหนัก</label>
+                <label for="child_weight_add" class="col-sm-4 control-label">น้ำหนัก</label>
                 <div class="col-sm-8">
-                    <input type="text" name="child_weight[]" value="<?php echo $weight; ?>" class="form-control input-sm" data-validation="number">
+                    <input type="text" name="child_weight_add[]" value="<?php echo $weight; ?>" class="form-control input-sm" data-validation="number">
                 </div>
             </div>
         </div>
