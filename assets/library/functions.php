@@ -1,6 +1,6 @@
 <?php
 
-require(base_path() . "/assets/library/uploadimg.php");
+require 'assets/library/uploadimg.php';
 
 function upload_file($input_file_name, $allowed_ext, $path)
 {
