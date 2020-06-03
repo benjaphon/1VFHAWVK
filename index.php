@@ -4,6 +4,7 @@ session_start();
 /*
  * include file start
  */
+require 'env.php';
 require 'assets/library/core.php';
 require 'assets/library/cons.php';
 require 'assets/library/database.php';
