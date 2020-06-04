@@ -10,7 +10,10 @@ RUN apt-get update && \
         zip unzip \
         nodejs \
         wget \
-        vim
+        vim \
+        && pecl install xdebug \
+        && rm -rf /tmp/pear \
+        && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)\n" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/

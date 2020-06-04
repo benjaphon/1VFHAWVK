@@ -179,15 +179,15 @@ require 'assets/template/back/header.php';
                 <nav>
                     <ul class="pagination pull-lg-right">
                         <li>
-                            <a href="?page=1&search=<?php echo $search ?>&role=<?php echo $role ?>" aria-label="Previous">
+                            <a href="?page=1&search=<?php echo $search ?>" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
                             <?php for($i=$page_start; ($i<$page_start+$page_number) && ($i<=$total_page); $i++){ ?>
-                                <li><a href="?page=<?php echo $i; ?>&search=<?php echo $search ?>&role=<?php echo $role ?>"><?php echo $i; ?></a></li>
+                                <li><a href="?page=<?php echo $i; ?>&search=<?php echo $search ?>"><?php echo $i; ?></a></li>
                             <?php } ?>
                         <li>
-                            <a href="?page=<?php echo $total_page;?>&search=<?php echo $search ?>&role=<?php echo $role ?>" aria-label="Next">
+                            <a href="?page=<?php echo $total_page;?>&search=<?php echo $search ?>" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
