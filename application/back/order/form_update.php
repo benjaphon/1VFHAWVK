@@ -10,10 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $cover_page_filename = upload_file('cover_page_file', $validextensions, $path);
 
-    if (empty($cover_page_filename)) {
-        $cover_page_filename = $_POST['cover_page_filename_hidden'];
-    } else {
-        @unlink($path . $_POST['cover_page_filename_hidden']);
+    if (isset($_POST['cover_page_filename_hidden'])) {
+        if (empty($cover_page_filename)) {
+            $cover_page_filename = $_POST['cover_page_filename_hidden'];
+        } else {
+            @unlink($path . $_POST['cover_page_filename_hidden']);
+        }
     }
 
     $value_or = array(
@@ -25,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "note" => trim($_POST['note']),
         "total" => $_SESSION[_ss . 'total_price'],
         "total_weight" => $_SESSION[_ss . 'total_weight'],
+        "boxsize_code" => $_SESSION[_ss . 'boxsize_code'],
         "modified_at" => date('Y-m-d H:i:s')
     );
     $query_or = $db->update("orders", $value_or, "id='{$_POST['id']}'");

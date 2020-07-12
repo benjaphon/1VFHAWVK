@@ -155,3 +155,105 @@ function soft_delete($id, $table)
 
     $query = $db->update($table, $arr_update, "id={$id}");
 }
+
+function shipping_calculation()
+{
+    $db = new database();
+    $shipping_rate = [];
+
+    $productIds = implode(",", $_SESSION[_ss . "cart"]);
+    $option_ct = array(
+        "fields" => "bs.size_index",
+        "table" => "products AS p 
+                    LEFT JOIN box_sizes AS bs ON p.boxsize_id = bs.id",
+        "condition" => "p.id IN ({$productIds})",
+        "order" => "bs.size_index DESC",
+        "limit" => "1"
+    );
+    $query_ct = $db->select($option_ct);
+
+    if ($query_ct) {
+       
+        $rs_ct = $db->get($query_ct);
+
+        $boxSizeIndex = $rs_ct['size_index'] ?? 0;
+
+        //อัพขนาดกล่อง 1 ไซต์ื่
+        $option = array(
+            "table" => "box_sizes",
+            "order" => "size_index DESC",
+            "limit" => "1"
+        );
+        $query = $db->select($option);
+        $rows = $db->rows($query);
+
+        if($row = $db->get($query)){
+            if ($boxSizeIndex < $row['size_index']) {
+                $boxSizeIndex++;
+            }
+        } else {
+            $boxSizeIndex++;
+        }
+        
+        /* Weight Only */
+        $option_shipping_wo = array(
+            "fields" => "s.*",
+            "table" => "shipping_rate AS s
+                        INNER JOIN weight_range AS wr ON s.weight_id = wr.id
+                        INNER JOIN box_sizes AS bs ON s.boxsize_id = bs.id",
+            "condition" => "{$_SESSION[_ss . 'total_weight']} >= wr.min_wg AND {$_SESSION[_ss . 'total_weight']} <= wr.max_wg AND bs.size_index = 0 "
+        );
+        $query_shipping_wo = $db->select($option_shipping_wo);
+        $rs_shipping_wo = $db->get($query_shipping_wo);
+        $rows_shipping_wo = $db->rows($query_shipping_wo);
+
+        /* Weight & Size */
+        $option_shipping_ws = array(
+            "fields" => "s.*",
+            "table" => "shipping_rate AS s
+                        INNER JOIN weight_range AS wr ON s.weight_id = wr.id
+                        INNER JOIN box_sizes AS bs ON s.boxsize_id = bs.id",
+            "condition" => "{$_SESSION[_ss . 'total_weight']} >= wr.min_wg AND {$_SESSION[_ss . 'total_weight']} <= wr.max_wg AND bs.size_index = {$boxSizeIndex} "
+        );
+        $query_shipping_ws = $db->select($option_shipping_ws);
+        $rs_shipping_ws = $db->get($query_shipping_ws);
+        $rows_shipping_ws = $db->rows($query_shipping_ws);
+
+        /* Box Size */
+        $option_st = array(
+            "table" => "shipping_type"
+        );
+        $query_st = $db->select($option_st);
+
+        while ($rs_st = $db->get($query_st)) {
+            if ($rs_st['is_ws']) {
+                if ($rows_shipping_ws > 0) {
+                    $shipping_rate[$rs_st['name']] = $rs_shipping_ws[$rs_st['name']];
+                } else {
+                    $shipping_rate[$rs_st['name']] = -1;
+                }
+            } else {
+                if ($rows_shipping_wo > 0) {
+                    $shipping_rate[$rs_st['name']] = $rs_shipping_wo[$rs_st['name']];
+                } else {
+                    $shipping_rate[$rs_st['name']] = -1;
+                }
+            }
+        }
+
+        //ดึงโค้ดของขนาดกล่องที่จะใช้สำหรับออเดอร์นี้มาเก็บไว้ใน session เพื่อเตรียมนำไปบันทึก
+        $option_bs = array(
+            "table" => "box_sizes",
+            "condition" => "size_index={$boxSizeIndex}"
+        );
+        $query_bs = $db->select($option_bs);
+
+        if($db->rows($query_bs) > 0){
+            $rs_bs = $db->get($query_bs);
+            $_SESSION[_ss . 'boxsize_code'] = $rs_bs["size_code"];
+        }
+
+    }
+
+    return $shipping_rate;
+}

@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "description" => trim($_POST['description']),
         "quantity" => trim($_POST['quantity']),
         "weight" => trim($_POST['weight']),
+        "boxsize_id" => trim($_POST['box_size']),
         "video_filename" => $vdo_filename,
         "product_status" => $_POST['product_status'],
         "product_full_name" => trim($_POST['name']),
@@ -47,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     "description" => trim($_POST['description']), //Same as parent
                     "quantity" => trim($_POST['child_quantity_add'][$key]),
                     "weight" => trim($_POST['child_weight_add'][$key]),
+                    "boxsize_id" => trim($_POST['child_box_size_add'][$key]),
                     "video_filename" => $vdo_filename, //Same as parent
                     "product_status" => $_POST['product_status'], //Same as parent
                     "parent_product_id" => $product_id,
@@ -83,6 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     "description" => trim($_POST['description']), //Same as parent
                     "quantity" => trim($_POST['child_quantity'][$key]),
                     "weight" => trim($_POST['child_weight'][$key]),
+                    "boxsize_id" => trim($_POST['child_box_size'][$key]),
                     "video_filename" => $vdo_filename, //Same as parent
                     "product_status" => $_POST['product_status'], //Same as parent
                     "parent_product_id" => $product_id,

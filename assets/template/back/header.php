@@ -54,6 +54,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
     <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>/assets/js/gritter/css/jquery.gritter.css" />
     <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>/assets/lineicons/style.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>/assets/css/jquery.fancybox.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $baseUrl; ?>/assets/css/bootstrap-toggle.min.css">
 
     <!-- Custom styles for this template -->
     <link href="<?php echo $baseUrl; ?>/assets/css/style.css" rel="stylesheet">
@@ -229,11 +230,32 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                           <span>ผู้ใช้</span>
                       </a>
                   </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-cog"></i>
+                            <span>ตั้งค่า</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="<?php echo $baseUrl; ?>/back/shipping_rate">
+                                    <i class="fa fa-truck"></i>
+                                    <span>อัตราค่าจัดส่ง</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $baseUrl; ?>/back/shipping_type">
+                                    <i class="fa fa-list"></i>
+                                    <span>ประเภทการจัดส่ง</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                   
                   <?php } ?>
 
                   <li>
-                    <span>Version 7.2</span>
+                    <span>Version 8.0</span>
                 </li>
               </ul>
               <!-- sidebar menu end-->

@@ -7,6 +7,7 @@ $agent_price = $_GET['agent_price'];
 $sale_price = $_GET['sale_price'];
 $quantity = $_GET['quantity'];
 $weight = $_GET['weight'];
+$box_size = $_GET['box_size'];
 
 ob_start();
 include(base_path().'/application/back/product/inc/product_child_create.php');

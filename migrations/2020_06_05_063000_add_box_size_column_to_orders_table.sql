@@ -1,0 +1,1 @@
+ALTER TABLE `orders` ADD `boxsize_code` VARCHAR(50) NULL AFTER `total_weight`;

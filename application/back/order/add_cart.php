@@ -8,13 +8,7 @@
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-//ดึงค่าที่ส่งมาจากส่วนของการเพิ่มสินค้าเอามาเก็บไว้ในตัวแปรเพื่อความสะดวกในการเรียกใช้
-$product_id = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[0] : 0;
-$agent_price = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[1] : 0;
-$weight = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[2] : 0;
-$wholesale_price = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[3] : 0;
-$sale_price = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[4] : 0;
-
+$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : 0;
 $qty = isset($_POST['qty']) && !empty($_POST['qty']) ? $_POST['qty'] : 0;
 
 //ดึงข้อมูลสินค้าที่สั่งซื้อขึ้นมาเก็บไว้ในตัวแปรเพื่อนำไปตรวจสอบในภายหลัง
@@ -26,6 +20,11 @@ $option_pd = array(
 
 $query_pd = $db->select($option_pd);
 $rs_pd = $db->get($query_pd);
+
+$agent_price = $rs_pd['agent_price'];
+$weight = $rs_pd['weight'];
+$wholesale_price = $rs_pd['wholesale_price'];
+$sale_price = $rs_pd['sale_price'];
 
 //ถ้ายังไม่เคยมีการสร้างตระกร้าสินค้าขึ้นมาก่อนให้ดำเนินการสร้าง
 if (!isset($_SESSION[_ss . 'cart'])) {

@@ -153,14 +153,17 @@ $i++; }
     </tr>
     <tr>
         <td colspan="6" style="text-align: right;">
-            <h4>น้ำหนักรวม <?php echo number_format($_SESSION[_ss . 'total_weight']); ?> กรัม</h4>
+            <h4>
+                น้ำหนักรวม <?php echo number_format($_SESSION[_ss . 'total_weight']); ?> กรัม กล่องไซต์ <span id="sp_boxsize_code"></span>
+            </h4>
         </td>
+    <tr>
     <tr>
     <tr>
         <td colspan="6" style="text-align: right;">
             <h4>
                 <span id="wrap_shipping_text">คำนวณค่าส่ง ประเภท <span id="sp_shipping_type"></span> <span id="sp_shipping_rate"></span> บาท</span>
-                <span id="wrap_shipping_warning">น้ำหนักเกิน 30 กิโลกรัม โปรดรอสอบถามแอดมิน!</span>
+                <span id="wrap_shipping_warning">โปรดสอบถามค่าส่งจากแอดมิน!</span>
             </h4>
             <!--<a href="<?php echo "{$baseUrl}/back/order/ship_rate"; ?>" target="_blank">ตารางอัตราค่าส่ง</a>-->
         </td>
@@ -181,90 +184,61 @@ $i++; }
     </tbody>
 </table>
 
-<?php
-
-//การคำนวณหาอัตราค่าขนส่งของแต่ละประเภทการขนส่งเพื่อนำไปแสดงผลส่วนท้ายของตระกร้าสินค้า
-$option_shipping = array(
-    "table" => "shipping_rate",
-    "condition" => "{$_SESSION[_ss . 'total_weight']} >= min_wg AND {$_SESSION[_ss . 'total_weight']} <= max_wg "
-);
-$query_shipping = $db->select($option_shipping);
-$rs_shipping = $db->get($query_shipping);
-$rows_shipping = $db->rows($query_shipping);
-
-$parcel_shipping = 0;
-$register_shipping = 0;
-$EMS_shipping = 0;
-$Flash_shipping = 0;
-$JT_shipping = 0;
-$Shopee_shipping = 0;
-
-
-if($rows_shipping > 0){
-    $parcel_shipping = $rs_shipping['parcel'];
-    $register_shipping = $rs_shipping['register'];
-    $EMS_shipping = $rs_shipping['EMS'];
-	$Flash_shipping = $rs_shipping['Flash'];
-	$JT_shipping = $rs_shipping['JT'];
-	$Shopee_shipping = $rs_shipping['JT'];
-}
-
-?>
-
 <script>
 
     function Update_shipping_type_price() {
 
         var shipping_rate = 0; 
+        var boxsize_code = "<?php echo $_SESSION[_ss . 'boxsize_code']; ?>";
 
-        if (<?php echo $rows_shipping; ?> == 0){
-            $("#wrap_shipping_text").hide();
-            $("#wrap_shipping_warning").show();
-        } else {
+        var shipping_type = $("input[name=shipping_type]:checked").val();
+        $("#sp_shipping_type").text(shipping_type);
+
+        var mapping = {
+            "พัสดุธรรมดา" : <?php echo $shipping_rate['parcel']; ?>,
+            "ลงทะเบียน" : <?php echo $shipping_rate['register']; ?>,
+            "EMS" : <?php echo $shipping_rate['ems']; ?>,
+            "FLASH EXPRESS" : <?php echo $shipping_rate['flash']; ?>,
+            "J&T" : <?php echo $shipping_rate['jt']; ?>,
+            "KERRY" : <?php echo $kerry_shipping; ?>
+        };
+
+        if (mapping[shipping_type] >= 0) {
+
             $("#wrap_shipping_text").show();
             $("#wrap_shipping_warning").hide();
 
-            var shipping_type = $("input[name=shipping_type]:checked").val();
-            $("#sp_shipping_type").text(shipping_type);
+            shipping_rate = mapping[shipping_type];
 
             switch(shipping_type) {
                 case "พัสดุธรรมดา":
-                    shipping_rate = <?php echo $parcel_shipping; ?>;
-                    $("#sp_shipping_rate").text(shipping_rate);
-                    break;
                 case "ลงทะเบียน":
-                    shipping_rate = <?php echo $register_shipping; ?>;
-                    $("#sp_shipping_rate").text(shipping_rate);
-                    break;
                 case "EMS":
-                    shipping_rate = <?php echo $EMS_shipping; ?>;
-                    $("#sp_shipping_rate").text(shipping_rate);
-                    break;
                 case "FLASH EXPRESS":
-                    shipping_rate = <?php echo $Flash_shipping; ?>;
+                case "J&T":
                     $("#sp_shipping_rate").text(shipping_rate);
-                    break;
-				case "J&T":
-                    shipping_rate = <?php echo $JT_shipping; ?>;
-                    $("#sp_shipping_rate").text(shipping_rate);
-                    break;
-			
+                    break;     
                 case "KERRY":
                     if (<?php echo $me_count; ?> == 1 && <?php echo $product_qty; ?> == 1){
-                        shipping_rate = <?php echo $kerry_shipping; ?>;
                         $("#sp_shipping_rate").text(shipping_rate);
                     } else {
                         $("#wrap_shipping_text").hide();
                         $("#wrap_shipping_warning").show();
-                        $("#wrap_shipping_warning").text("โปรดสอบถามค่าส่งจากแอดมิน!");
                     }
                     break;
                 default:
                     $("#sp_shipping_rate").text("0");
                     break;
             }
+            
+        } else {
+
+            $("#wrap_shipping_text").hide();
+            $("#wrap_shipping_warning").show();
+            
         }
 
+        $("#sp_boxsize_code").text(boxsize_code);
         $("#sp_total_price").text(addCommas(<?php echo $_SESSION[_ss . 'total_price']; ?>+shipping_rate));
         
     }

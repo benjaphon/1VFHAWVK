@@ -1,4 +1,5 @@
 <?php
+unset($_SESSION[_ss . 'cart']);
 /*
  * php code///////////**********************************************************
  */
@@ -6,6 +7,7 @@ if(!isset($_GET['id'])){
     header("location:" . $baseUrl . "/back/order");
 }
 $db = new database();
+$_SESSION[_ss . 'cart'] = array();
 
 $option_order = array(
     "table" => "orders",
@@ -93,6 +95,8 @@ MAIN CONTENT
                         $total_weight = $rs_od['weight'] * $rs_od['quantity'];
                         $grand_total_weight += $total_weight;
 
+                        array_push($_SESSION[_ss . 'cart'], $rs_od['product_id']);
+
                         //Select Product Picture
                         $option_img = array(
                             "table" => "images",
@@ -126,68 +130,57 @@ MAIN CONTENT
                             <td style='text-align:right;'>รายละเอียดสินค้า :</td>
                             <td colspan="5"><?php echo $rs_od['note']; ?></td>
                         </tr>
-                    <?php } ?>
+                    <?php } 
+
+                    $isCal = true;
+
+                    if ($rs_order['ship_price']==null) {
+
+                        $shipping_rate = shipping_calculation();
+                        $shipping_type = $rs_order['shipping_type'];
+
+                        if ($rows_count > 1 || $product_qty > 1){
+                            $kerry_shipping = 0;
+                        }
+
+                        $mapping = [
+                            "พัสดุธรรมดา" => $shipping_rate['parcel'],
+                            "ลงทะเบียน" => $shipping_rate['register'],
+                            "EMS" => $shipping_rate['ems'],
+                            "FLASH EXPRESS" => $shipping_rate['flash'],
+                            "J&T" => $shipping_rate['jt'],
+                            "KERRY" => $kerry_shipping
+                        ];
+
+                        $shipping_fees = $mapping[$shipping_type];
+
+                        if ($shipping_fees = -1) {
+                            $shipping_fees = 0;
+                            $isCal = false;
+                        }
+                    
+                    } else {
+                        $shipping_fees = $rs_order['ship_price'];
+                    }
+
+                    $grand_total_with_ship = $grand_total + $shipping_fees;
+
+                    ?>
                     <tr class="info">
                         <td colspan="3"></td>
                         <td colspan="2" style="text-align: right;">
-                            
                             <input type="hidden" name="grand_total" value="<?php echo $grand_total; ?>">
                             <label for="pay_money" class="text-bold control-label required">ค่าส่ง (ตามเงื่อนไข)<!--(<a href='<?php echo $baseUrl; ?>/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a>)--></label>
-                            <input type="text" style="text-align: right;" id="ship_price" name="ship_price" class="form-control input-sm" width="20px" data-validation="number" data-validation-error-msg="โปรดระบุค่าส่ง" data-validation-allowing="float"
-                            <?php 
-
-                                $option_shipping = array(
-                                    "table" => "shipping_rate",
-                                    "condition" => "'{$grand_total_weight}' >= min_wg AND '{$grand_total_weight}' <= max_wg "
-                                );
-                                $query_shipping = $db->select($option_shipping);
-                                $rs_shipping = $db->get($query_shipping);
-
-                                $shipping_fees = 0;
-                                $grand_total_with_ship = 0;
-
-                                if ($rs_order['ship_price']==null) {
-                                    switch ($rs_order['shipping_type']) {
-                                        case 'พัสดุธรรมดา':
-                                            $shipping_fees = $rs_shipping['parcel'];
-                                            break;
-                                        case 'ลงทะเบียน':
-                                            $shipping_fees = $rs_shipping['register'];
-                                            break;
-                                        case 'EMS':
-                                            $shipping_fees = $rs_shipping['EMS'];
-                                            break;
-										case 'FLASH EXPRESS':
-                                            $shipping_fees = $rs_shipping['Flash'];
-                                            break;
-										case 'J&T':
-                                            $shipping_fees = $rs_shipping['JT'];
-                                            break;
-                                        case 'KERRY':
-                                            if ($rows_count == 1 && $product_qty == 1){
-                                                $shipping_fees = $kerry_shipping;
-                                            }
-										
-                                            break;
-                                    }
-
-                                    $grand_total_with_ship = $grand_total + $shipping_fees;
-                                    if ($shipping_fees > 0)
-                                    echo "value='".$shipping_fees."'";
-                                }else{
-                                    $grand_total_with_ship = $grand_total + $rs_order['ship_price'];
-                                    echo "value='".$rs_order['ship_price']."'";
-                                }
-                            ?>>
+                            <input type="text" style="text-align: right;" id="ship_price" name="ship_price" class="form-control input-sm" width="20px" data-validation="number" data-validation-error-msg="โปรดระบุค่าส่ง" data-validation-allowing="float" placeholder="<?php echo $shipping_fees; ?>"  value="<?php echo $shipping_fees; ?>">
                         </td>
                     </tr>
                     <tr class="info">
                         <td colspan="5" style="text-align: right;">
                             <h4>
-                                <?php if ($db->rows($query_shipping) > 0){ ?>
-                                    <p>น้ำหนักรวม <?php echo number_format($grand_total_weight); ?> กรัม</p>
+                                <?php if ($isCal){ ?>
+                                    <p>น้ำหนักรวม <?php echo number_format($grand_total_weight); ?> กรัม กล่องไซต์ <?php echo $rs_order['boxsize_code']; ?></p>
                                 <?php } else { ?>
-                                    <p>น้ำหนักเกิน 10 กิโลกรัม โปรดรอสอบถามแอดมิน!</p>
+                                    <p>ไม่สามารถคำนวณค่าส่งได้ โปรดสอบถามค่าส่งจากแอดมิน!</p>
                                 <?php } ?>
                             </h4>
                             
@@ -258,7 +251,7 @@ MAIN CONTENT
                     <div class="form-group clearfix">
                         <div class="col-sm-6">
                             <label for="pay_money" class="text-bold control-label required">จำนวนเงิน</label>
-                            <input type="text" id="pay_money" name="pay_money" value="<?php echo $grand_total_with_ship; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
+                            <input type="text" id="pay_money" name="pay_money" placeholder="<?php echo $grand_total_with_ship; ?>" value="<?php echo $grand_total_with_ship; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                         </div>
                     </div>
                     <div class="form-group clearfix">
@@ -272,7 +265,7 @@ MAIN CONTENT
 					<div class="form-group clearfix">
                         <div class="col-sm-6">
                             <label for="deduct" class="text-bold">หักยอดค้าง</label>
-                            <input type="text" id="deduct" name="deduct" class="form-control" autocomplete="off">
+                            <input type="text" id="deduct" name="deduct" class="form-control input-sm" autocomplete="off" data-validation="number" data-validation-allowing="float" value="0">
                         </div>
                     </div>  
                     <div class="form-group clearfix">

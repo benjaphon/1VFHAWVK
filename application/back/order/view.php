@@ -158,7 +158,7 @@ MAIN CONTENT
                     </tr>
                     <tr class="info">
                         <td colspan="5" style="text-align: right;">
-                            <h4>น้ำหนักรวม <?php echo number_format($rs_os['total_weight']); ?> กรัม</h4>
+                            <h4>น้ำหนักรวม <?php echo number_format($rs_os['total_weight']); ?> กรัม กล่องไซต์ <?php echo $rs_os['boxsize_code']; ?></h4>
                         </td>
                     </tr>
                     <tr class="info">

@@ -113,7 +113,7 @@ MAIN CONTENT
                                     $product_name .= " (".date('d-m-Y', strtotime($row['start_ship_date'])).")";
                                 }
 
-                                echo "<option value='".$row['id'].",".$row['agent_price'].",".$row['weight'].",".$row['wholesale_price'].",".$row['sale_price']."'>".$product_name."</option>";
+                                echo "<option value='{$row['id']}'>{$product_name}</option>";
                             }
                             ?>
                         </select>

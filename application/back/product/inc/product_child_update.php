@@ -1,3 +1,11 @@
+<?php
+$db = new database();
+$option_sizes = array(
+    "table" => "box_sizes",
+);
+$query_sizes = $db->select($option_sizes);
+?>
+
 <div id="product_child_<?php echo $product_child_id?>" class="panel panel-default">
     <input type="hidden" name="child_id[]" value="<?php echo $row['id']; ?>">
     <div data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $product_child_id?>" class="panel-heading">
@@ -50,6 +58,18 @@
                 <label for="child_weight" class="col-sm-4 control-label">น้ำหนัก</label>
                 <div class="col-sm-8">
                     <input type="text" name="child_weight[]" value="<?php echo $row['weight']; ?>" class="form-control input-sm" data-validation="number">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="child_box_size" class="col-sm-4 control-label">ขนาดกล่อง</label>
+                <div class="col-sm-8">
+                    <select class="form-control input-sm" name="child_box_size[]">
+                        <?php while ($size = $db->get($query_sizes)){
+                            $selected = ($size['id']==$row['boxsize_id'])?'selected':'';
+                            echo "<option value='{$size['id']}' {$selected}>{$size['size_name']}</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
         </div>

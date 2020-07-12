@@ -1,0 +1,1 @@
+INSERT INTO `box_sizes` (`id`, `size_index`, `size_code`, `size_name`) VALUES (NULL, '0', 'NA', 'ไม่มีขนาด'), (NULL, '1', 'S', 'เล็ก'), (NULL, '2', 'M', 'กลาง'), (NULL, '3', 'L', 'ใหญ่')

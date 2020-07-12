@@ -1,0 +1,1 @@
+ALTER TABLE `products` ADD `boxsize_id` INT NOT NULL AFTER `weight`;

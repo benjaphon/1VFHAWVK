@@ -22,6 +22,11 @@ $option_img = array(
 );
 $query_img = $db->select($option_img);
 
+$option_sizes = array(
+    "table" => "box_sizes",
+);
+$query_sizes = $db->select($option_sizes);
+
 $title = 'แก้ไขสินค้า : ' .$rs_pd['name'];
 /*
  * php code///////////**********************************************************
@@ -181,6 +186,18 @@ border:1px solid #e8debd
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="box_size" class="col-sm-2 control-label">ขนาดกล่อง</label>
+                        <div class="col-sm-4">
+                            <select class="form-control input-sm" name="box_size" id="box_size">
+                                <?php while ($size = $db->get($query_sizes)){
+                                    $selected = ($size['id']==$rs_pd['boxsize_id'])?'selected':'';
+                                    echo "<option value='{$size['id']}' {$selected}>{$size['size_name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="product_status" class="col-sm-2 control-label">สถานะ</label>
                         <div class="col-sm-4">
                             <select class="form-control input-sm" name="product_status" id="product_status">
@@ -315,6 +332,7 @@ require 'assets/template/back/footer.php';
                 sale_price: $('#sale_price').val(),
                 quantity: $('#quantity').val(),
                 weight: $('#weight').val(),
+                box_size: $('#box_size').val(),
             };
 
             $.get(url, data, function (data) {

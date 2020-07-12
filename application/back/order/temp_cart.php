@@ -5,8 +5,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 $db = new database();
 
-$sql_od = "SELECT d.*,p.id,p.name,p.url_picture,p.weight,p.agent_price,p.wholesale_price,p.sale_price FROM order_details d INNER JOIN products p ";
-$sql_od .= "ON d.product_id=p.id ";
+$sql_od = "SELECT d.*,p.id,p.name,p.url_picture,p.weight,p.agent_price,p.wholesale_price,p.sale_price,bs.size_index 
+            FROM order_details AS d 
+            INNER JOIN products AS p ON d.product_id = p.id
+            LEFT JOIN box_sizes AS bs ON p.boxsize_id = bs.id ";
 $sql_od .="WHERE d.order_id='{$_POST['id']}' ";
 $query_od = $db->query($sql_od);
 
@@ -21,6 +23,7 @@ if (!isset($_SESSION[_ss . 'cart'])) {
     $_SESSION[_ss . 'note'][] = array();
     $_SESSION[_ss . 'total_price'] = 0;
     $_SESSION[_ss . 'total_weight'] = 0;
+    $_SESSION[_ss . 'order_size'] = 0;
 }
 
 while ($rs_od = $db->get($query_od)) {
@@ -35,6 +38,10 @@ while ($rs_od = $db->get($query_od)) {
     $_SESSION[_ss . 'note'][$key] = $rs_od['note'];
     $_SESSION[_ss . 'total_price'] += $rs_od['price'] * $rs_od['quantity'];
     $_SESSION[_ss . 'total_weight'] += $rs_od['weight'] * $rs_od['quantity'];
+
+    if ($rs_od['size_index'] > $_SESSION[_ss . 'order_size']) {
+        $_SESSION[_ss . 'order_size'] = $rs_od['size_index'];
+    }
 }
 
 /*

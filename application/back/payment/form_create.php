@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $value_pm = array(
                 "pay_money" => trim($pay_money),
                 "detail" => trim($detail),
+                "deduct" => trim($_POST['deduct']),
                 "order_id" => $order_id,
                 "bulk_id" => $payment_bulk_id,
                 "pay_type" => trim($pay_type),

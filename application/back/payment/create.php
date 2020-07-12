@@ -149,6 +149,12 @@ MAIN CONTENT
                         </div>
                         <div class="form-group clearfix">
                             <div class="col-sm-6">
+                                <label for="deduct" class="text-bold">หักยอดค้าง</label>
+                                <input type="text" id="deduct" name="deduct" class="form-control input-sm" autocomplete="off" data-validation="number" data-validation-allowing="float" value="0">
+                            </div>
+                        </div>  
+                        <div class="form-group clearfix">
+                            <div class="col-sm-6">
                                 <label for="detail" class="text-bold">เพิ่มเติม</label>
                                 <input type="text" id="detail" name="detail" class="form-control" autocomplete="off">
                             </div>

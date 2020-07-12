@@ -1,0 +1,1 @@
+RENAME TABLE shipping_rate TO weight_range;

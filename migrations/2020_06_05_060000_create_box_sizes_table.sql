@@ -1,0 +1,1 @@
+CREATE TABLE `box_sizes` ( `id` INT NOT NULL AUTO_INCREMENT , `size_index` TINYINT NOT NULL , `size_code` VARCHAR(50) NOT NULL , `size_name` VARCHAR(50) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;

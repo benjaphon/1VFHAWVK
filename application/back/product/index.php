@@ -16,8 +16,8 @@ $start = ($page - 1) * $perpage;
 $db = new database();
 
 $option_product = array(
-    "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
-    "table" => "products AS p LEFT JOIN shipping_rate AS s ON p.weight >= s.min_wg AND p.weight <= s.max_wg",
+    "fields" => "p.*",
+    "table" => "products AS p",
     "order" => "p.id DESC",
     "limit" => "{$start},{$perpage}",
     "condition" => "p.flag_status = 1 AND p.parent_product_id IS NULL"
@@ -173,9 +173,6 @@ MAIN CONTENT
                                     <a class="sort-link">ราคาขาย</a>
                                 </th>
                             <?php } ?>
-                            <th id="user-grid_c1">
-                                <a class="sort-link">ค่าส่ง</a>
-                            </th>
                             <th id="user-grid_c3">
                                 <a class="sort-link">คงเหลือ</a>
                             </th>
@@ -242,13 +239,12 @@ MAIN CONTENT
                                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                                     <td><?php echo $rs_pd['sale_price']; ?></td>
                                 <?php } ?>
-                                <td><?php echo round($rs_pd['cal_parcel']); ?>/<?php echo round($rs_pd['cal_register']); ?>/<?php echo round($rs_pd['cal_EMS']); ?>/<?php echo round($rs_pd['kerry']); ?></td>
                                 <td>
                                     <?php
 
                                         $quantity = $rs_pd['quantity'];
 
-                                        //หาผลรวมของสินค้าลูกค้ามาบวกเข้าไป
+                                        //หาผลรวมของสินค้าลูก มาบวกเข้าไป
                                         $sql = "SELECT SUM(quantity) AS quantity_sum FROM products WHERE parent_product_id={$rs_pd['id']} AND flag_status=1";
                                         $query = $db->query($sql);
                                         $rs = $db->get($query);

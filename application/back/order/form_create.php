@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "order_datetime" => date('Y-m-d H:i:s'),
         "total" => $_SESSION[_ss . 'total_price'],
         "total_weight" => $_SESSION[_ss . 'total_weight'],
+        "boxsize_code" => $_SESSION[_ss . 'boxsize_code'],
         "user_id" => $_SESSION[_ss . 'id'],
         "created_at" => date('Y-m-d H:i:s'),
         "modified_at" => date('Y-m-d H:i:s')

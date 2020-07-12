@@ -22,7 +22,7 @@
 
                         if (isset($row['parent_product_id'])) {
                             $option_pd_parent = array(
-                                "table" => "products",
+                                "table" => "products LEFT JOIN box_sizes ON products.box_size = box_sizes.id",
                                 "condition" => "id={$row['parent_product_id']}"
                             );
 
@@ -96,6 +96,12 @@
                 <label for="weight" class="col-sm-2 control-label text-bold">น้ำหนัก</label>
                 <div class="col-sm-4">
                     <label name="weight" class="control-label"><?php echo $row['weight']; ?></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="size_name" class="col-sm-2 control-label text-bold">ขนาดกล่อง</label>
+                <div class="col-sm-4">
+                    <label name="size_name" class="control-label"><?php echo $row['size_name']; ?></label>
                 </div>
             </div>
             <?php } ?>

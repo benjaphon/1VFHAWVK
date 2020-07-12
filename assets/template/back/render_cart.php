@@ -6,6 +6,8 @@
  * Last Modified: Benjaphon
  */
 
+$shipping_rate = shipping_calculation();
+
 ob_start();
 include(base_path().'/assets/template/back/render_cart_html.php');
 $var=ob_get_contents(); 

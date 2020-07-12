@@ -40,6 +40,14 @@ if ($onpage == "back" AND $a != "login") {
         if ($url == 'user' && $a == 'index') {
             header("location:" . base_url() . "/back/order");
         }
+
+        if ($url == 'shipping_rate') {
+            header("location:" . base_url() . "/back/order");
+        }
+
+        if ($url == 'shipping_type') {
+            header("location:" . base_url() . "/back/order");
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-$product_id = isset($_POST['product_id']) ? explode(",", $_POST['product_id'])[0] : "";
+$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : 0;
 
 $key = array_search($product_id, $_SESSION[_ss . 'cart']);
 $_SESSION[_ss . 'total_price'] -= $_SESSION[_ss . 'price'][$key] * $_SESSION[_ss . 'qty'][$key];
