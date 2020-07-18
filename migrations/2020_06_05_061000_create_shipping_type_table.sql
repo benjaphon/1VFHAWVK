@@ -31,19 +31,19 @@ CREATE TABLE `shipping_type` (
   `id` int NOT NULL,
   `name` varchar(50) NOT NULL,
   `is_ws` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 --
 -- Dumping data for table `shipping_type`
 --
 
 INSERT INTO `shipping_type` (`id`, `name`, `is_ws`) VALUES
-(1, 'พัสดุ', 1),
-(2, 'ลงทะเบียน', 1),
-(3, 'EMS', 1),
-(4, 'KERRY', 0),
-(5, 'FLASH', 0),
-(6, 'JT', 0);
+(1, 'parcel', 1),
+(2, 'register', 1),
+(3, 'ems', 1),
+(4, 'kerry', 0),
+(5, 'flash', 0),
+(6, 'jt', 0);
 
 --
 -- Indexes for dumped tables
