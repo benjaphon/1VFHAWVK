@@ -4,7 +4,13 @@
  */
 $title = 'ระบบจัดการร้านค้า : อัตราค่าจัดส่ง';
 
-$perpage = 34;
+$db = new database();
+
+$sql = "SELECT COUNT(id) AS wrCount FROM weight_range";
+$query = $db->query($sql);
+$rs = $db->get($query);
+$perpage = $rs['wrCount'];
+
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
 } else {
@@ -13,7 +19,7 @@ if (isset($_GET['page'])) {
 
 $start = ($page - 1) * $perpage;
 
-$db = new database();
+
 
 $option = array(
     "fields" => "s.*, wr.min_wg, wr.max_wg, bs.size_code",
