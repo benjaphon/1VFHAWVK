@@ -154,7 +154,7 @@ MAIN CONTENT
 
                         $shipping_fees = $mapping[$shipping_type];
 
-                        if ($shipping_fees = -1) {
+                        if ($shipping_fees == -1) {
                             $shipping_fees = 0;
                             $isCal = false;
                         }
