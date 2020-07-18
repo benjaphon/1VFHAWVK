@@ -176,7 +176,7 @@ function shipping_calculation()
        
         $rs_ct = $db->get($query_ct);
 
-        $boxSizeIndex = $rs_ct['size_index'] ?? 0;
+        $boxSizeIndex = !empty($rs_ct['size_index']) ? $rs_ct['size_index'] : 0;
 
         //อัพขนาดกล่อง 1 ไซต์ื่
         $option = array(
