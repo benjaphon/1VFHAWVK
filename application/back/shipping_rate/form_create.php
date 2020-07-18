@@ -17,6 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($query == TRUE) {
         header("location:" . $baseUrl . "/back/shipping_rate");
+    } else {
+        echo "ไม่สามารถเลือกขนาดและน้ำหนักซ้ำกันได้ หรือมีข้อผิดพลาดบางอย่างเกิดขึ้น<br>";
+        echo "<a href='/back/shipping_rate'>ย้อนกลับ</a>";
     }
     
 }

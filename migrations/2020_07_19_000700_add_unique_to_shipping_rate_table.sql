@@ -1,0 +1,1 @@
+ALTER TABLE `shipping_rate` ADD UNIQUE( `weight_id`, `boxsize_id`);
