@@ -176,7 +176,7 @@ function shipping_calculation()
        
         $rs_ct = $db->get($query_ct);
 
-        $boxSizeIndex = !empty($rs_ct['size_index']) ? $rs_ct['size_index'] : 0;
+        $boxSizeIndex = $productSizeIndex = !empty($rs_ct['size_index']) ? $rs_ct['size_index'] : 0;
 
         //อัพขนาดกล่อง 1 ไซต์
         $option = array(
@@ -201,8 +201,8 @@ function shipping_calculation()
             $key = array_search(reset($_SESSION[_ss . "cart"]), $_SESSION[_ss . "cart"]);
             $product_qty = $_SESSION[_ss . "qty"][$key];
 
-            if ($product_qty) {
-                $boxSizeIndex = 0;
+            if ($product_qty == 1) {
+                $boxSizeIndex = $productSizeIndex;
             }
         }
 
