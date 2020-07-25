@@ -178,7 +178,7 @@ function shipping_calculation()
 
         $boxSizeIndex = !empty($rs_ct['size_index']) ? $rs_ct['size_index'] : 0;
 
-        //อัพขนาดกล่อง 1 ไซต์ื่
+        //อัพขนาดกล่อง 1 ไซต์
         $option = array(
             "table" => "box_sizes",
             "order" => "size_index DESC",
@@ -194,6 +194,18 @@ function shipping_calculation()
         } else {
             $boxSizeIndex++;
         }
+
+        //ถ้าสินค้ามี 1 ชิ้นและ 1 รายการไม่ต้องคำนวณไซต์ Weight Only (NA)
+        if (count($_SESSION[_ss . "cart"]) == 1) {
+            
+            $key = array_search(reset($_SESSION[_ss . "cart"]), $_SESSION[_ss . "cart"]);
+            $product_qty = $_SESSION[_ss . "qty"][$key];
+
+            if ($product_qty) {
+                $boxSizeIndex = 0;
+            }
+        }
+
         
         /* Weight Only */
         $option_shipping_wo = array(
