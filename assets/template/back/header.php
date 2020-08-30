@@ -255,7 +255,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                   <?php } ?>
 
                   <li>
-                    <span>Version 8.0</span>
+                    <span>Version 8.2</span>
                 </li>
               </ul>
               <!-- sidebar menu end-->
