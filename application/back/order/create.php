@@ -133,23 +133,19 @@ MAIN CONTENT
                         <div class="radio">
                           <label><input type="radio" name="shipping_type" value="EMS">EMS</label>
                         </div>
-                        <div class="radio">
-                            <label><input type="radio" name="shipping_type" value="อื่นๆ">อื่นๆ</label>
-                        </div>
+ 			
+                      
                     </div>
                     <div class="col-xs-6">
-                        <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="KERRY">KERRY</label>
+              
+			
+			<div class="radio">
+                          <label><input type="radio" name="shipping_type" value="KERRY">Flash Express </label>
                         </div>
-                        <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">FLASH EXPRESS</label>
+                       <div class="radio">
+                            <label><input type="radio" name="shipping_type" value="อื่นๆ">อื่นๆ</label>
                         </div>
-                        <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="Shopee">Shopee (ส่งกับ J&T เท่านั้น)</label>
-                        </div>
-						<div class="radio">
-                          <label><input type="radio" name="shipping_type" value="J&T">'J&T'</label>
-                        </div>
+						
                     </div>
                 </div>
 

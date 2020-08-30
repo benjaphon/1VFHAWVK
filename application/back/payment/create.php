@@ -115,7 +115,7 @@ MAIN CONTENT
                             <label for="pay_type" class="text-bold col-xs-12">ช่องทางการชำระเงิน</label>
                             <div class="col-xs-6">
                                 <div class="radio">
-                                  <label><input type="radio" name="pay_type" value="กสิกรไทย" data-validation="required">กสิกรไทย</label>
+                                  <label><input type="radio" name="pay_type" value="กสิกรไทย" data-validation="required">กสิกรไทย  050-2-61878-4</label>
                                 </div>
                                 <div class="radio">
                                   <label><input type="radio" name="pay_type" value="กรุงไทย">กรุงไทย</label>
@@ -130,7 +130,7 @@ MAIN CONTENT
                                   <label><input type="radio" name="pay_type" value="ไทยพาณิชย์">ไทยพาณิชย์</label>
                                 </div>
                                 <div class="radio">
-                                  <label><input type="radio" name="pay_type" value="พร้อมเพย์">พร้อมเพย์</label>
+                                  <label><input type="radio" name="pay_type" value="พร้อมเพย์">พร้อมเพย์  0897818110</label>
                                 </div>
                             </div>
                         </div>
