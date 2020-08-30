@@ -24,6 +24,8 @@
             $grand_total_weight += $total_weight;
 
             array_push($_SESSION[_ss . 'cart'], $rs_od['product_id']);
+            $key = array_search($rs_od['product_id'], $_SESSION[_ss . 'cart']);
+            $_SESSION[_ss . 'qty'][$key] = $rs_od['quantity'];
 
             ?>
             <tr>
@@ -51,7 +53,8 @@
                 "EMS" => $shipping_rate['ems'],
                 "FLASH EXPRESS" => $shipping_rate['flash'],
                 "J&T" => $shipping_rate['jt'],
-                "KERRY" => $kerry_shipping
+                "KERRY" => $kerry_shipping,
+                "CoverPage" => $shipping_rate['coverpage']
             ];
 
             $shipping_fees = $mapping[$shipping_type];

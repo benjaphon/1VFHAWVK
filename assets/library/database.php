@@ -11,7 +11,7 @@ class database {
             'pass' => MYSQL_PASSWORD,
             'dbname' => MYSQL_DATABASE
         );
-        $this->con = mysqli_connect($dbsql['host'], $dbsql['user'], $dbsql['pass'], $dbsql['dbname'], '3306') or die('Error connecting to MySQL');
+        $this->con = mysqli_connect($dbsql['host'], $dbsql['user'], $dbsql['pass'], $dbsql['dbname'], '3308') or die('Error connecting to MySQL');
         //mysql_select_db($dbsql['dbname'], $this->con) or die('Database ' . $dbsql['dbname'] . ' does not exist!');
         mysqli_set_charset($this->con, "utf8");
     }

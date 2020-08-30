@@ -3,16 +3,13 @@
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $db = new database();
-
-    $db->update("shipping_type", ["is_ws" => 0], true);
     
-    if (isset($_POST['shipping_type'])) {
+    if (isset($_POST['hidden_shipping_type'])) {
         
-        for ($key = 0; $key < count($_POST['shipping_type']); $key++) {
-           
-            $query = $db->update("shipping_type", [ "is_ws" => true ], "id={$_POST['shipping_type'][$key]}");
-            
+        foreach ($_POST['hidden_shipping_type'] as $value) {
+            $query = $db->update("shipping_type", [ "type" => $_POST["shipping_type_{$value}"] ], "id={$value}");
         }
+
     }
 
     header("location:" . $baseUrl . "/back/shipping_type");

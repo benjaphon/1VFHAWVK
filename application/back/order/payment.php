@@ -1,5 +1,6 @@
 <?php
 unset($_SESSION[_ss . 'cart']);
+unset($_SESSION[_ss . 'qty']);
 /*
  * php code///////////**********************************************************
  */
@@ -8,6 +9,8 @@ if(!isset($_GET['id'])){
 }
 $db = new database();
 $_SESSION[_ss . 'cart'] = array();
+$_SESSION[_ss . 'qty'][] = array();
+
 
 $option_order = array(
     "table" => "orders",
@@ -96,6 +99,8 @@ MAIN CONTENT
                         $grand_total_weight += $total_weight;
 
                         array_push($_SESSION[_ss . 'cart'], $rs_od['product_id']);
+                        $key = array_search($rs_od['product_id'], $_SESSION[_ss . 'cart']);
+                        $_SESSION[_ss . 'qty'][$key] = $rs_od['quantity'];
 
                         //Select Product Picture
                         $option_img = array(
@@ -149,7 +154,8 @@ MAIN CONTENT
                             "EMS" => $shipping_rate['ems'],
                             "FLASH EXPRESS" => $shipping_rate['flash'],
                             "J&T" => $shipping_rate['jt'],
-                            "KERRY" => $kerry_shipping
+                            "KERRY" => $kerry_shipping,
+                            "CoverPage" => $shipping_rate['coverpage']
                         ];
 
                         $shipping_fees = $mapping[$shipping_type];

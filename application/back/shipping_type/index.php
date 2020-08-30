@@ -50,10 +50,22 @@ require 'assets/template/back/header.php';
             <div class="form-horizontal" style="margin-top: 10px;">
                 <form id="shipping-form" action="<?php echo $baseUrl; ?>/back/shipping_type/form_update" method="post" enctype="multipart/form-data">
                     <?php while ($row = $db->get($query)): ?>
+                        <input type="hidden" name="hidden_shipping_type[]" value="<?php echo $row['id']; ?>">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="shipping_type"><?php echo $row['name']; ?></label>
+                            <label class="col-sm-2 control-label" for="shipping_type"><b><?php echo $row['name']; ?> :</b></label>
                             <div class="col-sm-4">
-                                <input name="shipping_type[]" type="checkbox" data-toggle="toggle" data-on="WS" data-off="WO" value="<?php echo $row['id']; ?>" <?php echo ($row['is_ws'])?'checked':''; ?> >
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="shipping_type_<?php echo $row['id']; ?>" id="inlineRadio1_<?php echo $row['id']; ?>" value="wo" <?php echo ($row['type']=="wo") ? "checked" : "" ?> >
+                                    <label class="form-check-label" for="inlineRadio1_<?php echo $row['id']; ?>">Weight Only (NA)</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="shipping_type_<?php echo $row['id']; ?>" id="inlineRadio2_<?php echo $row['id']; ?>" value="ws" <?php echo ($row['type']=="ws") ? "checked" : "" ?> >
+                                    <label class="form-check-label" for="inlineRadio2_<?php echo $row['id']; ?>">Weight & Size</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="shipping_type_<?php echo $row['id']; ?>" id="inlineRadio3_<?php echo $row['id']; ?>" value="so" <?php echo ($row['type']=="so") ? "checked" : "" ?> >
+                                    <label class="form-check-label" for="inlineRadio3_<?php echo $row['id']; ?>">Size Only</label>
+                                </div>
                             </div>
                         </div>
                     <?php endwhile; ?>

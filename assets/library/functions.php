@@ -161,6 +161,7 @@ function shipping_calculation()
     $db = new database();
     $shipping_rate = [];
 
+    //คิวรี่ขนาดสินค้าที่ขนาดใหญ่ที่สุดในตระกร้า
     $productIds = implode(",", $_SESSION[_ss . "cart"]);
     $option_ct = array(
         "fields" => "bs.size_index",
@@ -231,6 +232,40 @@ function shipping_calculation()
         $rs_shipping_ws = $db->get($query_shipping_ws);
         $rows_shipping_ws = $db->rows($query_shipping_ws);
 
+        /* Size Only */
+        $shipping_so = 0;
+        $sum_product_qty = 0;
+
+        $option_size_parent = array(
+            "fields"    => "(price - add_price) AS sum_price",
+            "table"     => "box_sizes",
+            "condition" => "size_index={$productSizeIndex}"
+        );
+        $query_size_parent = $db->select($option_size_parent);
+        $rs_size_parent = $db->get($query_size_parent);
+
+        $shipping_so = $rs_size_parent['sum_price'];
+
+        foreach ($_SESSION[_ss . "cart"] as $productId) {
+
+            $option_size_child = array(
+                "fields"    => "bs.add_price",
+                "table"     => "products AS p
+                                INNER JOIN box_sizes AS bs ON p.boxsize_id = bs.id",
+                "condition" => "p.id = {$productId}"
+            );
+
+            $query_size_child = $db->select($option_size_child);
+            $rs_size_child = $db->get($query_size_child);
+
+            $key = array_search($productId, $_SESSION[_ss . "cart"]);
+            $product_qty = $_SESSION[_ss . "qty"][$key];
+
+            $sum_product_qty += $product_qty;
+
+            $shipping_so += $rs_size_child['add_price'] * $product_qty;
+        }
+
         /* Box Size */
         $option_st = array(
             "table" => "shipping_type"
@@ -238,20 +273,35 @@ function shipping_calculation()
         $query_st = $db->select($option_st);
 
         while ($rs_st = $db->get($query_st)) {
-            if ($rs_st['is_ws']) {
-                if ($rows_shipping_ws > 0) {
-                    $shipping_rate[$rs_st['name']] = $rs_shipping_ws[$rs_st['name']];
-                } else {
+            switch ($rs_st['type']) {
+                case 'wo':
+                    if ($rows_shipping_wo > 0) {
+                        $shipping_rate[$rs_st['name']] = $rs_shipping_wo[$rs_st['name']];
+                    } else {
+                        $shipping_rate[$rs_st['name']] = -1;
+                    }
+                    break;
+                case 'ws':
+                    if ($rows_shipping_ws > 0) {
+                        $shipping_rate[$rs_st['name']] = $rs_shipping_ws[$rs_st['name']];
+                    } else {
+                        $shipping_rate[$rs_st['name']] = -1;
+                    }
+                    break;
+                case 'so':
+                    if ($sum_product_qty <= 5) {
+                        $shipping_rate[$rs_st['name']] = $shipping_so;
+                    } else {
+                        $shipping_rate[$rs_st['name']] = -1;
+                    }
+                    break;
+                default:
                     $shipping_rate[$rs_st['name']] = -1;
-                }
-            } else {
-                if ($rows_shipping_wo > 0) {
-                    $shipping_rate[$rs_st['name']] = $rs_shipping_wo[$rs_st['name']];
-                } else {
-                    $shipping_rate[$rs_st['name']] = -1;
-                }
+                    break;
             }
         }
+
+        $shipping_rate["coverpage"] = 15;
 
         //ดึงโค้ดของขนาดกล่องที่จะใช้สำหรับออเดอร์นี้มาเก็บไว้ใน session เพื่อเตรียมนำไปบันทึก
         $option_bs = array(

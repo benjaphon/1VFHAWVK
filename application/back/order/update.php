@@ -159,7 +159,7 @@ MAIN CONTENT
                           <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">FLASH EXPRESS</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="shipping_type" value="Shopee">Shopee</label>
+                            <label><input type="radio" name="shipping_type" value="CoverPage">มีใบปะหน้า</label>
                         </div>
 						  <div class="radio">
                           <label><input type="radio" name="shipping_type" value="J&T">'J&T'</label>
@@ -398,9 +398,9 @@ $(document).ready(function(){
     var old_sender_type;
     $('input[name=shipping_type]').change(function () {
 
-        //Shipping Type Shopee Set
-        if ($(this).val()=='Shopee') {
-            $('#sender, #receiver').val('shopee ข้อมูลตามใบปะหน้า').attr('readonly', true);
+        //Shipping Type CoverPage Set
+        if ($(this).val()=='CoverPage') {
+            $('#sender, #receiver').val('ที่อยู่ตามใบประหน้า').attr('readonly', true);
 
             if (!$('input[name=cover_page_filename_hidden]').val()) {
                 $('#cover_page_file').attr('data-validation', 'required');
@@ -414,8 +414,8 @@ $(document).ready(function(){
             
         }
 
-        //Shipping Type Shopee Cancel
-        if (shipping_type_old_val=='Shopee') {
+        //Shipping Type CoverPage Cancel
+        if (shipping_type_old_val=='CoverPage') {
             $('#sender, #receiver').val('').attr('readonly', false)
             $('#div_cover_page_file').hide();
             $('#cover_page_file').removeAttr('data-validation')

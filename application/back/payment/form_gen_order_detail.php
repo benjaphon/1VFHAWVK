@@ -1,7 +1,10 @@
 <?php
 unset($_SESSION[_ss . 'cart']);
+unset($_SESSION[_ss . 'qty']);
+
 $db = new database();
 $_SESSION[_ss . 'cart'] = array();
+$_SESSION[_ss . 'qty'][] = array();
 
 $option_order = array(
     "table" => "orders",

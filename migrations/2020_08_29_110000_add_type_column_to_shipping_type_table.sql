@@ -1,0 +1,1 @@
+ALTER TABLE `shipping_type` ADD `type` ENUM('wo','ws','so','') NOT NULL DEFAULT 'wo' AFTER `is_ws`;

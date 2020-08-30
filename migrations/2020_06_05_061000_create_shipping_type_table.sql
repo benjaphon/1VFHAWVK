@@ -42,7 +42,8 @@ INSERT INTO `shipping_type` (`id`, `name`, `is_ws`) VALUES
 (2, 'register', 1),
 (3, 'ems', 1),
 (4, 'flash', 0),
-(5, 'jt', 0);
+(5, 'jt', 0),
+(6, 'coverpage', 0);
 
 --
 -- Indexes for dumped tables

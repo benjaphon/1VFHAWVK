@@ -200,7 +200,8 @@ $i++; }
             "EMS" : <?php echo $shipping_rate['ems']; ?>,
             "FLASH EXPRESS" : <?php echo $shipping_rate['flash']; ?>,
             "J&T" : <?php echo $shipping_rate['jt']; ?>,
-            "KERRY" : <?php echo $kerry_shipping; ?>
+            "KERRY" : <?php echo $kerry_shipping; ?>,
+            "CoverPage" : <?php echo $shipping_rate['coverpage']; ?>
         };
 
         if (mapping[shipping_type] >= 0) {
@@ -216,6 +217,7 @@ $i++; }
                 case "EMS":
                 case "FLASH EXPRESS":
                 case "J&T":
+                case "CoverPage":
                     $("#sp_shipping_rate").text(shipping_rate);
                     break;     
                 case "KERRY":
