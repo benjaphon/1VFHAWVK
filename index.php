@@ -28,6 +28,11 @@ if ($onpage == "back" AND $a != "login") {
 
     //guest prevent route
     if($_SESSION[_ss . 'levelaccess'] != 'admin'){
+
+        if(MAINTENANCE_MODE && $url != 'maintenance') {
+            header("location:" . base_url() . "/back/maintenance");
+        }
+
         //product create
         if ($url == 'product' && $a == 'create') {
              header("location:" . base_url() . "/back/product");

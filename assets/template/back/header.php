@@ -233,8 +233,13 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                   <?php } ?>
 
                   <li>
-                    <span>Version 7.2</span>
+                    <span>Version 7.5</span>
                 </li>
+                <?php if (MAINTENANCE_MODE): ?>
+                    <li>
+                        <label class="maintenance">MAINTENANCE MODE ON</label>
+                    </li>
+                <?php endif; ?>
               </ul>
               <!-- sidebar menu end-->
           </div>
