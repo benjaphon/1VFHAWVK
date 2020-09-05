@@ -125,30 +125,30 @@ MAIN CONTENT
                     <label for="shipping_type" class="text-bold required col-xs-12">ประเภทการส่ง</label>
                     <div class="col-xs-6">
                         <div class="radio">
-                          <label><input type="radio" id="rdo_parcel" name="shipping_type" value="พัสดุธรรมดา" checked>พัสดุธรรมดา</label>
+                            <label><input type="radio" id="rdo_parcel" name="shipping_type" value="พัสดุธรรมดา" checked>พัสดุธรรมดา</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" id="rdo_register" name="shipping_type" value="ลงทะเบียน">ลงทะเบียน</label>
+                            <label><input type="radio" id="rdo_register" name="shipping_type" value="ลงทะเบียน">ลงทะเบียน</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="EMS">EMS</label>
+                            <label><input type="radio" name="shipping_type" value="EMS">EMS</label>
                         </div>
                         <div class="radio">
                             <label><input type="radio" name="shipping_type" value="อื่นๆ">อื่นๆ</label>
                         </div>
                     </div>
                     <div class="col-xs-6">
-                        <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="KERRY">KERRY</label>
+			            <div class="radio">
+                            <label><input type="radio" name="shipping_type" value="KERRY">KERRY</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">FLASH EXPRESS</label>
+                            <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">FLASH EXPRESS</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="CoverPage">มีใบปะหน้า</label>
+                            <label><input type="radio" name="shipping_type" value="CoverPage">มีใบปะหน้า</label>
                         </div>
 						<div class="radio">
-                          <label><input type="radio" name="shipping_type" value="J&T">'J&T'</label>
+                            <label><input type="radio" name="shipping_type" value="J&T">J&T</label>
                         </div>
                     </div>
                 </div>

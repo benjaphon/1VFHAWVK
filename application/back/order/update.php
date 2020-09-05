@@ -153,16 +153,16 @@ MAIN CONTENT
                     </div>
                     <div class="col-xs-6">
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="KERRY">KERRY</label>
+                            <label><input type="radio" name="shipping_type" value="KERRY">KERRY</label>
                         </div>
                         <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">FLASH EXPRESS</label>
+                            <label><input type="radio" name="shipping_type" value="FLASH EXPRESS">FLASH EXPRESS</label>
                         </div>
                         <div class="radio">
                             <label><input type="radio" name="shipping_type" value="CoverPage">มีใบปะหน้า</label>
                         </div>
-						  <div class="radio">
-                          <label><input type="radio" name="shipping_type" value="J&T">'J&T'</label>
+                        <div class="radio">
+                            <label><input type="radio" name="shipping_type" value="J&T">J&T</label>
                         </div>
                     </div>
                 </div>

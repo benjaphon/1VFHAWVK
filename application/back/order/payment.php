@@ -224,65 +224,62 @@ MAIN CONTENT
         </div>
         <div class="col-lg-6">
             <div class="form-horizontal" style="margin-top: 10px;">
-                    <input type="hidden" name="order_id" value="<?php echo $_GET['id']; ?>">
+                <input type="hidden" name="order_id" value="<?php echo $_GET['id']; ?>">
 
-
-                    <div class="form-group col-xs-12 clearfix">
-                        <h3>การชำระเงิน</h3>
-                    </div>
-                    <div class="form-group clearfix">  
-                        <label for="pay_type" class="text-bold col-xs-12">ช่องทางการชำระเงิน</label>
-                        <div class="col-xs-6">
-                            <div class="radio">
-                              <label><input type="radio" name="pay_type" value="กสิกรไทย" data-validation="required">กสิกรไทย</label>
-                            </div>
-                            <div class="radio">
-                              <label><input type="radio" name="pay_type" value="กรุงไทย">กรุงไทย</label>
-                            </div>
-                            <div class="radio">
-                              <label><input type="radio" name="pay_type" value="other"><input type="text" placeholder="Other" class="form-control" name="txt_pay_type"></label>
-
-                            </div>
+                <div class="form-group col-xs-12 clearfix">
+                    <h3>การชำระเงิน</h3>
+                    <h5>ชื่อบัญชี  ภัทราตรี ทิพวัจนา</h5>
+                </div>
+                <div class="form-group clearfix">  
+                    <label for="pay_type" class="text-bold col-xs-12">ช่องทางการชำระเงิน</label>
+                    <div class="col-xs-6">
+                        <div class="radio">
+                            <label><input type="radio" name="pay_type" value="กสิกรไทย" data-validation="required">กสิกรไทย   050-2-61878-4</label>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="radio">
-                              <label><input type="radio" name="pay_type" value="ไทยพาณิชย์">ไทยพาณิชย์</label>
-                            </div>
-                            <div class="radio">
-                              <label><input type="radio" name="pay_type" value="พร้อมเพย์">พร้อมเพย์</label>
-                            </div>
+                        <div class="radio">
+                            <label><input type="radio" name="pay_type" value="กรุงไทย">กรุงไทย</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="pay_type" value="other"><input type="text" placeholder="Other" class="form-control" name="txt_pay_type"></label>
+
                         </div>
                     </div>
-
-                    <div class="form-group clearfix">
-                        <div class="col-sm-6">
-                            <label for="pay_money" class="text-bold control-label required">จำนวนเงิน</label>
-                            <input type="text" id="pay_money" name="pay_money" placeholder="<?php echo $grand_total_with_ship; ?>" value="<?php echo $grand_total_with_ship; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
+                    <div class="col-xs-6">
+                        <div class="radio">
+                            <label><input type="radio" name="pay_type" value="ไทยพาณิชย์">ไทยพาณิชย์</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="pay_type" value="พร้อมเพย์">พร้อมเพย์ 0897818110</label>
                         </div>
                     </div>
-                    <div class="form-group clearfix">
-                        <div class="col-xs-6">
-                            <label for="url_picture" class="control-label">รูปภาพ</label>
-                            <input type="file" name="image[]" id="image" accept="image/*">
-                            <input type="file" name="image[]" id="image" accept="image/*">
-                        </div>
+                </div>
+
+                <div class="form-group clearfix">
+                    <div class="col-sm-6">
+                        <label for="pay_money" class="text-bold control-label required">จำนวนเงิน</label>
+                        <input type="text" id="pay_money" name="pay_money" placeholder="<?php echo $grand_total_with_ship; ?>" value="<?php echo $grand_total_with_ship; ?>" class="form-control input-sm" data-validation="number" data-validation-allowing="float">
                     </div>
-					
-					<div class="form-group clearfix">
-                        <div class="col-sm-6">
-                            <label for="deduct" class="text-bold">หักยอดค้าง</label>
-                            <input type="text" id="deduct" name="deduct" class="form-control input-sm" autocomplete="off" data-validation="number" data-validation-allowing="float" value="0">
-                        </div>
-                    </div>  
-                    <div class="form-group clearfix">
-                        <div class="col-sm-6">
-                            <label for="detail" class="text-bold">เพิ่มเติม</label>
-                            <input type="text" id="detail" name="detail" class="form-control" autocomplete="off">
-                        </div>
-                    </div>     
-
-
+                </div>
+                <div class="form-group clearfix">
+                    <div class="col-xs-6">
+                        <label for="url_picture" class="control-label">รูปภาพ</label>
+                        <input type="file" name="image[]" id="image" accept="image/*">
+                        <input type="file" name="image[]" id="image" accept="image/*">
+                    </div>
+                </div>
                 
+                <div class="form-group clearfix">
+                    <div class="col-sm-6">
+                        <label for="deduct" class="text-bold">หักยอดค้าง</label>
+                        <input type="text" id="deduct" name="deduct" class="form-control input-sm" autocomplete="off" data-validation="number" data-validation-allowing="float" value="0">
+                    </div>
+                </div>  
+                <div class="form-group clearfix">
+                    <div class="col-sm-6">
+                        <label for="detail" class="text-bold">เพิ่มเติม</label>
+                        <input type="text" id="detail" name="detail" class="form-control" autocomplete="off">
+                    </div>
+                </div>     
             </div>
         </div>
     </div>

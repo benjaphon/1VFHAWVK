@@ -254,9 +254,14 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                   
                   <?php } ?>
 
-                  <li>
+                <li>
                     <span>Version 8.2</span>
                 </li>
+                <?php if (MAINTENANCE_MODE): ?>
+                    <li>
+                        <label class="maintenance">MAINTENANCE MODE ON</label>
+                    </li>
+                <?php endif; ?>
               </ul>
               <!-- sidebar menu end-->
           </div>

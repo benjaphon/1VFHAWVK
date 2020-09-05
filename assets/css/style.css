@@ -2247,3 +2247,10 @@ label {
 }
 
 
+label.maintenance {
+    color: red;
+    padding: 1rem;
+    font-weight: bold;
+    background-color: yellow;
+    margin-top: 1rem;
+}
