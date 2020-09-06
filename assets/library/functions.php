@@ -319,3 +319,19 @@ function shipping_calculation()
 
     return $shipping_rate;
 }
+
+function isMaintenance()
+{
+    $db = new database();
+
+    $option = array(
+        "table" => "settings",
+        "condition" => "meta='maintenance'",
+        "limit" => 1
+    );
+
+    $query = $db->select($option);
+    $row = $db->get($query);
+
+    return ($row['value']==='true');
+}

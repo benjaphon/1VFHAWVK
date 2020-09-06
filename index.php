@@ -29,7 +29,7 @@ if ($onpage == "back" AND $a != "login") {
     //guest prevent route
     if($_SESSION[_ss . 'levelaccess'] != 'admin'){
 
-        if(MAINTENANCE_MODE && $url != 'maintenance') {
+        if(isMaintenance() && $url != 'maintenance') {
             header("location:" . base_url() . "/back/maintenance");
         }
 
@@ -51,6 +51,10 @@ if ($onpage == "back" AND $a != "login") {
         }
 
         if ($url == 'shipping_type') {
+            header("location:" . base_url() . "/back/order");
+        }
+
+        if ($url == 'settings') {
             header("location:" . base_url() . "/back/order");
         }
     }

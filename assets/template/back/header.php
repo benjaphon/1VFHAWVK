@@ -222,7 +222,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                       </a>
                   </li>
                          
-                  <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
+                  <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'): ?>
 
                   <li>
                       <a href="<?php echo $baseUrl; ?>/back/user">
@@ -238,6 +238,12 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                         </a>
                         <ul>
                             <li>
+                                <a href="<?php echo $baseUrl; ?>/back/settings">
+                                    <i class="fa fa-bars"></i>
+                                    <span>ตั้งค่าทั่วไป</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="<?php echo $baseUrl; ?>/back/shipping_rate">
                                     <i class="fa fa-truck"></i>
                                     <span>อัตราค่าจัดส่ง</span>
@@ -252,12 +258,12 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                         </ul>
                     </li>
                   
-                  <?php } ?>
+                <?php endif; ?>
 
                 <li>
-                    <span>Version 8.2</span>
+                    <span>Version 8.3</span>
                 </li>
-                <?php if (MAINTENANCE_MODE): ?>
+                <?php if (isMaintenance()): ?>
                     <li>
                         <label class="maintenance">MAINTENANCE MODE ON</label>
                     </li>
