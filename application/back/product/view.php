@@ -9,16 +9,22 @@ if (!isset($_GET['id'])) {
 $db = new database();
 $option_product = array(
     "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
-    "table" => "products AS p LEFT JOIN shipping_rate AS s ON p.weight >= s.min_wg AND p.weight <= s.max_wg",
-    "condition" => "p.id='{$_GET['id']}'"
+    "table" => "products AS p 
+                LEFT JOIN weight_range AS w ON p.weight >= w.min_wg AND p.weight <= w.max_wg
+                LEFT JOIN shipping_rate AS s ON w.id = s.weight_id
+                LEFT JOIN box_sizes AS bs ON s.boxsize_id = bs.id",
+    "condition" => "p.id='{$_GET['id']}' AND bs.size_index = 0"
 );
 $query_product = $db->select($option_product);
 $rs_product = $db->get($query_product);
 
 $option_child_pd = array(
     "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
-    "table" => "products AS p LEFT JOIN shipping_rate AS s ON p.weight >= s.min_wg AND p.weight <= s.max_wg",
-    "condition" => "p.parent_product_id='{$_GET['id']}' AND flag_status=1"
+    "table" => "products AS p 
+                LEFT JOIN weight_range AS w ON p.weight >= w.min_wg AND p.weight <= w.max_wg
+                LEFT JOIN shipping_rate AS s ON w.id = s.weight_id
+                LEFT JOIN box_sizes AS bs ON s.boxsize_id = bs.id",
+    "condition" => "p.parent_product_id='{$_GET['id']}' AND p.flag_status=1 AND bs.size_index = 0"
 );
 $query_child_pd = $db->select($option_child_pd);
 
