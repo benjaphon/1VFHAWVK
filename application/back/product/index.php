@@ -16,11 +16,14 @@ $start = ($page - 1) * $perpage;
 $db = new database();
 
 $option_product = array(
-    "fields" => "p.*",
-    "table" => "products AS p",
-    "order" => "p.id DESC",
-    "limit" => "{$start},{$perpage}",
-    "condition" => "p.flag_status = 1 AND p.parent_product_id IS NULL"
+    "fields"    => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
+    "table"     => "products AS p 
+                    LEFT JOIN weight_range AS w ON p.weight >= w.min_wg AND p.weight <= w.max_wg
+                    LEFT JOIN shipping_rate AS s ON w.id = s.weight_id
+                    LEFT JOIN box_sizes AS bs ON s.boxsize_id = bs.id",
+    "condition" => "p.flag_status = 1 AND p.parent_product_id IS NULL AND bs.size_index = 0",
+    "order"     => "p.id DESC",
+    "limit"     => "{$start},{$perpage}"
 );
 
 
@@ -173,6 +176,9 @@ MAIN CONTENT
                                     <a class="sort-link">ราคาขาย</a>
                                 </th>
                             <?php } ?>
+                            <th id="user-grid_c1">
+                                <a class="sort-link">ค่าส่ง</a>
+                            </th>
                             <th id="user-grid_c3">
                                 <a class="sort-link">คงเหลือ</a>
                             </th>
@@ -239,6 +245,7 @@ MAIN CONTENT
                                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                                     <td><?php echo $rs_pd['sale_price']; ?></td>
                                 <?php } ?>
+                                <td><?php echo round($rs_pd['cal_parcel']); ?>/<?php echo round($rs_pd['cal_register']); ?>/<?php echo round($rs_pd['cal_EMS']); ?>/<?php echo round($rs_pd['kerry']); ?></td>
                                 <td>
                                     <?php
 
