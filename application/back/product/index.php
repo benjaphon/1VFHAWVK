@@ -16,7 +16,7 @@ $start = ($page - 1) * $perpage;
 $db = new database();
 
 $option_product = array(
-    "fields"    => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
+    "fields"    => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS, (SELECT box_sizes.price FROM products LEFT JOIN box_sizes ON products.boxsize_id = box_sizes.id WHERE products.id = p.id ) AS size_price",
     "table"     => "products AS p 
                     LEFT JOIN weight_range AS w ON p.weight >= w.min_wg AND p.weight <= w.max_wg
                     LEFT JOIN shipping_rate AS s ON w.id = s.weight_id
@@ -245,7 +245,7 @@ MAIN CONTENT
                                 <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'){ ?>
                                     <td><?php echo $rs_pd['sale_price']; ?></td>
                                 <?php } ?>
-                                <td><?php echo round($rs_pd['cal_parcel']); ?>/<?php echo round($rs_pd['cal_register']); ?>/<?php echo round($rs_pd['cal_EMS']); ?>/<?php echo round($rs_pd['kerry']); ?></td>
+                                <td><?php echo round($rs_pd['cal_parcel']); ?>/<?php echo round($rs_pd['cal_register']); ?>/<?php echo round($rs_pd['cal_EMS']); ?>/<?php echo round($rs_pd['size_price']); ?></td>
                                 <td>
                                     <?php
 

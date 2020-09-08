@@ -8,7 +8,7 @@ if (!isset($_GET['id'])) {
 
 $db = new database();
 $option_product = array(
-    "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
+    "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS, (SELECT box_sizes.price FROM products LEFT JOIN box_sizes ON products.boxsize_id = box_sizes.id WHERE products.id = p.id ) AS size_price",
     "table" => "products AS p 
                 LEFT JOIN weight_range AS w ON p.weight >= w.min_wg AND p.weight <= w.max_wg
                 LEFT JOIN shipping_rate AS s ON w.id = s.weight_id
@@ -19,7 +19,7 @@ $query_product = $db->select($option_product);
 $rs_product = $db->get($query_product);
 
 $option_child_pd = array(
-    "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS",
+    "fields" => "p.*, s.parcel AS cal_parcel, s.register AS cal_register, s.EMS AS cal_EMS, (SELECT box_sizes.price FROM products LEFT JOIN box_sizes ON products.boxsize_id = box_sizes.id WHERE products.id = p.id ) AS size_price",
     "table" => "products AS p 
                 LEFT JOIN weight_range AS w ON p.weight >= w.min_wg AND p.weight <= w.max_wg
                 LEFT JOIN shipping_rate AS s ON w.id = s.weight_id
@@ -132,7 +132,7 @@ border:1px solid #e8debd
                 </div>
                 <div class="form-group">
                     <div class="col-sm-6">
-                        <p id="p_shipping_0">ค่าส่ง <?php echo round($rs_product['cal_parcel']); ?>/<?php echo round($rs_product['cal_register']); ?>/<?php echo round($rs_product['cal_EMS']); ?>/<?php echo round($rs_product['kerry']); ?></p>
+                        <p id="p_shipping_0">ค่าส่ง <?php echo round($rs_product['cal_parcel']); ?>/<?php echo round($rs_product['cal_register']); ?>/<?php echo round($rs_product['cal_EMS']); ?>/<?php echo round($rs_product['size_price']); ?></p>
                     </div>
                 </div>
                 <div class="form-group">

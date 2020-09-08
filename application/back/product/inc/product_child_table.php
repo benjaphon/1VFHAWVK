@@ -64,7 +64,7 @@
                         <td><?php echo $rs_pd['sale_price']; ?></td>
                     <?php } ?>
 
-                    <td id="p_shipping_<?php echo $i; ?>"><?php echo round($rs_pd['cal_parcel']); ?>/<?php echo round($rs_pd['cal_register']); ?>/<?php echo round($rs_pd['cal_EMS']); ?>/<?php echo round($rs_pd['kerry']); ?></td>
+                    <td id="p_shipping_<?php echo $i; ?>"><?php echo round($rs_pd['cal_parcel']); ?>/<?php echo round($rs_pd['cal_register']); ?>/<?php echo round($rs_pd['cal_EMS']); ?>/<?php echo round($rs_pd['size_price']); ?></td>
                     <td id="p_quantity_<?php echo $i; ?>"><?php echo $rs_pd['quantity']; ?></td>
                 </tr>
             <?php } ?>

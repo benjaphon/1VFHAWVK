@@ -58,7 +58,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-6">
-                    <p id="p_shipping_<?php echo $product_child_id; ?>">ค่าส่ง <?php echo round($row['cal_parcel']); ?>/<?php echo round($row['cal_register']); ?>/<?php echo round($row['cal_EMS']); ?>/<?php echo round($row['kerry']); ?></p>
+                    <p id="p_shipping_<?php echo $product_child_id; ?>">ค่าส่ง <?php echo round($row['cal_parcel']); ?>/<?php echo round($row['cal_register']); ?>/<?php echo round($row['cal_EMS']); ?>/<?php echo round($row['size_price']); ?></p>
                 </div>
             </div>
             <div class="form-group">
