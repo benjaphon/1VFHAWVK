@@ -1,6 +1,8 @@
 <?php
 unset($_SESSION[_ss . 'cart']);
 unset($_SESSION[_ss . 'qty']);
+unset($_SESSION[_ss . 'total_weight']);
+
 /*
  * php code///////////**********************************************************
  */
@@ -140,6 +142,8 @@ MAIN CONTENT
                     $isCal = true;
 
                     if ($rs_order['ship_price']==null) {
+
+                        $_SESSION[_ss . 'total_weight'] = $grand_total_weight;
 
                         $shipping_rate = shipping_calculation();
                         $shipping_type = $rs_order['shipping_type'];
