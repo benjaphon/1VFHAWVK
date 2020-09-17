@@ -9,9 +9,10 @@ class database {
             'host' => MYSQL_HOSTNAME,
             'user' => MYSQL_USERNAME,
             'pass' => MYSQL_PASSWORD,
-            'dbname' => MYSQL_DATABASE
+            'dbname' => MYSQL_DATABASE,
+            'port' => MYSQL_PORT
         );
-        $this->con = mysqli_connect($dbsql['host'], $dbsql['user'], $dbsql['pass'], $dbsql['dbname'], '3308') or die('Error connecting to MySQL');
+        $this->con = mysqli_connect($dbsql['host'], $dbsql['user'], $dbsql['pass'], $dbsql['dbname'], $dbsql['port']) or die('Error connecting to MySQL');
         //mysql_select_db($dbsql['dbname'], $this->con) or die('Database ' . $dbsql['dbname'] . ' does not exist!');
         mysqli_set_charset($this->con, "utf8");
     }
