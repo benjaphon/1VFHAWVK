@@ -2,14 +2,21 @@
 /*
  * php code///////////**********************************************************
  */
+unset($_SESSION[_ss . 'cart']);
+unset($_SESSION[_ss . 'qty']);
+unset($_SESSION[_ss . 'total_weight']);
+
 if (!isset($_GET['id'])) {
     header("location:" . $baseUrl . "/back/order");
 }
 $db = new database();
+$_SESSION[_ss . 'cart'] = array();
+$_SESSION[_ss . 'qty'][] = array();
 
-$sql_os = "SELECT os.*, pm.pay_type, pm.pay_money, pm.url_picture, pm.detail, pm.created_at as pay_created_at, u.username FROM orders os ";
+$sql_os = "SELECT os.*, pm.pay_type, pm.pay_money, pm.url_picture, pm.detail, pm.created_at as pay_created_at, u.username, st.name as shipping_name FROM orders os ";
 $sql_os .= "LEFT JOIN payments pm ON pm.order_id = os.id ";
 $sql_os .= "LEFT JOIN users u ON u.id = os.user_id ";
+$sql_os .= "LEFT JOIN shipping_type st ON st.code = os.shipping_type ";
 $sql_os .= "WHERE os.id='{$_GET['id']}' ORDER BY pm.created_at DESC LIMIT 1";
 
 $query_os = $db->query($sql_os);
@@ -88,6 +95,10 @@ MAIN CONTENT
                         $total_price = $rs_od['price'] * $rs_od['quantity'];
                         $total_weight = $rs_od['weight'] * $rs_od['quantity'];
 
+                        array_push($_SESSION[_ss . 'cart'], $rs_od['product_id']);
+                        $key = array_search($rs_od['product_id'], $_SESSION[_ss . 'cart']);
+                        $_SESSION[_ss . 'qty'][$key] = $rs_od['quantity'];
+
                         //Select Product Picture
                         $option_img = array(
                             "table" => "images",
@@ -147,12 +158,30 @@ MAIN CONTENT
                     <?php } ?>
                     <tr class="info">
                         <td colspan="5" style="text-align: right;">
-                            <!--<p><a href='<?php echo $baseUrl; ?>/back/order/ship_rate' target='_blank'>ตารางอัตราค่าส่ง</a></p>-->
+
                             <?php if (isset($rs_os['ship_price'])){ ?>
                                 <h4>ค่าส่ง <?php echo number_format($rs_os['ship_price']); ?> บาท</h4>
                             <?php } else { ?>
                                 <h4>ยังไม่ได้ระบุค่าส่ง</h4>
                             <?php } ?>
+
+                            <?php if($_SESSION[_ss . 'levelaccess'] == 'admin'): ?>
+                            
+                                <?php
+                                    $shipping_fees = shipping_calculation($rs_os['total_weight'])[$rs_os['shipping_name']];
+
+                                    if ($shipping_fees == -1) {
+                                        $shipping_fees = 0;
+                                    }
+                                ?>
+
+                                <?php if (empty($shipping_fees)): ?>
+                                    <h4>(คำนวณค่าส่งไม่ได้)</h4>
+                                <?php else: ?>
+                                    <h4>(คำนวณค่าส่ง <?php echo $shipping_fees; ?> บาท)</h4>
+                                <?php endif; ?>
+
+                            <?php endif; ?>
                             
                         </td>
                     </tr>

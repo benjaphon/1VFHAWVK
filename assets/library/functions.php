@@ -156,10 +156,14 @@ function soft_delete($id, $table)
     $query = $db->update($table, $arr_update, "id={$id}");
 }
 
-function shipping_calculation()
+function shipping_calculation($weight = 0)
 {
     $db = new database();
     $shipping_rate = [];
+
+    if (!empty($weight)) {
+        $_SESSION[_ss . 'total_weight'] = $weight;
+    }
 
     //คิวรี่ขนาดสินค้าที่ขนาดใหญ่ที่สุดในตระกร้า
     $productIds = implode(",", $_SESSION[_ss . "cart"]);
@@ -210,7 +214,7 @@ function shipping_calculation()
         
         /* Weight Only */
         $option_shipping_wo = array(
-            "fields" => "s.*",
+            "fields" => "s.*, 15 AS coverpage",
             "table" => "shipping_rate AS s
                         INNER JOIN weight_range AS wr ON s.weight_id = wr.id
                         INNER JOIN box_sizes AS bs ON s.boxsize_id = bs.id",
@@ -222,7 +226,7 @@ function shipping_calculation()
 
         /* Weight & Size */
         $option_shipping_ws = array(
-            "fields" => "s.*",
+            "fields" => "s.*, 15 AS coverpage",
             "table" => "shipping_rate AS s
                         INNER JOIN weight_range AS wr ON s.weight_id = wr.id
                         INNER JOIN box_sizes AS bs ON s.boxsize_id = bs.id",
@@ -300,8 +304,6 @@ function shipping_calculation()
                     break;
             }
         }
-
-        $shipping_rate["coverpage"] = 15;
 
         //ดึงโค้ดของขนาดกล่องที่จะใช้สำหรับออเดอร์นี้มาเก็บไว้ใน session เพื่อเตรียมนำไปบันทึก
         $option_bs = array(
