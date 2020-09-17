@@ -1,6 +1,7 @@
 <?php
 unset($_SESSION[_ss . 'cart']);
 unset($_SESSION[_ss . 'qty']);
+unset($_SESSION[_ss . 'total_weight']);
 
 $db = new database();
 $_SESSION[_ss . 'cart'] = array();
