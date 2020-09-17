@@ -261,7 +261,7 @@ $rows_head_2 = $db_head->rows($query_head_pd_2);
                 <?php endif; ?>
 
                 <li>
-                    <span>Version 8.3</span>
+                    <span>Version 8.4</span>
                 </li>
                 <?php if (isMaintenance()): ?>
                     <li>
